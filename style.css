@@ -1,0 +1,142 @@
+/* Nature-Tech Editorial Design System Refinements */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --primary: #0d631b;
+    --primary-container: #2e7d32;
+    --surface: #f8faf9;
+    --surface-container-low: #f2f4f3;
+    --surface-container-lowest: #ffffff;
+    --outline-variant: rgba(191, 202, 186, 0.15);
+}
+
+body {
+    background-color: var(--surface);
+    color: #191c1c;
+}
+
+/* Glassmorphism Recipe */
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: none !important;
+}
+
+/* Alpine Card Interaction */
+.alpine-card {
+    background-color: var(--surface-container-low);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    cursor: pointer;
+}
+
+.alpine-card:hover {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(24px) !important;
+    transform: translateY(-8px);
+    box-shadow: inset 0 0 0 1px rgba(163, 246, 156, 0.3), 
+                0 20px 40px rgba(0, 0, 0, 0.05);
+}
+
+/* Typography Editorial Scales */
+.display-lg {
+    font-size: clamp(3rem, 8vw, 5rem);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+/* Ambient Shadows */
+.ambient-shadow {
+    box-shadow: 0 24px 48px rgba(25, 28, 28, 0.04);
+}
+
+/* No-Line Rule: Section Transitions */
+section {
+    position: relative;
+    border: none;
+}
+
+/* Ghost Border Fallback */
+.ghost-border {
+    border: 1px solid var(--outline-variant);
+}
+
+/* Custom Gradients */
+.btn-primary-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+}
+
+/* Navigation Blur */
+nav {
+    background: rgba(248, 250, 249, 0.7) !important;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+/* Mobile Navigation Menu */
+#nav-menu {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 768px) {
+    #nav-menu.active {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(248, 250, 249, 0.95);
+        backdrop-filter: blur(32px);
+        padding: 2rem;
+        gap: 1.5rem;
+        border-top: 1px solid var(--outline-variant);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Responsive Grid Spacing */
+.responsive-grid {
+    display: grid;
+    gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .responsive-grid {
+        gap: 4rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-entrance {
+    animation: fadeInSlideUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+
+/* Reveal on Scroll (Basic) */
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}

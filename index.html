@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Vishambrio Cabs | Sustainable Himachal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="style.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-container": "#51b2fe",
+                        "surface-container-low": "#f2f4f3",
+                        "inverse-on-surface": "#eff1f0",
+                        "on-primary-fixed-variant": "#005312",
+                        "outline": "#707a6c",
+                        "on-primary-container": "#cbffc2",
+                        "on-secondary-container": "#00436a",
+                        "surface": "#f8faf9",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#354a53",
+                        "outline-variant": "#bfcaba",
+                        "on-tertiary-fixed": "#071e27",
+                        "tertiary": "#445963",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#001d32",
+                        "secondary-fixed-dim": "#96ccff",
+                        "on-primary-fixed": "#002204",
+                        "surface-tint": "#1b6d24",
+                        "surface-variant": "#e1e3e2",
+                        "background": "#f8faf9",
+                        "tertiary-fixed": "#cfe6f2",
+                        "on-error": "#ffffff",
+                        "primary": "#0d631b",
+                        "surface-dim": "#d8dada",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f8faf9",
+                        "primary-container": "#2e7d32",
+                        "tertiary-fixed-dim": "#b4cad6",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#a3f69c",
+                        "secondary": "#00639a",
+                        "on-tertiary-container": "#e1f4ff",
+                        "surface-container": "#eceeed",
+                        "on-surface": "#191c1c",
+                        "secondary-fixed": "#cee5ff",
+                        "on-background": "#191c1c",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e1e3e2",
+                        "on-surface-variant": "#40493d",
+                        "surface-container-high": "#e6e9e8",
+                        "inverse-surface": "#2e3131",
+                        "tertiary-container": "#5c717b",
+                        "primary-fixed-dim": "#88d982",
+                        "inverse-primary": "#88d982",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#004a75"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+    <!-- Top Navigation Bar -->
+    <nav class="sticky top-0 w-full z-50 ambient-shadow">
+        <div class="flex justify-between items-center px-6 md:px-12 py-4 max-w-screen-2xl mx-auto">
+            <div class="text-xl font-extrabold text-emerald-900 tracking-tighter font-headline">
+                Vishambrio Cabs
+            </div>
+
+            <!-- Desktop/Mobile Menu -->
+            <div id="nav-menu"
+                class="hidden md:flex items-center space-x-10 font-headline font-semibold tracking-tight">
+                <a class="text-emerald-700 border-b-2 border-emerald-600 transition-all duration-300"
+                    href="#home">Home</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300"
+                    href="#features">Features</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="#safety">Safety</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="#roadmap">Roadmap</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="#about">About</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button
+                    class="hidden sm:block btn-primary-gradient text-on-primary px-6 py-2.5 rounded-xl font-headline font-bold active:scale-95 duration-200 shadow-lg shadow-primary/20">
+                    Book Now
+                </button>
+
+                <!-- Mobile Menu Toggle -->
+                <button id="menu-toggle"
+                    class="md:hidden p-2 text-on-surface hover:bg-surface-container-low rounded-lg transition-colors">
+                    <span class="material-symbols-outlined text-3xl">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center overflow-hidden" id="home">
+        <div class="absolute inset-0 z-0">
+            <img class="w-full h-full object-cover brightness-75 scale-105" src="assets/heroimage.png"
+                alt="Sleek white EV in Himachal" />
+            <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80"></div>
+        </div>
+        <div class="relative z-10 max-w-screen-2xl mx-auto px-8 grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container/20 backdrop-blur-md border border-primary/20 animate-entrance opacity-0">
+                    <span class="material-symbols-outlined text-primary text-sm"
+                        style="font-variation-settings: 'FILL' 1;">eco</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-primary">Sustainable Future</span>
+                </div>
+                <h1 class="display-lg text-white drop-shadow-2xl animate-entrance opacity-0 delay-100">
+                    Revolutionizing How <span class="text-primary-fixed">Himachal</span> Moves
+                </h1>
+
+                <p
+                    class="text-xl md:text-2xl text-white/90 max-w-xl font-medium leading-relaxed drop-shadow-md animate-entrance opacity-0 delay-200">
+                    Eco-friendly, affordable, and reliable electric cabs for urban and rural commuters navigating the
+                    peaks.
+                </p>
+                <div class="flex flex-wrap gap-4 animate-entrance opacity-0 delay-300">
+
+                    <button
+                        class="btn-primary-gradient text-on-primary px-10 py-5 rounded-xl font-headline font-extrabold text-lg flex items-center gap-3 hover:shadow-2xl hover:shadow-primary/40 transition-all active:scale-95">
+                        Book Your Ride
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                    </button>
+                    <button
+                        class="bg-white/10 backdrop-blur-xl border border-white/20 text-white px-10 py-5 rounded-xl font-headline font-extrabold text-lg hover:bg-white/20 transition-all">
+                        View Routes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Unique Selling Points -->
+    <section class="py-32 px-8 max-w-screen-2xl mx-auto reveal" id="features">
+        <div class="mb-20 space-y-4">
+            <h2 class="text-sm font-bold text-primary tracking-[0.3em] uppercase">Why Vishambrio?</h2>
+            <p class="text-5xl font-headline font-extrabold tracking-tight text-on-surface">Designed for the Terrain</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <!-- Card 1 -->
+            <div class="alpine-card p-10 rounded-[32px] flex flex-col justify-between group">
+                <div class="space-y-6">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shadow-inner">
+                        <span class="material-symbols-outlined text-3xl">location_on</span>
+                    </div>
+                    <h3 class="text-2xl font-headline font-bold text-on-surface">Localized for India</h3>
+                    <p class="text-tertiary leading-relaxed text-lg">Specially calibrated drivetrains tailored for local
+                        traffic nuances and the unique Himalayan climate challenges.</p>
+                </div>
+                <div class="mt-8 pt-8 ghost-border border-t-1 border-l-0 border-r-0 border-b-0">
+                    <span
+                        class="text-primary font-bold flex items-center gap-2 group-hover:gap-4 transition-all cursor-pointer">
+                        Learn More <span class="material-symbols-outlined">trending_flat</span>
+                    </span>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="alpine-card p-10 rounded-[32px] flex flex-col justify-between group">
+                <div class="space-y-6">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-primary-fixed flex items-center justify-center text-on-primary-fixed shadow-inner">
+                        <span class="material-symbols-outlined text-3xl">bolt</span>
+                    </div>
+                    <h3 class="text-2xl font-headline font-bold text-on-surface">Advanced Tech</h3>
+                    <p class="text-tertiary leading-relaxed text-lg">Next-gen long-range batteries featuring
+                        fast-charging capabilities that work efficiently even at high altitudes.</p>
+                </div>
+                <div class="mt-8 pt-8 ghost-border border-t-1 border-l-0 border-r-0 border-b-0">
+                    <span
+                        class="text-primary font-bold flex items-center gap-2 group-hover:gap-4 transition-all cursor-pointer">
+                        Battery Specs <span class="material-symbols-outlined">trending_flat</span>
+                    </span>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="alpine-card p-10 rounded-[32px] flex flex-col justify-between group">
+                <div class="space-y-6">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed shadow-inner">
+                        <span class="material-symbols-outlined text-3xl">forest</span>
+                    </div>
+                    <h3 class="text-2xl font-headline font-bold text-on-surface">Eco-Friendly</h3>
+                    <p class="text-tertiary leading-relaxed text-lg">Zero tailpipe emissions to preserve the pristine
+                        mountain air and delicate ecosystem of the valley.</p>
+                </div>
+                <div class="mt-8 pt-8 ghost-border border-t-1 border-l-0 border-r-0 border-b-0">
+                    <span
+                        class="text-primary font-bold flex items-center gap-2 group-hover:gap-4 transition-all cursor-pointer">
+                        Impact Report <span class="material-symbols-outlined">trending_flat</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety & Convenience -->
+    <section class="bg-surface-container-low py-32 reveal" id="safety">
+        <div class="max-w-screen-2xl mx-auto px-8 grid lg:grid-cols-2 gap-24 items-center">
+
+            <div class="relative">
+                <div class="aspect-square rounded-[48px] overflow-hidden ambient-shadow">
+                    <img class="w-full h-full object-cover"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxnm2lkwHRKgOKolfxACC_FOolaIwd9RgQMUGoPbBQZxuN2nncyubAbqtbFheO3JqgrucqUjyJRswXaKmpU3FENRn7rG-VSYloHCQ_QZ8KeSJPxhwmgf95jp2gsRhbNfyq8g7Y7CNh9vN2MZrrdeo_EhYNWxnelOygAht_HIQxTIiAVb_EvwOwyCVikv0fHgJ09Qmbu66RTomFQK7_nIdwPcvlPEGpIVjvUprjT_4VUA-mqI2x7WYbEXIv_aljLE2aYZWBzevjid8"
+                        alt="EV dashboard navigation" />
+                </div>
+                <div
+                    class="absolute -bottom-10 -right-10 glass-card p-8 rounded-3xl ambient-shadow max-w-xs transition-transform hover:scale-105 duration-500">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-700">
+                            <span class="material-symbols-outlined">verified_user</span>
+                        </div>
+                        <p class="font-headline font-bold">100% Verified Fleet</p>
+                    </div>
+                    <p class="text-sm text-tertiary">Real-time health monitoring for every EV in our ecosystem.</p>
+                </div>
+            </div>
+            <div class="space-y-12">
+                <div class="space-y-6">
+                    <h2 class="text-5xl font-headline font-extrabold tracking-tight text-on-surface">Safety First,
+                        Convenience Always</h2>
+                    <p class="text-xl text-tertiary leading-relaxed">We've integrated high-end security protocols with a
+                        seamless booking interface to ensure your journey is as smooth as the electric drive.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="flex gap-6">
+                        <span class="material-symbols-outlined text-primary text-3xl"
+                            style="font-variation-settings: 'FILL' 1;">person_pin_circle</span>
+                        <div>
+                            <h4 class="font-headline font-bold text-lg mb-1">Trained Drivers</h4>
+                            <p class="text-sm text-tertiary">Professionals trained specifically for electric vehicle
+                                handling.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6">
+                        <span class="material-symbols-outlined text-primary text-3xl"
+                            style="font-variation-settings: 'FILL' 1;">emergency_share</span>
+                        <div>
+                            <h4 class="font-headline font-bold text-lg mb-1">Emergency Response</h4>
+                            <p class="text-sm text-tertiary">Instant SOS alerts and 24/7 rapid response teams.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section class="py-32 px-8 max-w-4xl mx-auto reveal" id="roadmap">
+        <div class="text-center mb-24 space-y-4">
+            <h2 class="text-5xl font-headline font-extrabold tracking-tight">Our Growth Roadmap</h2>
+            <p class="text-lg text-tertiary">Steering the future of transportation in Himachal Pradesh.</p>
+        </div>
+
+        <div class="relative">
+            <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-outline-variant/30"></div>
+            <div class="space-y-24">
+                <div class="relative flex items-center justify-between group">
+                    <div class="w-[45%] text-right pr-12 hidden md:block">
+                        <h3 class="text-2xl font-headline font-extrabold text-on-surface">Phase 1</h3>
+                        <p class="text-primary font-bold">2026 - 2030</p>
+                    </div>
+                    <div
+                        class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-4 border-surface ambient-shadow group-hover:scale-150 transition-transform duration-300">
+                    </div>
+                    <div class="md:w-[45%] pl-12">
+                        <div class="md:hidden mb-2">
+                            <h3 class="text-xl font-headline font-extrabold text-on-surface">Phase 1 (2026-2030)</h3>
+                        </div>
+                        <h4 class="text-xl font-bold mb-3">District Kangra Launch</h4>
+                        <p class="text-tertiary leading-relaxed">Establishing our core fleet and hub operations in
+                            Kangra.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="py-20 px-8 bg-surface-container-low reveal">
+        <div class="max-w-4xl mx-auto text-center space-y-8">
+            <h3 class="text-3xl font-headline font-bold text-on-surface">Ready to streamline your company's travel?</h3>
+            <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-4 text-sm font-semibold text-slate-500">
+                <a href="#" class="hover:text-primary transition-colors">Download the App</a>
+                <span class="hidden sm:inline text-outline-variant">|</span>
+                <a href="#" class="hover:text-primary transition-colors">Contact Us</a>
+                <span class="hidden sm:inline text-outline-variant">|</span>
+                <a href="#" class="hover:text-primary transition-colors">Operations and routes</a>
+                <span class="hidden sm:inline text-outline-variant">|</span>
+                <a href="#" class="hover:text-primary transition-colors">Suggestions</a>
+                <span class="hidden sm:inline text-outline-variant">|</span>
+                <a href="#" class="hover:text-primary transition-colors">View Fleet</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full rounded-t-[48px] bg-white pt-20 pb-12 ambient-shadow">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 pb-20 max-w-screen-2xl mx-auto font-body text-sm">
+            <div class="col-span-1 md:col-span-1 space-y-6">
+                <div class="text-lg font-bold text-emerald-900 tracking-tighter font-headline">Vishambrio Cabs</div>
+                <p class="text-slate-500 italic">"We are not just cabs; we are a sustainable transportation ecosystem"
+                </p>
+                <div class="flex gap-4">
+                    <a class="w-10 h-10 rounded-full bg-surface flex items-center justify-center ambient-shadow hover:text-primary transition-all"
+                        href="#"><span class="material-symbols-outlined text-sm">public</span></a>
+                    <a class="w-10 h-10 rounded-full bg-surface flex items-center justify-center ambient-shadow hover:text-primary transition-all"
+                        href="#"><span class="material-symbols-outlined text-sm">alternate_email</span></a>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <h4 class="font-headline font-bold text-emerald-900 uppercase tracking-widest text-xs">Explore</h4>
+                <ul class="space-y-4 text-slate-500">
+                    <li><a class="hover:text-emerald-600 transition-all" href="#">Home</a></li>
+                    <li><a class="hover:text-emerald-600 transition-all" href="#">Features</a></li>
+                    <li><a class="hover:text-emerald-600 transition-all" href="#">Safety</a></li>
+                    <li><a class="hover:text-emerald-600 transition-all" href="#">Roadmap</a></li>
+                </ul>
+            </div>
+            <div class="space-y-6">
+                <h4 class="font-headline font-bold text-emerald-900 uppercase tracking-widest text-xs">Company</h4>
+                <ul class="space-y-4 text-slate-500">
+                    <li><a class="hover:text-emerald-600 transition-all" href="#">About Us</a></li>
+                    <li><a class="hover:text-emerald-600 transition-all" href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="space-y-6">
+                <h4 class="font-headline font-bold text-emerald-900 uppercase tracking-widest text-xs">Newsletter</h4>
+                <div class="flex">
+                    <input
+                        class="bg-surface border-none rounded-l-xl w-full px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Email address" type="email" />
+                    <button class="bg-primary text-white px-4 rounded-r-xl"><span
+                            class="material-symbols-outlined">send</span></button>
+                </div>
+            </div>
+        </div>
+        <div
+            class="max-w-screen-2xl mx-auto px-12 py-8 ghost-border border-b-0 border-l-0 border-r-0 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-slate-400">© 2024 Vishambrio Cabs. Sustainable Himachal.</p>
+            <div class="flex gap-8 text-xs text-slate-400">
+                <a class="hover:text-primary" href="#">Privacy Policy</a>
+                <a class="hover:text-primary" href="#">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const menuIcon = menuToggle.querySelector('.material-symbols-outlined');
+
+        if (menuToggle && navMenu) {
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('hidden');
+                navMenu.classList.toggle('active');
+
+                if (navMenu.classList.contains('active')) {
+                    menuIcon.textContent = 'close';
+                } else {
+                    menuIcon.textContent = 'menu';
+                }
+            });
+
+            // Close menu on link click
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.add('hidden');
+                    navMenu.classList.remove('active');
+                    menuIcon.textContent = 'menu';
+                });
+            });
+        }
+
+        // Scroll Reveal
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>
