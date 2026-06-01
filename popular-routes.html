@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Popular Routes | Vishambrio Cabs</title>
+    <meta name="description" content="Explore popular cab routes across Himachal Pradesh offered by Vishambrio Cabs — Dharamshala, Manali, Shimla, Spiti Valley, and more." />
+    <link href="tailwind.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <style>
+        .routes-hero {
+            background: linear-gradient(135deg, #071e27 0%, #0d3349 50%, #00639a 100%);
+            min-height: 44vh;
+            position: relative;
+            overflow: hidden;
+        }
+        .routes-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .route-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .route-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 60px rgba(13, 99, 27, 0.15);
+        }
+        .route-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .badge-popular { background: #dcfce7; color: #15803d; }
+        .badge-scenic { background: #dbeafe; color: #1d4ed8; }
+        .badge-spiritual { background: #fef3c7; color: #b45309; }
+        .badge-adventure { background: #fce7f3; color: #be185d; }
+        .dotted-route {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #445963;
+        }
+        .dotted-route::before {
+            content: '';
+            flex: 1;
+            border-top: 2px dashed #bfcaba;
+        }
+        .filter-btn {
+            padding: 8px 20px;
+            border-radius: 999px;
+            font-family: Manrope, sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: 2px solid #bfcaba;
+            background: white;
+            color: #445963;
+            transition: all 0.25s;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: #0d631b;
+            border-color: #0d631b;
+            color: white;
+        }
+        
+        /* Modal Transitions & Animations */
+        @keyframes modalScaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .animate-modal-entrance {
+            animation: modalScaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        
+        /* Interactive Map Node Animations */
+        @keyframes pulseGlow {
+            0% { r: 5px; opacity: 0.6; }
+            50% { r: 9px; opacity: 0.9; }
+            100% { r: 5px; opacity: 0.6; }
+        }
+        .map-node-pulse {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+        .map-interactive-node {
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .map-interactive-node:hover circle {
+            stroke-width: 2.5px !important;
+            stroke: #ffffff !important;
+            r: 7.5px !important;
+        }
+        
+        /* Winding Map cab offset path glide */
+        @keyframes cabGlide {
+            0% { offset-distance: 0%; }
+            100% { offset-distance: 100%; }
+        }
+        .animate-cab-glide {
+            animation: cabGlide 7s infinite linear;
+        }
+        
+        /* Timeline Stepper Highlight effects */
+        .timeline-step {
+            transition: all 0.3s ease;
+        }
+        .timeline-step.active {
+            background-color: #f0fdf4;
+            border-color: #86efac;
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 w-full z-50 ambient-shadow">
+        <div class="flex justify-between items-center px-6 md:px-12 py-4 max-w-screen-2xl mx-auto">
+            <a href="index.html" class="text-xl font-extrabold text-emerald-900 tracking-tighter font-headline">Vishambrio Cabs</a>
+            <div id="nav-menu" class="hidden md:flex items-center space-x-8 font-headline font-semibold tracking-tight">
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="index.html">Home</a>
+                <a class="text-emerald-700 border-b-2 border-emerald-600 transition-all duration-300" href="popular-routes.html">Popular Routes</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="packaged-tours.html">Packaged Tours</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="tourist-attractions.html">Attractions</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="contact.html">Contact</a>
+                <a class="md:hidden text-slate-600 hover:text-emerald-600 transition-all duration-300 flex items-center gap-1.5" href="index.html?openBookings=true">
+                    <span class="material-symbols-outlined text-lg">receipt_long</span> My Bookings
+                </a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="index.html?openBookings=true" class="hidden sm:inline-flex items-center gap-1.5 border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-5 py-2 rounded-xl font-headline font-bold active:scale-95 duration-200 shadow-md transition-colors">
+                    <span class="material-symbols-outlined text-lg">receipt_long</span>
+                    My Bookings
+                </a>
+                <a href="index.html#booking-card" class="hidden sm:block btn-primary-gradient text-on-primary px-6 py-2.5 rounded-xl font-headline font-bold active:scale-95 duration-200 shadow-lg shadow-primary/20">Book Now</a>
+                <button id="menu-toggle" class="md:hidden p-2 text-on-surface hover:bg-surface-container-low rounded-lg transition-colors">
+                    <span class="material-symbols-outlined text-3xl">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="routes-hero flex items-center justify-center px-8 py-24 text-center">
+        <div class="relative z-10 space-y-5 animate-entrance opacity-0">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+                <span class="material-symbols-outlined text-blue-300 text-sm" style="font-variation-settings: 'FILL' 1;">route</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-blue-200">Explore Himachal</span>
+            </div>
+            <h1 class="display-lg text-white">Popular <span style="color: #96ccff;">Routes</span></h1>
+            <p class="text-xl text-white/80 max-w-xl mx-auto leading-relaxed">
+                From dhauladhar peaks to ancient temples — discover our most-travelled electric cab routes.
+            </p>
+        </div>
+    </section>
+
+    <!-- Filter Chips -->
+    <section class="py-10 px-6 max-w-screen-xl mx-auto reveal">
+        <div class="flex flex-wrap gap-3 justify-center">
+            <button class="filter-btn active" onclick="filterRoutes('all', this)">All Routes</button>
+            <button class="filter-btn" onclick="filterRoutes('popular', this)">🌟 Popular</button>
+            <button class="filter-btn" onclick="filterRoutes('scenic', this)">🏔️ Scenic</button>
+            <button class="filter-btn" onclick="filterRoutes('spiritual', this)">🛕 Spiritual</button>
+            <button class="filter-btn" onclick="filterRoutes('adventure', this)">🧗 Adventure</button>
+        </div>
+    </section>
+
+    <!-- Routes Grid -->
+    <section class="pb-20 px-6 max-w-screen-xl mx-auto">
+        <!-- Modern Glassmorphic Search Bar -->
+        <div class="mb-10 max-w-lg mx-auto relative group">
+            <input type="text" id="routes-search" placeholder="Search routes by name or keyword (e.g. McLeod)..." class="w-full py-4 pl-12 pr-6 bg-slate-50 border-2 border-slate-100 rounded-2xl shadow-sm text-sm font-semibold outline-none focus:border-emerald-600 focus:bg-white transition-all text-slate-800 placeholder-slate-400">
+            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-emerald-700">search</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="routes-grid">
+
+            <!-- Route 1 -->
+            <div class="route-card" data-tag="popular scenic">
+                <div class="h-48 bg-gradient-to-br from-sky-400 to-blue-700 flex items-end p-6 relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center">🏔️</div>
+                    <div class="relative z-10">
+                        <span class="route-badge badge-popular">🌟 Popular</span>
+                        <h3 class="text-white font-headline font-extrabold text-xl mt-2">Gaggal → Dharamshala</h3>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">straighten</span> ~18 km</span>
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">schedule</span> ~35 min</span>
+                        <span class="font-bold text-primary">From ₹450</span>
+                    </div>
+                    <p class="text-sm text-tertiary leading-relaxed">The most frequented route connecting Kangra Airport (Gaggal) to the heart of Dharamshala — perfect for airport transfers and city exploration.</p>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="route-badge badge-scenic">🏔️ Scenic</span>
+                            <span class="text-xs text-tertiary font-medium">Via Dharamshala Bypass</span>
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100/50">
+                            🌱 +85 Tokens &nbsp;•&nbsp; 17kg CO2 saved ⚡
+                        </span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openRouteDetails('route-1')" class="flex-1 text-center border-2 border-primary text-primary rounded-xl py-3 font-headline font-bold hover:bg-emerald-50/50 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">map</span> Map & Stops</button>
+                        <a href="index.html?pickup=gaggal&drop=dharamshala#booking-card" class="flex-1 text-center bg-primary text-white rounded-xl py-3 font-headline font-bold hover:bg-primary-container transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">bolt</span> Book Ride</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route 2 -->
+            <div class="route-card" data-tag="popular scenic">
+                <div class="h-48 bg-gradient-to-br from-emerald-500 to-green-800 flex items-end p-6 relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center">🌲</div>
+                    <div class="relative z-10">
+                        <span class="route-badge badge-popular">🌟 Popular</span>
+                        <h3 class="text-white font-headline font-extrabold text-xl mt-2">Gaggal → McLeod Ganj</h3>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">straighten</span> ~25 km</span>
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">schedule</span> ~55 min</span>
+                        <span class="font-bold text-primary">From ₹650</span>
+                    </div>
+                    <p class="text-sm text-tertiary leading-relaxed">Winding mountain roads up to the vibrant Tibetan refugee town — home of the Dalai Lama. Our most requested tourist transfer.</p>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="route-badge badge-scenic">🏔️ Scenic</span>
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100/50">
+                            🌱 +110 Tokens &nbsp;•&nbsp; 22kg CO2 saved ⚡
+                        </span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openRouteDetails('route-2')" class="flex-1 text-center border-2 border-primary text-primary rounded-xl py-3 font-headline font-bold hover:bg-emerald-50/50 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">map</span> Map & Stops</button>
+                        <a href="index.html?pickup=gaggal&drop=mcleodganj#booking-card" class="flex-1 text-center bg-primary text-white rounded-xl py-3 font-headline font-bold hover:bg-primary-container transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">bolt</span> Book Ride</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route 3 -->
+            <div class="route-card" data-tag="spiritual">
+                <div class="h-48 bg-gradient-to-br from-amber-400 to-orange-700 flex items-end p-6 relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center">🛕</div>
+                    <div class="relative z-10">
+                        <span class="route-badge badge-spiritual">🛕 Spiritual</span>
+                        <h3 class="text-white font-headline font-extrabold text-xl mt-2">Gaggal → Chamunda Devi</h3>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">straighten</span> ~20 km</span>
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">schedule</span> ~45 min</span>
+                        <span class="font-bold text-primary">From ₹600</span>
+                    </div>
+                    <p class="text-sm text-tertiary leading-relaxed">A sacred pilgrimage route to the revered Chamunda Devi temple — one of the most important Shakti Peethas in Himachal.</p>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="route-badge badge-spiritual">🛕 Spiritual</span>
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100/50">
+                            🌱 +95 Tokens &nbsp;•&nbsp; 19kg CO2 saved ⚡
+                        </span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openRouteDetails('route-3')" class="flex-1 text-center border-2 border-primary text-primary rounded-xl py-3 font-headline font-bold hover:bg-emerald-50/50 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">map</span> Map & Stops</button>
+                        <a href="index.html?pickup=gaggal&drop=kangra_temple#booking-card" class="flex-1 text-center bg-primary text-white rounded-xl py-3 font-headline font-bold hover:bg-primary-container transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">bolt</span> Book Ride</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route 4 -->
+            <div class="route-card" data-tag="spiritual popular">
+                <div class="h-48 bg-gradient-to-br from-violet-500 to-purple-800 flex items-end p-6 relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center">🕌</div>
+                    <div class="relative z-10">
+                        <span class="route-badge badge-popular">🌟 Popular</span>
+                        <h3 class="text-white font-headline font-extrabold text-xl mt-2">Gaggal → Jwalamukhi</h3>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">straighten</span> ~55 km</span>
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">schedule</span> ~1.5 hrs</span>
+                        <span class="font-bold text-primary">From ₹1,200</span>
+                    </div>
+                    <p class="text-sm text-tertiary leading-relaxed">The flame temple of Jwalamukhi is one of the 51 Shakti Peethas. A deeply spiritual journey through the Kangra Valley.</p>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="route-badge badge-spiritual">🛕 Spiritual</span>
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100/50">
+                            🌱 +250 Tokens &nbsp;•&nbsp; 50kg CO2 saved ⚡
+                        </span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openRouteDetails('route-4')" class="flex-1 text-center border-2 border-primary text-primary rounded-xl py-3 font-headline font-bold hover:bg-emerald-50/50 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">map</span> Map & Stops</button>
+                        <a href="index.html?pickup=gaggal&drop=kangra_temple#booking-card" class="flex-1 text-center bg-primary text-white rounded-xl py-3 font-headline font-bold hover:bg-primary-container transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">bolt</span> Book Ride</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route 5 -->
+            <div class="route-card" data-tag="adventure scenic">
+                <div class="h-48 bg-gradient-to-br from-slate-600 to-slate-900 flex items-end p-6 relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center">🗻</div>
+                    <div class="relative z-10">
+                        <span class="route-badge badge-adventure">🧗 Adventure</span>
+                        <h3 class="text-white font-headline font-extrabold text-xl mt-2">Gaggal → Manali</h3>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">straighten</span> ~230 km</span>
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">schedule</span> ~6–7 hrs</span>
+                        <span class="font-bold text-primary">From ₹5,500</span>
+                    </div>
+                    <p class="text-sm text-tertiary leading-relaxed">A breathtaking drive through Kullu Valley — rivers, pine forests, and snow peaks culminating at the adventure capital of North India.</p>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="route-badge badge-scenic">🏔️ Scenic</span>
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100/50">
+                            🌱 +950 Tokens &nbsp;•&nbsp; 190kg CO2 saved ⚡
+                        </span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openRouteDetails('route-5')" class="flex-1 text-center border-2 border-primary text-primary rounded-xl py-3 font-headline font-bold hover:bg-emerald-50/50 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">map</span> Map & Stops</button>
+                        <a href="index.html?pickup=gaggal&drop=dharamshala#booking-card" class="flex-1 text-center bg-primary text-white rounded-xl py-3 font-headline font-bold hover:bg-primary-container transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">bolt</span> Book Ride</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route 6 -->
+            <div class="route-card" data-tag="scenic adventure">
+                <div class="h-48 bg-gradient-to-br from-cyan-500 to-teal-800 flex items-end p-6 relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center">🌊</div>
+                    <div class="relative z-10">
+                        <span class="route-badge badge-scenic">🏔️ Scenic</span>
+                        <h3 class="text-white font-headline font-extrabold text-xl mt-2">Gaggal → Baijnath Paprola</h3>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">straighten</span> ~60 km</span>
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">schedule</span> ~1.5 hrs</span>
+                        <span class="font-bold text-primary">From ₹1,400</span>
+                    </div>
+                    <p class="text-sm text-tertiary leading-relaxed">A serene drive along the Beas river to the ancient Shiva temple town of Baijnath — known for its exquisite 13th century temple.</p>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="route-badge badge-spiritual">🛕 Spiritual</span>
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100/50">
+                            🌱 +260 Tokens &nbsp;•&nbsp; 52kg CO2 saved ⚡
+                        </span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openRouteDetails('route-6')" class="flex-1 text-center border-2 border-primary text-primary rounded-xl py-3 font-headline font-bold hover:bg-emerald-50/50 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">map</span> Map & Stops</button>
+                        <a href="index.html?pickup=gaggal&drop=kangra_temple#booking-card" class="flex-1 text-center bg-primary text-white rounded-xl py-3 font-headline font-bold hover:bg-primary-container transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">bolt</span> Book Ride</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route 7 -->
+            <div class="route-card" data-tag="spiritual popular">
+                <div class="h-48 bg-gradient-to-br from-rose-400 to-red-700 flex items-end p-6 relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center">⛩️</div>
+                    <div class="relative z-10">
+                        <span class="route-badge badge-popular">🌟 Popular</span>
+                        <h3 class="text-white font-headline font-extrabold text-xl mt-2">Gaggal → Kangra Fort</h3>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">straighten</span> ~22 km</span>
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">schedule</span> ~45 min</span>
+                        <span class="font-bold text-primary">From ₹700</span>
+                    </div>
+                    <p class="text-sm text-tertiary leading-relaxed">Visit one of the oldest forts in India, the historic Kangra Fort — with stunning views of the Kangra valley and the Dhauladhar range.</p>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="route-badge badge-scenic">🏔️ Scenic</span>
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100/50">
+                            🌱 +100 Tokens &nbsp;•&nbsp; 20kg CO2 saved ⚡
+                        </span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openRouteDetails('route-7')" class="flex-1 text-center border-2 border-primary text-primary rounded-xl py-3 font-headline font-bold hover:bg-emerald-50/50 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">map</span> Map & Stops</button>
+                        <a href="index.html?pickup=gaggal&drop=kangra_temple#booking-card" class="flex-1 text-center bg-primary text-white rounded-xl py-3 font-headline font-bold hover:bg-primary-container transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">bolt</span> Book Ride</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route 8 -->
+            <div class="route-card" data-tag="adventure scenic">
+                <div class="h-48 bg-gradient-to-br from-pink-500 to-fuchsia-800 flex items-end p-6 relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center">🌸</div>
+                    <div class="relative z-10">
+                        <span class="route-badge badge-adventure">🧗 Adventure</span>
+                        <h3 class="text-white font-headline font-extrabold text-xl mt-2">Gaggal → Chintpurni</h3>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">straighten</span> ~80 km</span>
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">schedule</span> ~2 hrs</span>
+                        <span class="font-bold text-primary">From ₹2,000</span>
+                    </div>
+                    <p class="text-sm text-tertiary leading-relaxed">Journey to the revered Chintpurni Mata temple — among the most visited Shakti Peethas in Himachal Pradesh.</p>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="route-badge badge-spiritual">🛕 Spiritual</span>
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100/50">
+                            🌱 +320 Tokens &nbsp;•&nbsp; 64kg CO2 saved ⚡
+                        </span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openRouteDetails('route-8')" class="flex-1 text-center border-2 border-primary text-primary rounded-xl py-3 font-headline font-bold hover:bg-emerald-50/50 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">map</span> Map & Stops</button>
+                        <a href="index.html?pickup=gaggal&drop=kangra_temple#booking-card" class="flex-1 text-center bg-primary text-white rounded-xl py-3 font-headline font-bold hover:bg-primary-container transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">bolt</span> Book Ride</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route 9 -->
+            <div class="route-card" data-tag="scenic popular">
+                <div class="h-48 bg-gradient-to-br from-lime-500 to-green-700 flex items-end p-6 relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center">🌿</div>
+                    <div class="relative z-10">
+                        <span class="route-badge badge-scenic">🏔️ Scenic</span>
+                        <h3 class="text-white font-headline font-extrabold text-xl mt-2">Gaggal → Palampur</h3>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">straighten</span> ~35 km</span>
+                        <span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-base">schedule</span> ~55 min</span>
+                        <span class="font-bold text-primary">From ₹900</span>
+                    </div>
+                    <p class="text-sm text-tertiary leading-relaxed">Drive through rolling tea estates and cedar forests to Palampur — Himachal's tea capital — with a backdrop of perpetual snow peaks.</p>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="route-badge badge-scenic">🏔️ Scenic</span>
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100/50">
+                            🌱 +160 Tokens &nbsp;•&nbsp; 32kg CO2 saved ⚡
+                        </span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openRouteDetails('route-9')" class="flex-1 text-center border-2 border-primary text-primary rounded-xl py-3 font-headline font-bold hover:bg-emerald-50/50 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">map</span> Map & Stops</button>
+                        <a href="index.html?pickup=gaggal&drop=dharamshala#booking-card" class="flex-1 text-center bg-primary text-white rounded-xl py-3 font-headline font-bold hover:bg-primary-container transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm"><span class="material-symbols-outlined text-base">bolt</span> Book Ride</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- No results message -->
+        <div id="no-results" class="hidden text-center py-20 text-tertiary">
+            <span class="material-symbols-outlined text-5xl mb-4 block">search_off</span>
+            <p class="font-headline font-bold text-xl">No routes found for this filter.</p>
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="py-20 px-6 reveal">
+        <div class="max-w-screen-xl mx-auto bg-gradient-to-r from-emerald-900 via-emerald-800 to-emerald-700 rounded-[40px] p-12 text-center text-white">
+            <h2 class="text-4xl font-headline font-extrabold mb-4">Need a Custom Route?</h2>
+            <p class="text-xl text-white/80 mb-8 max-w-xl mx-auto">Don't see your destination? Contact us and we'll plan your perfect Himachal road trip.</p>
+            <a href="contact.html" class="inline-flex items-center gap-3 bg-white text-emerald-900 px-10 py-4 rounded-2xl font-headline font-extrabold text-lg hover:bg-green-50 transition-all hover:-translate-y-1 shadow-xl duration-300">
+                <span class="material-symbols-outlined">mail</span>
+                Contact Us
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full bg-surface-container-low pt-12 pb-28 text-center text-sm text-tertiary">
+        <p>© 2024 Vishambrio Cabs. Sustainable Himachal.</p>
+        <div class="flex justify-center gap-6 mt-3">
+            <a href="index.html" class="hover:text-primary transition-colors">Home</a>
+            <a href="popular-routes.html" class="hover:text-primary transition-colors">Routes</a>
+            <a href="packaged-tours.html" class="hover:text-primary transition-colors">Tours</a>
+            <a href="contact.html" class="hover:text-primary transition-colors">Contact</a>
+        </div>
+    </footer>
+
+    <!-- Under Development Ribbon -->
+    <div id="dev-ribbon" class="fixed bottom-0 left-0 right-0 z-[999] flex items-center justify-between px-6 py-3" style="background: linear-gradient(90deg, #92400e, #b45309, #d97706); box-shadow: 0 -4px 20px rgba(180,83,9,0.3);">
+        <div class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-amber-200 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-amber-100 text-sm font-semibold font-headline tracking-wide">🚧 &nbsp;This website is currently under development. Some features may be incomplete or subject to change.</span>
+        </div>
+        <button onclick="document.getElementById('dev-ribbon').style.display='none'" class="text-amber-200 hover:text-white transition-colors ml-4 flex-shrink-0" aria-label="Dismiss">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </button>
+    </div>
+
+    <!-- Route Details Modal (Glassmorphic) -->
+    <div id="route-details-modal" class="hidden fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-6 transition-all duration-300">
+        <!-- Semi-translucent Backdrop -->
+        <div class="fixed inset-0 bg-emerald-950/60 backdrop-blur-md transition-opacity duration-300" onclick="closeRouteDetails()"></div>
+        
+        <!-- Modal Window Container -->
+        <div class="relative w-full max-w-4xl bg-white rounded-[32px] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-white/20 h-[85vh] md:h-auto max-h-[85vh] transition-all duration-300 transform scale-95 opacity-0" id="route-modal-window">
+            
+            <!-- Left Column: Dynamic Map Canvas (approx 45% on desktop) -->
+            <div class="w-full md:w-[45%] bg-[#081f2c] p-6 flex flex-col justify-between relative text-white min-h-[340px] md:min-h-auto">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#081f2c]/50 to-[#081f2c] pointer-events-none z-10"></div>
+                <!-- Winding Mountains decorative grid patterns -->
+                <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 0); background-size: 24px 24px;"></div>
+                
+                <!-- Map Header -->
+                <div class="relative z-20">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-bold tracking-wider text-emerald-400 uppercase">
+                        <span class="material-symbols-outlined text-[14px]">explore</span> Live Route Map
+                    </span>
+                    <h4 class="text-xl font-headline font-extrabold mt-2 text-slate-100" id="map-route-title">Pathankot → Dharamshala</h4>
+                    <p class="text-xs text-slate-400 mt-1">Click the nodes along the route path to view stop details and scenic checkpoints.</p>
+                </div>
+                
+                <!-- Live SVG Map Box -->
+                <div class="relative flex-1 flex items-center justify-center mt-1 mb-6 z-20 select-none">
+                    <svg id="map-svg-element" viewBox="0 0 400 240" class="w-full h-full max-h-[220px]" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Definitions for markers and animations -->
+                        <defs>
+                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="3" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+                        <!-- Grid Lines or Scenic Background Lines -->
+                        <path d="M 0 200 Q 100 160, 200 180 T 400 140" stroke="#102e3f" stroke-width="2" fill="none" opacity="0.4" />
+                        <path d="M 0 160 Q 150 200, 300 120 T 400 180" stroke="#102e3f" stroke-width="2" fill="none" opacity="0.4" />
+                        
+                        <!-- Baseline Dotted Route Path -->
+                        <path id="svg-base-path" d="" stroke="#1e3a5f" stroke-width="4" stroke-linecap="round" stroke-dasharray="6,6" fill="none" />
+                        
+                        <!-- Overlay Animated Emerald Green Trace Path -->
+                        <path id="svg-trace-path" d="" stroke="#10b981" stroke-width="4" stroke-linecap="round" fill="none" />
+                        
+                        <!-- SVG Pin Markers / Dots will be dynamically injected here -->
+                        <g id="svg-nodes-group"></g>
+                        
+                        <!-- Gliding Taxi Dot/Icon -->
+                        <circle id="svg-cab-circle" r="7" fill="#34d399" filter="url(#glow)"></circle>
+                        <circle id="svg-cab-inner" r="3.5" fill="#047857"></circle>
+                    </svg>
+                    
+                    <!-- Floating Popover Tooltip over the Map -->
+                    <div id="map-node-popup" class="absolute z-[30] hidden bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-emerald-500/20 max-w-[240px] text-slate-800 animate-entrance transition-all duration-300">
+                        <div class="flex items-start gap-2">
+                            <span id="popup-node-icon" class="material-symbols-outlined text-emerald-600 mt-0.5 text-lg">circle</span>
+                            <div class="space-y-1">
+                                <h5 id="popup-node-title" class="font-bold text-sm text-slate-900 leading-tight">Gaggal Airport</h5>
+                                <p id="popup-node-desc" class="text-[11px] text-slate-500 leading-relaxed">Flight arrivals & baggage pickup area</p>
+                                <a id="popup-node-maps-btn" href="#" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 hover:text-emerald-950 transition-colors pt-1">
+                                    <span class="material-symbols-outlined text-[12px]">directions</span> View on Google Maps
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Map Footer Stats -->
+                <div class="flex justify-between items-center bg-[#071822]/60 backdrop-blur-md rounded-2xl p-3 border border-slate-800 relative z-20">
+                    <div class="text-center flex-1 border-r border-slate-800">
+                        <div class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Distance</div>
+                        <div class="text-sm font-extrabold text-slate-200" id="map-stat-distance">18 km</div>
+                    </div>
+                    <div class="text-center flex-1 border-r border-slate-800">
+                        <div class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Est. Time</div>
+                        <div class="text-sm font-extrabold text-slate-200" id="map-stat-time">35 min</div>
+                    </div>
+                    <div class="text-center flex-1">
+                        <div class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Base Fare</div>
+                        <div class="text-sm font-extrabold text-emerald-400" id="map-stat-fare">₹450</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column: Timeline, Drop Points & Scenic Gallery (approx 55% wide) -->
+            <div class="w-full md:w-[55%] p-6 md:p-8 flex flex-col justify-between overflow-y-auto max-h-[50vh] md:max-h-[85vh] relative">
+                <button onclick="closeRouteDetails()" class="absolute top-4 right-4 z-30 p-2 text-slate-400 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-full transition-all">
+                    <span class="material-symbols-outlined text-xl block">close</span>
+                </button>
+                
+                <div class="space-y-6">
+                    <!-- Section Header -->
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Timeline & Scenic Stops</span>
+                        <h3 class="text-2xl font-headline font-extrabold text-slate-900 mt-1">Route Details & Highlights</h3>
+                    </div>
+                    
+                    <!-- Vertical Timeline Steps -->
+                    <div class="space-y-4 relative before:absolute before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100 pl-8" id="route-timeline-container">
+                        <!-- Dynamically populated timeline elements -->
+                    </div>
+                    
+                    <!-- Common Drop Points -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Available Exact Drop Points</h4>
+                        <div class="flex flex-wrap gap-2" id="route-drop-points-container">
+                            <!-- Populated drop point tags -->
+                        </div>
+                    </div>
+                    
+                    <!-- Scenic Photo Gallery Slider -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Route Gallery & Scenery</h4>
+                        <div class="relative rounded-2xl overflow-hidden h-[180px] shadow-md group">
+                            <div id="gallery-carousel-inner" class="w-full h-full relative transition-all duration-500">
+                                <!-- Slides will be injected dynamically -->
+                            </div>
+                            <!-- Slide navigation controls -->
+                            <button onclick="prevScenicPhoto(event)" class="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                <span class="material-symbols-outlined text-sm block">chevron_left</span>
+                            </button>
+                            <button onclick="nextScenicPhoto(event)" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                <span class="material-symbols-outlined text-sm block">chevron_right</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bottom Modal Buttons -->
+                <div class="pt-6 mt-6 border-t border-slate-100 flex gap-4">
+                    <button onclick="closeRouteDetails()" class="flex-1 py-3 text-center border-2 border-slate-200 text-slate-600 hover:text-slate-900 rounded-xl font-headline font-bold hover:bg-slate-50 transition-colors">Close Details</button>
+                    <a id="modal-book-btn" href="#" class="flex-1 py-3 text-center bg-primary hover:bg-primary-container text-white rounded-xl font-headline font-bold transition-all shadow-lg flex items-center justify-center gap-1.5"><span class="material-symbols-outlined text-base">bolt</span> Book Route Now</a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Script Dependencies -->
+    <script src="auth.js"></script>
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        if (menuToggle && navMenu) {
+            const menuIcon = menuToggle.querySelector('.material-symbols-outlined');
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('hidden');
+                navMenu.classList.toggle('active');
+                menuIcon.textContent = navMenu.classList.contains('active') ? 'close' : 'menu';
+            });
+        }
+
+        if (menuToggle && navMenu) {
+            const menuIcon = menuToggle.querySelector('.material-symbols-outlined');
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('hidden');
+                navMenu.classList.toggle('active');
+                menuIcon.textContent = navMenu.classList.contains('active') ? 'close' : 'menu';
+            });
+        }
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ========================================================
+        // INTERACTIVE MAP, TIMELINE, GALLERY & POPUP ROUTE CONTROLLER
+        // ========================================================
+
+        const routeDetailsData = {
+            'route-1': {
+                title: 'Gaggal → Dharamshala',
+                distance: '18 km',
+                duration: '35 min',
+                baseFare: '₹450',
+                pickupVal: 'gaggal',
+                dropVal: 'dharamshala',
+                svgPath: 'M 40 180 C 100 120, 150 200, 200 100 C 240 60, 280 80, 360 60',
+                dropPoints: ['Dharamshala Skyway Terminal', 'Kotwali Bazar', 'Dharamshala Bus Stand'],
+                photos: ['assets/palampur_tea.png', 'assets/mcleod_ganj.png'],
+                nodes: [
+                    { name: 'Gaggal Airport (DHM)', desc: 'Start Point - Flight arrivals & baggage pickup area', x: 40, y: 180, type: 'start', photoIndex: 0 },
+                    { name: 'Dharamshala Bypass EV Charger', desc: 'Quick 50kW EV high-speed backup charger station', x: 150, y: 165, type: 'stop', photoIndex: 0 },
+                    { name: 'Pine Valley Viewpoint', desc: 'Photogenic panoramic overview of lush tea gardens', x: 235, y: 85, type: 'scenic', photoIndex: 0 },
+                    { name: 'Dharamshala Skyway Terminal', desc: 'Drop Point - Major mountain skyway terminal hub', x: 360, y: 60, type: 'end', photoIndex: 1 }
+                ]
+            },
+            'route-2': {
+                title: 'Gaggal → McLeod Ganj',
+                distance: '25 km',
+                duration: '55 min',
+                baseFare: '₹650',
+                pickupVal: 'gaggal',
+                dropVal: 'mcleodganj',
+                svgPath: 'M 40 180 C 80 160, 100 220, 160 140 C 220 60, 240 100, 360 40',
+                dropPoints: ['McLeodganj Main Square', 'Bhagsunag Temple Parking', 'Naddi Sunset Viewpoint'],
+                photos: ['assets/mcleod_ganj.png', 'assets/kangra_fort.png'],
+                nodes: [
+                    { name: 'Gaggal Airport (DHM)', desc: 'Start Point - Flight landing terminal', x: 40, y: 180, type: 'start', photoIndex: 0 },
+                    { name: 'Dharamshala Kotwali Bazar', desc: 'Scenic mountain climb gateway and local market entry', x: 130, y: 170, type: 'stop', photoIndex: 0 },
+                    { name: 'Bhagsunag Pine Forests', desc: 'Lush towering cedar and pine forest overlook', x: 220, y: 85, type: 'scenic', photoIndex: 0 },
+                    { name: 'McLeodganj Main Square', desc: 'Drop Point - Heart of Tibetan culture and Dalai Lama Temple', x: 360, y: 40, type: 'end', photoIndex: 1 }
+                ]
+            },
+            'route-3': {
+                title: 'Gaggal → Chamunda Devi',
+                distance: '20 km',
+                duration: '45 min',
+                baseFare: '₹600',
+                pickupVal: 'gaggal',
+                dropVal: 'kangra_temple',
+                svgPath: 'M 40 180 C 120 180, 160 120, 220 160 C 260 180, 300 120, 360 100',
+                dropPoints: ['Chamunda Devi Temple Main Entrance', 'Yatri Niwas Dharamshala Crossing', 'Baner River Bank Parking'],
+                photos: ['assets/baijnath_temple.png', 'assets/masroor_temple.png'],
+                nodes: [
+                    { name: 'Gaggal Airport (DHM)', desc: 'Start Point', x: 40, y: 180, type: 'start', photoIndex: 0 },
+                    { name: 'Kangra Valley View Toll', desc: 'Valley checkpoint with breathtaking mountain backdrops', x: 170, y: 135, type: 'stop', photoIndex: 0 },
+                    { name: 'Baner River Banks', desc: 'A serene flowing river next to the temple steps', x: 270, y: 140, type: 'scenic', photoIndex: 1 },
+                    { name: 'Chamunda Devi Temple', desc: 'Drop Point - Famous sacred Shakti Peeth pilgrimage shrine', x: 360, y: 100, type: 'end', photoIndex: 0 }
+                ]
+            },
+            'route-4': {
+                title: 'Gaggal → Jwalamukhi',
+                distance: '55 km',
+                duration: '1.5 hrs',
+                baseFare: '₹1,200',
+                pickupVal: 'gaggal',
+                dropVal: 'kangra_temple',
+                svgPath: 'M 40 180 C 100 180, 140 100, 200 140 C 260 180, 300 80, 360 120',
+                dropPoints: ['Jwalamukhi Temple Gate 1', 'Jwalamukhi Bus Stand', 'State Yatri Niwas'],
+                photos: ['assets/masroor_temple.png', 'assets/kangra_fort.png'],
+                nodes: [
+                    { name: 'Gaggal Airport (DHM)', desc: 'Start Point', x: 40, y: 180, type: 'start', photoIndex: 0 },
+                    { name: 'Kangra Bypass Charger', desc: 'EV charging backup station', x: 120, y: 145, type: 'stop', photoIndex: 0 },
+                    { name: 'Ranital Crossing rest', desc: 'Traditional local tea and sweets checkpoint', x: 230, y: 160, type: 'stop', photoIndex: 1 },
+                    { name: 'Jwalamukhi Temple', desc: 'Drop Point - Sacred flame temple of natural blue fire', x: 360, y: 120, type: 'end', photoIndex: 0 }
+                ]
+            },
+            'route-5': {
+                title: 'Gaggal → Manali',
+                distance: '230 km',
+                duration: '6–7 hrs',
+                baseFare: '₹5,500',
+                pickupVal: 'gaggal',
+                dropVal: 'dharamshala',
+                svgPath: 'M 40 180 C 90 140, 110 200, 180 160 C 240 120, 260 180, 360 40',
+                dropPoints: ['Manali Mall Road Bus Stand', 'Old Manali Bridge', 'Hadimba Temple Road'],
+                photos: ['assets/bir_billing.png', 'assets/palampur_tea.png'],
+                nodes: [
+                    { name: 'Gaggal Airport (DHM)', desc: 'Start Point', x: 40, y: 180, type: 'start', photoIndex: 0 },
+                    { name: 'Palampur Tea Estate Bypass', desc: 'Lush green tea garden pathways', x: 105, y: 175, type: 'scenic', photoIndex: 1 },
+                    { name: 'Mandi Town EV Charger Hub', desc: 'EV quick charger station for lunch & vehicle backup charge', x: 190, y: 155, type: 'stop', photoIndex: 0 },
+                    { name: 'Kullu River Valley', desc: 'Breathtaking drive alongside the roaring Beas river', x: 270, y: 130, type: 'scenic', photoIndex: 0 },
+                    { name: 'Manali Mall Road', desc: 'Drop Point - Iconic snowy hilltop mall road terminal', x: 360, y: 40, type: 'end', photoIndex: 0 }
+                ]
+            },
+            'route-6': {
+                title: 'Gaggal → Baijnath Paprola',
+                distance: '60 km',
+                duration: '1.5 hrs',
+                baseFare: '₹1,400',
+                pickupVal: 'gaggal',
+                dropVal: 'kangra_temple',
+                svgPath: 'M 40 180 C 100 180, 150 140, 220 140 C 260 140, 310 120, 360 80',
+                dropPoints: ['Baijnath Shiva Temple Complex', 'Baijnath Paprola Railway Station', 'Palampur Crossing Market'],
+                photos: ['assets/baijnath_temple.png', 'assets/palampur_tea.png'],
+                nodes: [
+                    { name: 'Gaggal Airport (DHM)', desc: 'Start Point', x: 40, y: 180, type: 'start', photoIndex: 0 },
+                    { name: 'Palampur Tea Garden Vistas', desc: 'Lush panoramic green estate terraces', x: 180, y: 150, type: 'scenic', photoIndex: 1 },
+                    { name: 'Baijnath Temple Gates', desc: 'Drop Point - Beautiful 13th-century stone Shiva temple monument', x: 360, y: 80, type: 'end', photoIndex: 0 }
+                ]
+            },
+            'route-7': {
+                title: 'Gaggal → Kangra Fort',
+                distance: '22 km',
+                duration: '45 min',
+                baseFare: '₹700',
+                pickupVal: 'gaggal',
+                dropVal: 'kangra_temple',
+                svgPath: 'M 40 180 C 120 180, 160 220, 220 140 C 260 80, 300 100, 360 80',
+                dropPoints: ['Kangra Fort Entrance Ticket Booth', 'Kangra Devi Temple Crossing', 'Fort View Cafe Hub'],
+                photos: ['assets/kangra_fort.png', 'assets/masroor_temple.png'],
+                nodes: [
+                    { name: 'Gaggal Airport (DHM)', desc: 'Start Point', x: 40, y: 180, type: 'start', photoIndex: 0 },
+                    { name: 'Kangra Town Entry Point', desc: 'Historic local market checkpoint', x: 190, y: 170, type: 'stop', photoIndex: 1 },
+                    { name: 'Kangra Fort Museum Gates', desc: 'Drop Point - Ancient heritage fort with snow peak overlooks', x: 360, y: 80, type: 'end', photoIndex: 0 }
+                ]
+            },
+            'route-8': {
+                title: 'Gaggal → Chintpurni',
+                distance: '80 km',
+                duration: '2 hrs',
+                baseFare: '₹2,000',
+                pickupVal: 'gaggal',
+                dropVal: 'kangra_temple',
+                svgPath: 'M 40 180 C 100 180, 140 140, 200 160 C 260 180, 310 120, 360 140',
+                dropPoints: ['Chintpurni Temple Parking Plaza', 'Mata Rani Main Market Gate', 'Bus Stand Hilltop'],
+                photos: ['assets/masroor_temple.png', 'assets/baijnath_temple.png'],
+                nodes: [
+                    { name: 'Gaggal Airport (DHM)', desc: 'Start Point', x: 40, y: 180, type: 'start', photoIndex: 0 },
+                    { name: 'Kandwal Toll Gate', desc: 'Himachal state entry border checkpoint', x: 130, y: 160, type: 'stop', photoIndex: 0 },
+                    { name: 'Mubarakpur Hill Rest Stop', desc: 'Hill station junction stop for tea and rest', x: 245, y: 155, type: 'stop', photoIndex: 1 },
+                    { name: 'Chintpurni Devi Temple', desc: 'Drop Point - Hilltop temple of wish fulfillment', x: 360, y: 140, type: 'end', photoIndex: 0 }
+                ]
+            },
+            'route-9': {
+                title: 'Gaggal → Palampur',
+                distance: '35 km',
+                duration: '55 min',
+                baseFare: '₹900',
+                pickupVal: 'gaggal',
+                dropVal: 'dharamshala',
+                svgPath: 'M 40 180 C 110 180, 140 120, 200 140 C 260 160, 310 100, 360 60',
+                dropPoints: ['Palampur Tea Garden Plaza', 'Saurabh Van Vihar Entrance', 'Palampur Main Bazar Stand'],
+                photos: ['assets/palampur_tea.png', 'assets/bir_billing.png'],
+                nodes: [
+                    { name: 'Gaggal Airport (DHM)', desc: 'Start Point', x: 40, y: 180, type: 'start', photoIndex: 0 },
+                    { name: 'Yol Cantt Pine Drive', desc: 'Beautiful pine forest drive with spectacular snow views', x: 190, y: 150, type: 'scenic', photoIndex: 1 },
+                    { name: 'Palampur Tea Garden Estates', desc: 'Drop Point - Iconic Northwest India tea garden fields', x: 360, y: 60, type: 'end', photoIndex: 0 }
+                ]
+            }
+        };
+
+        let activeRouteId = null;
+        let activeScenicIndex = 0;
+        let scenicPhotosList = [];
+        let scenicCarouselTimer = null;
+
+        function openRouteDetails(routeId) {
+            activeRouteId = routeId;
+            const data = routeDetailsData[routeId];
+            if (!data) return;
+
+            // Inject text details
+            document.getElementById('map-route-title').textContent = data.title;
+            document.getElementById('map-stat-distance').textContent = data.distance;
+            document.getElementById('map-stat-time').textContent = data.duration;
+            document.getElementById('map-stat-fare').textContent = data.baseFare;
+
+            // Update Booking CTA link in the modal
+            document.getElementById('modal-book-btn').href = `index.html?pickup=${data.pickupVal}&drop=${data.dropVal}#booking-card`;
+
+            // Render interactive timeline
+            const timelineContainer = document.getElementById('route-timeline-container');
+            timelineContainer.innerHTML = '';
+            data.nodes.forEach((node, idx) => {
+                let badgeClass = 'bg-slate-100 text-slate-700';
+                let icon = 'location_on';
+                if (node.type === 'start') { badgeClass = 'bg-emerald-100 text-emerald-800'; icon = 'play_arrow'; }
+                else if (node.type === 'stop') { badgeClass = 'bg-amber-100 text-amber-800'; icon = 'battery_charging_full'; }
+                else if (node.type === 'scenic') { badgeClass = 'bg-blue-100 text-blue-800'; icon = 'photo_camera'; }
+                else if (node.type === 'end') { badgeClass = 'bg-emerald-950 text-white'; icon = 'flag'; }
+
+                const stepHtml = `
+                    <div class="timeline-step flex items-start gap-4 p-3 rounded-2xl border border-slate-100 cursor-pointer hover:bg-slate-50" id="timeline-step-${idx}" onclick="selectMapNode(${idx})">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 relative z-10 ${badgeClass}">
+                            <span class="material-symbols-outlined text-sm font-bold">${icon}</span>
+                        </div>
+                        <div class="space-y-0.5">
+                            <h4 class="font-bold text-sm text-slate-800">${node.name}</h4>
+                            <p class="text-xs text-slate-500">${node.desc}</p>
+                        </div>
+                    </div>
+                `;
+                timelineContainer.innerHTML += stepHtml;
+            });
+
+            // Populate drop points
+            const dropsContainer = document.getElementById('route-drop-points-container');
+            dropsContainer.innerHTML = '';
+            data.dropPoints.forEach(pt => {
+                dropsContainer.innerHTML += `
+                    <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 text-xs font-semibold text-slate-600 border border-slate-200">
+                        <span class="material-symbols-outlined text-[14px]">pin_drop</span> ${pt}
+                    </span>
+                `;
+            });
+
+            // Setup scenic gallery list & carousel
+            scenicPhotosList = data.photos;
+            activeScenicIndex = 0;
+            renderScenicPhotos();
+
+            // Setup SVG map elements
+            renderSVGMap(data);
+
+            // Reveal modal with animations FIRST so elements are rendered in DOM with sizes
+            const modal = document.getElementById('route-details-modal');
+            const modalWin = document.getElementById('route-modal-window');
+            modal.classList.remove('hidden');
+
+            // Now that modal is visible and SVG is in layout, open popup of first node as default
+            try {
+                selectMapNode(0);
+            } catch (e) {
+                console.error("selectMapNode error:", e);
+            }
+
+            setTimeout(() => {
+                modalWin.classList.remove('scale-95', 'opacity-0');
+            }, 50);
+
+            // Auto-rotate scenic gallery every 4.5 seconds
+            clearInterval(scenicCarouselTimer);
+            scenicCarouselTimer = setInterval(() => {
+                nextScenicPhoto();
+            }, 4500);
+        }
+
+        function closeRouteDetails() {
+            clearInterval(scenicCarouselTimer);
+            const modal = document.getElementById('route-details-modal');
+            const modalWin = document.getElementById('route-modal-window');
+            modalWin.classList.add('scale-95', 'opacity-0');
+            
+            // Hide popover
+            document.getElementById('map-node-popup').classList.add('hidden');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                activeRouteId = null;
+            }, 300);
+        }
+
+        function renderScenicPhotos() {
+            const inner = document.getElementById('gallery-carousel-inner');
+            inner.innerHTML = '';
+            scenicPhotosList.forEach((src, idx) => {
+                inner.innerHTML += `
+                    <div class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${idx === activeScenicIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}" style="background-image: url('${src}'); background-size: cover; background-position: center;">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-3 left-4 text-white">
+                            <p class="text-xs font-bold uppercase tracking-wider text-slate-300">Scenic Viewpoint</p>
+                            <p class="text-sm font-headline font-semibold">Himachal Ridge Vistas</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function nextScenicPhoto(event) {
+            if (event) event.stopPropagation();
+            if (scenicPhotosList.length === 0) return;
+            activeScenicIndex = (activeScenicIndex + 1) % scenicPhotosList.length;
+            renderScenicPhotos();
+        }
+
+        function prevScenicPhoto(event) {
+            if (event) event.stopPropagation();
+            if (scenicPhotosList.length === 0) return;
+            activeScenicIndex = (activeScenicIndex - 1 + scenicPhotosList.length) % scenicPhotosList.length;
+            renderScenicPhotos();
+        }
+
+        function selectMapNode(idx) {
+            if (!activeRouteId) return;
+            const data = routeDetailsData[activeRouteId];
+            const node = data.nodes[idx];
+            if (!node) return;
+
+            // Highlight timeline step
+            document.querySelectorAll('.timeline-step').forEach(step => step.classList.remove('active'));
+            const stepEl = document.getElementById(`timeline-step-${idx}`);
+            if (stepEl) {
+                stepEl.classList.add('active');
+                stepEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            // Highlight node in SVG map
+            document.querySelectorAll('.map-interactive-node').forEach(n => {
+                n.classList.remove('selected');
+                const circ = n.querySelector('circle:last-child');
+                if (circ) circ.setAttribute('stroke', '#ffffff');
+            });
+            const activeNodeSvg = document.getElementById(`svg-node-${idx}`);
+            if (activeNodeSvg) {
+                activeNodeSvg.classList.add('selected');
+                const circ = activeNodeSvg.querySelector('circle:last-child');
+                if (circ) circ.setAttribute('stroke', '#ffffff');
+            }
+
+            // Sync Scenic Photo Carousel if matching image is defined
+            if (node.photoIndex !== undefined) {
+                activeScenicIndex = node.photoIndex % scenicPhotosList.length;
+                renderScenicPhotos();
+            }
+
+            // Open absolute glassmorphic popover on top of map
+            const popup = document.getElementById('map-node-popup');
+            popup.classList.remove('hidden');
+
+            const title = document.getElementById('popup-node-title');
+            const desc = document.getElementById('popup-node-desc');
+            const iconEl = document.getElementById('popup-node-icon');
+            const mapsBtn = document.getElementById('popup-node-maps-btn');
+
+            title.textContent = node.name;
+            desc.textContent = node.desc;
+            
+            // Set dynamic icon inside tooltip
+            let iconText = 'location_on';
+            if (node.type === 'start') iconText = 'play_arrow';
+            else if (node.type === 'stop') iconText = 'battery_charging_full';
+            else if (node.type === 'scenic') iconText = 'photo_camera';
+            else if (node.type === 'end') iconText = 'flag';
+            iconEl.textContent = iconText;
+
+            // Feed Google Maps query search dynamically
+            mapsBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(node.name)}`;
+
+            // Calculate screen coordinates dynamically using getBoundingClientRect relative to map parent container
+            const mapSvg = document.getElementById('map-svg-element');
+            const parentContainer = mapSvg.parentElement;
+            
+            if (activeNodeSvg && parentContainer) {
+                const rect = activeNodeSvg.getBoundingClientRect();
+                const containerRect = parentContainer.getBoundingClientRect();
+                
+                const leftPx = rect.left - containerRect.left + (rect.width / 2);
+                const topPx = rect.top - containerRect.top + (rect.height / 2);
+                
+                popup.style.left = `${leftPx}px`;
+                popup.style.top = `${topPx}px`;
+            }
+
+            // Calculate dynamic translations to prevent cutting off at boundaries
+            let translateX = '-50%';
+            let translateY = '-115%';
+
+            // Horizontal alignment adjustments (if too close to left or right edges)
+            if (node.x < 120) {
+                translateX = '10px'; // Shift popover to the right of the node
+            } else if (node.x > 280) {
+                translateX = '-108%'; // Shift popover to the left of the node (pure percent)
+            }
+
+            // Vertical alignment adjustments (if too close to top or bottom edges)
+            if (node.y < 90) {
+                translateY = '15px'; // Float popover below the node
+            } else if (node.y > 150) {
+                translateY = '-112%'; // Float popover above the node (pure percent)
+            }
+
+            popup.style.transform = `translate(${translateX}, ${translateY})`;
+        }
+
+        function renderSVGMap(data) {
+            // Set SVG path definitions
+            const base = document.getElementById('svg-base-path');
+            const trace = document.getElementById('svg-trace-path');
+            const cab = document.getElementById('svg-cab-circle');
+            const cabInner = document.getElementById('svg-cab-inner');
+
+            base.setAttribute('d', data.svgPath);
+            trace.setAttribute('d', data.svgPath);
+
+            // Re-boot SVG trace path animation
+            const length = trace.getTotalLength();
+            trace.style.strokeDasharray = length;
+            trace.style.strokeDashoffset = length;
+            // Force reflow
+            trace.getBoundingClientRect();
+            // Start trace transition
+            trace.style.transition = 'stroke-dashoffset 2s ease-out';
+            trace.style.strokeDashoffset = '0';
+
+            // Re-boot cab glide looping natively using CSS offset-path
+            cab.style.offsetPath = `path("${data.svgPath}")`;
+            cabInner.style.offsetPath = `path("${data.svgPath}")`;
+            cab.classList.remove('animate-cab-glide');
+            cabInner.classList.remove('animate-cab-glide');
+            // Force reflow
+            cab.getBoundingClientRect();
+            cab.classList.add('animate-cab-glide');
+            cabInner.classList.add('animate-cab-glide');
+
+            // Draw interactive nodes along the green path trace
+            const nodesGroup = document.getElementById('svg-nodes-group');
+            nodesGroup.innerHTML = '';
+            
+            data.nodes.forEach((node, idx) => {
+                let fill = '#10b981'; // Emerald Start
+                if (node.type === 'stop') fill = '#f59e0b'; // Amber stop
+                else if (node.type === 'scenic') fill = '#3b82f6'; // Blue scenic
+                else if (node.type === 'end') fill = '#0d631b'; // Primary End
+
+                const pulseCircle = node.type === 'stop' || node.type === 'scenic'
+                    ? `<circle cx="${node.x}" cy="${node.y}" r="6" fill="${fill}" opacity="0.6" class="map-node-pulse"></circle>`
+                    : '';
+
+                nodesGroup.innerHTML += `
+                    <g class="map-interactive-node" id="svg-node-${idx}" onclick="selectMapNode(${idx})">
+                        ${pulseCircle}
+                        <circle cx="${node.x}" cy="${node.y}" r="5" fill="${fill}" stroke="#ffffff" stroke-width="1.5"></circle>
+                    </g>
+                `;
+            });
+        }
+
+        let activeTag = 'all';
+
+        // Add search input real-time filtering
+        const searchInput = document.getElementById('routes-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                applyFilters();
+            });
+        }
+
+        function filterRoutes(tag, btn) {
+            if (btn) {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            activeTag = tag;
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const cards = document.querySelectorAll('#routes-grid .route-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
+                const tags = card.dataset.tag || '';
+                const category = card.querySelector('.route-badge')?.textContent.toLowerCase() || '';
+
+                const matchesTag = (activeTag === 'all' || tags.includes(activeTag));
+                const matchesSearch = title.includes(query) || desc.includes(query) || category.includes(query);
+
+                if (matchesTag && matchesSearch) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const noResults = document.getElementById('no-results');
+            const grid = document.getElementById('routes-grid');
+            if (noResults && grid) {
+                if (visibleCount === 0) {
+                    grid.classList.add('hidden');
+                    noResults.classList.remove('hidden');
+                } else {
+                    grid.classList.remove('hidden');
+                    noResults.classList.add('hidden');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Contact Us | Vishambrio Cabs</title>
+    <meta name="description" content="Get in touch with Vishambrio Cabs. Reach us at gen@vishambrio.com for bookings, inquiries, and support." />
+    <link href="tailwind.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <style>
+        .contact-hero {
+            background: linear-gradient(135deg, #0a3d12 0%, #1b6d24 50%, #2e7d32 100%);
+            min-height: 40vh;
+        }
+        .info-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 24px rgba(13, 99, 27, 0.06);
+        }
+        .info-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 48px rgba(13, 99, 27, 0.12);
+        }
+        .form-input {
+            width: 100%;
+            background: #f2f4f3;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            padding: 14px 18px;
+            font-family: Inter, sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+            color: #191c1c;
+        }
+        .form-input:focus {
+            border-color: #0d631b;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(13, 99, 27, 0.08);
+        }
+        .form-input::placeholder { color: #707a6c; }
+        .submit-btn {
+            background: linear-gradient(135deg, #0d631b 0%, #2e7d32 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 16px 40px;
+            font-family: Manrope, sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(13, 99, 27, 0.35);
+        }
+        .submit-btn:active { transform: translateY(0); }
+        .map-placeholder {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 320px;
+        }
+        .success-msg { display: none; }
+    </style>
+</head>
+
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 w-full z-50 ambient-shadow">
+        <div class="flex justify-between items-center px-6 md:px-12 py-4 max-w-screen-2xl mx-auto">
+            <a href="index.html" class="text-xl font-extrabold text-emerald-900 tracking-tighter font-headline">
+                Vishambrio Cabs
+            </a>
+            <div id="nav-menu" class="hidden md:flex items-center space-x-8 font-headline font-semibold tracking-tight">
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="index.html">Home</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="popular-routes.html">Popular Routes</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="packaged-tours.html">Packaged Tours</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="tourist-attractions.html">Attractions</a>
+                <a class="text-emerald-700 border-b-2 border-emerald-600 transition-all duration-300" href="contact.html">Contact</a>
+                <a class="md:hidden text-slate-600 hover:text-emerald-600 transition-all duration-300 flex items-center gap-1.5" href="index.html?openBookings=true">
+                    <span class="material-symbols-outlined text-lg">receipt_long</span> My Bookings
+                </a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="index.html?openBookings=true" class="hidden sm:inline-flex items-center gap-1.5 border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-5 py-2 rounded-xl font-headline font-bold active:scale-95 duration-200 shadow-md transition-colors">
+                    <span class="material-symbols-outlined text-lg">receipt_long</span>
+                    My Bookings
+                </a>
+                <a href="index.html#booking-card" class="hidden sm:block btn-primary-gradient text-on-primary px-6 py-2.5 rounded-xl font-headline font-bold active:scale-95 duration-200 shadow-lg shadow-primary/20">
+                    Book Now
+                </a>
+                <button id="menu-toggle" class="md:hidden p-2 text-on-surface hover:bg-surface-container-low rounded-lg transition-colors">
+                    <span class="material-symbols-outlined text-3xl">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="contact-hero flex items-center justify-center px-8 py-24 text-center">
+        <div class="space-y-5 animate-entrance opacity-0">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+                <span class="material-symbols-outlined text-green-300 text-sm" style="font-variation-settings: 'FILL' 1;">mail</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-green-200">Get In Touch</span>
+            </div>
+            <h1 class="display-lg text-white">Contact <span style="color: #a3f69c;">Vishambrio</span></h1>
+            <p class="text-xl text-white/80 max-w-xl mx-auto leading-relaxed">
+                Whether you're planning a trip across the mountains or have a question, we're here to help.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Info Cards -->
+    <section class="py-20 px-6 max-w-screen-xl mx-auto reveal" id="info">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            <div class="info-card flex flex-col items-start gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">mail</span>
+                </div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-tertiary mb-1">Email Us</p>
+                    <a href="mailto:gen@vishambrio.com" class="text-lg font-headline font-bold text-emerald-800 hover:text-emerald-600 transition-colors">gen@vishambrio.com</a>
+                    <p class="text-sm text-tertiary mt-1">We respond within 24 hours</p>
+                </div>
+            </div>
+            <div class="info-card flex flex-col items-start gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+                </div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-tertiary mb-1">Based In</p>
+                    <p class="text-lg font-headline font-bold text-on-surface">Kangra, Himachal Pradesh</p>
+                    <p class="text-sm text-tertiary mt-1">Gaggal Airport, HP 176024</p>
+                </div>
+            </div>
+            <div class="info-card flex flex-col items-start gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-amber-600 text-2xl" style="font-variation-settings: 'FILL' 1;">schedule</span>
+                </div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-tertiary mb-1">Hours</p>
+                    <p class="text-lg font-headline font-bold text-on-surface">24 / 7 Available</p>
+                    <p class="text-sm text-tertiary mt-1">Fleet operations round the clock</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form + Map -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+            <!-- Form -->
+            <div class="bg-white rounded-[32px] p-10 shadow-xl shadow-emerald-900/5">
+                <h2 class="text-3xl font-headline font-extrabold text-on-surface mb-2">Send us a Message</h2>
+                <p class="text-tertiary mb-8">Fill in the form below and our team will get back to you shortly.</p>
+
+                <div id="success-msg" class="success-msg bg-green-50 border-2 border-green-200 rounded-2xl p-6 mb-6 text-center">
+                    <span class="material-symbols-outlined text-primary text-4xl mb-2 block" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                    <p class="font-headline font-bold text-emerald-800">Message sent! We'll be in touch soon.</p>
+                </div>
+
+                <form id="contact-form" class="space-y-5" onsubmit="handleSubmit(event)">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-on-surface-variant" for="fname">First Name</label>
+                            <input class="form-input" id="fname" name="fname" placeholder="Arjun" type="text" required />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-on-surface-variant" for="lname">Last Name</label>
+                            <input class="form-input" id="lname" name="lname" placeholder="Sharma" type="text" required />
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-on-surface-variant" for="email">Email Address</label>
+                        <input class="form-input" id="email" name="email" placeholder="you@example.com" type="email" required />
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-on-surface-variant" for="phone">Phone (optional)</label>
+                        <input class="form-input" id="phone" name="phone" placeholder="+91 98765 43210" type="tel" />
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-on-surface-variant" for="subject">Subject</label>
+                        <select class="form-input" id="subject" name="subject" required>
+                            <option value="" disabled selected>Select a topic…</option>
+                            <option value="booking">Tour / Cab Booking</option>
+                            <option value="packaged">Packaged Tour Inquiry</option>
+                            <option value="routes">Route Information</option>
+                            <option value="corporate">Corporate Travel</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-on-surface-variant" for="message">Message</label>
+                        <textarea class="form-input resize-none" id="message" name="message" rows="5" placeholder="Tell us how we can help…" required></textarea>
+                    </div>
+                    <button class="submit-btn" type="submit">
+                        Send Message &nbsp;✉️
+                    </button>
+                </form>
+            </div>
+
+            <!-- Map Placeholder + Quick Info -->
+            <div class="space-y-6">
+                <div class="map-placeholder p-10 text-center">
+                    <div class="space-y-4">
+                        <span class="material-symbols-outlined text-primary text-6xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+                        <div>
+                            <p class="text-xl font-headline font-bold text-emerald-900">Kangra District, Himachal Pradesh</p>
+                            <p class="text-emerald-700 mt-1">Operation Hub: Gaggal (Dharamshala Airport)</p>
+                        </div>
+                        <a href="https://maps.google.com/?q=Kangra,Himachal+Pradesh" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white text-emerald-800 font-headline font-bold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                            <span class="material-symbols-outlined text-sm">open_in_new</span>
+                            View on Google Maps
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick contact prompt -->
+                <div class="bg-gradient-to-br from-emerald-900 to-emerald-700 rounded-[24px] p-8 text-white">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-white/15 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">mail</span>
+                        </div>
+                        <div>
+                            <p class="font-headline font-bold text-lg mb-1">Prefer email?</p>
+                            <p class="text-white/70 text-sm mb-4">Drop us a direct mail and we'll respond within one business day.</p>
+                            <a href="mailto:gen@vishambrio.com" class="inline-flex items-center gap-2 bg-white text-emerald-800 font-headline font-bold px-5 py-2.5 rounded-xl hover:bg-green-50 transition-colors text-sm">
+                                <span class="material-symbols-outlined text-base">mail</span>
+                                gen@vishambrio.com
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full bg-surface-container-low pt-12 pb-28 text-center text-sm text-tertiary mt-16">
+        <p>© 2024 Vishambrio Cabs. Sustainable Himachal.</p>
+        <div class="flex justify-center gap-6 mt-3">
+            <a href="index.html" class="hover:text-primary transition-colors">Home</a>
+            <a href="popular-routes.html" class="hover:text-primary transition-colors">Routes</a>
+            <a href="packaged-tours.html" class="hover:text-primary transition-colors">Tours</a>
+            <a href="contact.html" class="hover:text-primary transition-colors">Contact</a>
+        </div>
+    </footer>
+
+    <!-- Under Development Ribbon -->
+    <div id="dev-ribbon" class="fixed bottom-0 left-0 right-0 z-[999] flex items-center justify-between px-6 py-3" style="background: linear-gradient(90deg, #92400e, #b45309, #d97706); box-shadow: 0 -4px 20px rgba(180,83,9,0.3);">
+        <div class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-amber-200 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-amber-100 text-sm font-semibold font-headline tracking-wide">🚧 &nbsp;This website is currently under development. Some features may be incomplete or subject to change.</span>
+        </div>
+        <button onclick="document.getElementById('dev-ribbon').style.display='none'" class="text-amber-200 hover:text-white transition-colors ml-4 flex-shrink-0" aria-label="Dismiss">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </button>
+    </div>
+
+    <!-- Script Dependencies -->
+    <script src="auth.js"></script>
+    <script>
+        // Nav toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        if (menuToggle && navMenu) {
+            const menuIcon = menuToggle.querySelector('.material-symbols-outlined');
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('hidden');
+                navMenu.classList.toggle('active');
+                menuIcon.textContent = navMenu.classList.contains('active') ? 'close' : 'menu';
+            });
+        }
+        // Scroll reveal
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Form submit
+        function handleSubmit(e) {
+            e.preventDefault();
+            document.getElementById('contact-form').style.display = 'none';
+            const msg = document.getElementById('success-msg');
+            msg.style.display = 'block';
+            msg.style.animation = 'fadeInSlideUp 0.6s ease forwards';
+        }
+    </script>
+</body>
+</html>

@@ -5,74 +5,10 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Vishambrio Cabs | Sustainable Himachal</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="tailwind.css" rel="stylesheet" />
     <link href="style.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "secondary-container": "#51b2fe",
-                        "surface-container-low": "#f2f4f3",
-                        "inverse-on-surface": "#eff1f0",
-                        "on-primary-fixed-variant": "#005312",
-                        "outline": "#707a6c",
-                        "on-primary-container": "#cbffc2",
-                        "on-secondary-container": "#00436a",
-                        "surface": "#f8faf9",
-                        "on-secondary": "#ffffff",
-                        "on-tertiary-fixed-variant": "#354a53",
-                        "outline-variant": "#bfcaba",
-                        "on-tertiary-fixed": "#071e27",
-                        "tertiary": "#445963",
-                        "on-primary": "#ffffff",
-                        "on-secondary-fixed": "#001d32",
-                        "secondary-fixed-dim": "#96ccff",
-                        "on-primary-fixed": "#002204",
-                        "surface-tint": "#1b6d24",
-                        "surface-variant": "#e1e3e2",
-                        "background": "#f8faf9",
-                        "tertiary-fixed": "#cfe6f2",
-                        "on-error": "#ffffff",
-                        "primary": "#0d631b",
-                        "surface-dim": "#d8dada",
-                        "error": "#ba1a1a",
-                        "surface-bright": "#f8faf9",
-                        "primary-container": "#2e7d32",
-                        "tertiary-fixed-dim": "#b4cad6",
-                        "on-tertiary": "#ffffff",
-                        "primary-fixed": "#a3f69c",
-                        "secondary": "#00639a",
-                        "on-tertiary-container": "#e1f4ff",
-                        "surface-container": "#eceeed",
-                        "on-surface": "#191c1c",
-                        "secondary-fixed": "#cee5ff",
-                        "on-background": "#191c1c",
-                        "on-error-container": "#93000a",
-                        "surface-container-highest": "#e1e3e2",
-                        "on-surface-variant": "#40493d",
-                        "surface-container-high": "#e6e9e8",
-                        "inverse-surface": "#2e3131",
-                        "tertiary-container": "#5c717b",
-                        "primary-fixed-dim": "#88d982",
-                        "inverse-primary": "#88d982",
-                        "surface-container-lowest": "#ffffff",
-                        "error-container": "#ffdad6",
-                        "on-secondary-fixed-variant": "#004a75"
-                    },
-                    fontFamily: {
-                        "headline": ["Manrope"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    },
-                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
-                },
-            },
-        }
-    </script>
 </head>
 
 <body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
@@ -84,19 +20,31 @@
             </div>
 
             <!-- Desktop/Mobile Menu -->
-            <div id="nav-menu"
-                class="hidden md:flex items-center space-x-10 font-headline font-semibold tracking-tight">
+            <div id="nav-menu" class="hidden md:flex items-center space-x-8 font-headline font-semibold tracking-tight">
                 <a class="text-emerald-700 border-b-2 border-emerald-600 transition-all duration-300"
-                    href="#home">Home</a>
+                    href="index.html">Home</a>
                 <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300"
-                    href="#features">Features</a>
-                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="#safety">Safety</a>
-                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="#roadmap">Roadmap</a>
-                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300" href="#about">About</a>
+                    href="popular-routes.html">Popular Routes</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300"
+                    href="packaged-tours.html">Packaged Tours</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300"
+                    href="tourist-attractions.html">Attractions</a>
+                <a class="text-slate-600 hover:text-emerald-600 transition-all duration-300"
+                    href="contact.html">Contact</a>
+                <a class="md:hidden text-slate-600 hover:text-emerald-600 transition-all duration-300 flex items-center gap-1.5"
+                    href="javascript:void(0)" onclick="openBookingsDrawer()">
+                    <span class="material-symbols-outlined text-lg">receipt_long</span> My Bookings
+                </a>
             </div>
 
             <div class="flex items-center gap-4">
+                <button onclick="openBookingsDrawer()"
+                    class="hidden sm:inline-flex items-center gap-1.5 border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-5 py-2 rounded-xl font-headline font-bold active:scale-95 duration-200 shadow-md transition-colors">
+                    <span class="material-symbols-outlined text-lg">receipt_long</span>
+                    My Bookings
+                </button>
                 <button
+                    onclick="document.getElementById('booking-card').scrollIntoView({ behavior: 'smooth', block: 'center' })"
                     class="hidden sm:block btn-primary-gradient text-on-primary px-6 py-2.5 rounded-xl font-headline font-bold active:scale-95 duration-200 shadow-lg shadow-primary/20">
                     Book Now
                 </button>
@@ -113,8 +61,9 @@
     <!-- Hero Section -->
     <header class="relative min-h-screen flex items-center overflow-hidden" id="home">
         <div class="absolute inset-0 z-0">
-            <img class="w-full h-full object-cover brightness-75 scale-105" src="assets/heroimage.png"
-                alt="Sleek white EV in Himachal" />
+            <img id="hero-bg-img"
+                class="w-full h-full object-cover brightness-75 scale-105 transition-all duration-700 ease-in-out"
+                src="assets/heroimage.png" alt="Sleek white EV in Himachal" />
             <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80"></div>
         </div>
         <div class="relative z-10 max-w-screen-2xl mx-auto px-8 grid lg:grid-cols-2 gap-12 items-center">
@@ -136,15 +85,630 @@
                 </p>
                 <div class="flex flex-wrap gap-4 animate-entrance opacity-0 delay-300">
 
-                    <button
-                        class="btn-primary-gradient text-on-primary px-10 py-5 rounded-xl font-headline font-extrabold text-lg flex items-center gap-3 hover:shadow-2xl hover:shadow-primary/40 transition-all active:scale-95">
-                        Book Your Ride
-                        <span class="material-symbols-outlined">arrow_forward</span>
+                    <button onclick="openBookingsDrawer()"
+                        class="btn-glass-green px-10 py-5 rounded-xl font-headline font-extrabold text-lg flex items-center gap-3 active:scale-95 shadow-lg shadow-emerald-950/20">
+                        <span class="material-symbols-outlined">receipt_long</span>
+                        Your Bookings
                     </button>
-                    <button
-                        class="bg-white/10 backdrop-blur-xl border border-white/20 text-white px-10 py-5 rounded-xl font-headline font-extrabold text-lg hover:bg-white/20 transition-all">
+                    <a href="popular-routes.html"
+                        class="btn-glass-white px-10 py-5 rounded-xl font-headline font-extrabold text-lg hover:shadow-2xl transition-all flex items-center justify-center gap-2 shadow-lg">
+                        <span class="material-symbols-outlined text-xl">explore</span>
                         View Routes
-                    </button>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Interactive E-Taxi Booking Wizard Column -->
+            <div id="booking-card"
+                class="booking-wizard-card rounded-[32px] p-8 md:p-10 shadow-2xl relative w-full max-w-lg mx-auto animate-entrance opacity-0 delay-200 z-20">
+                <!-- Header / Progress Bar -->
+                <div class="mb-8">
+                    <div
+                        class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                        <span id="wizard-step-title" class="text-primary font-headline">Step 1: Check Green Fares</span>
+                        <span id="wizard-step-progress-text">1 of 7</span>
+                    </div>
+                    <!-- Combined progress segments -->
+                    <div class="grid gap-1.5" style="grid-template-columns: repeat(7, minmax(0, 1fr));">
+                        <div class="progress-bar-segment active" data-step="1"></div>
+                        <div class="progress-bar-segment" data-step="2"></div>
+                        <div class="progress-bar-segment" data-step="3"></div>
+                        <div class="progress-bar-segment" data-step="4"></div>
+                        <div class="progress-bar-segment" data-step="5"></div>
+                        <div class="progress-bar-segment" data-step="6"></div>
+                        <div class="progress-bar-segment" data-step="7"></div>
+                    </div>
+                </div>
+
+                <!-- Form Wizard Step 1: Check Green Fares -->
+                <div class="booking-step active" data-step="1">
+                    <h3 class="text-2xl font-headline font-extrabold text-emerald-950 mb-6">Plan Your Green Ride</h3>
+                    <div class="space-y-5">
+                        <!-- Journey Type -->
+                        <div class="flex gap-4">
+                            <div class="relative flex-1">
+                                <input class="sr-only wizard-radio" type="radio" id="one-way" name="journey_type"
+                                    value="oneway" checked>
+                                <label
+                                    class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-outline-variant text-sm font-semibold cursor-pointer select-none text-slate-600 transition-all text-center hover:bg-slate-50"
+                                    for="one-way">
+                                    <span class="material-symbols-outlined text-sm">trending_flat</span> One-Way
+                                </label>
+                            </div>
+                            <div class="relative flex-1">
+                                <input class="sr-only wizard-radio" type="radio" id="round-trip" name="journey_type"
+                                    value="roundtrip">
+                                <label
+                                    class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-outline-variant text-sm font-semibold cursor-pointer select-none text-slate-600 transition-all text-center hover:bg-slate-50"
+                                    for="round-trip">
+                                    <span class="material-symbols-outlined text-sm">sync</span> Round-Trip
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Locations -->
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Pick-up
+                                Location</label>
+                            <select id="pickup-loc" class="wizard-input">
+                                <option value="" disabled selected>Select pick-up station...</option>
+                                <option value="pathankot">Pathankot Cantt Railway Station (PTK)</option>
+                                <option value="gaggal">Gaggal Airport (DHM)</option>
+                                <option value="kandwal">Kandwal Garage (Kangra Entry)</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Drop-off
+                                Location</label>
+                            <select id="drop-loc" class="wizard-input">
+                                <option value="" disabled selected>Select destination...</option>
+                                <option value="dharamshala">Dharamshala Skyway Terminal</option>
+                                <option value="mcleodganj">McLeodganj Main Square</option>
+                                <option value="kangra_temple">Kangra Devi Temple</option>
+                            </select>
+                        </div>
+
+                        <!-- Date & Time -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Date</label>
+                                <input id="ride-date" type="date" class="wizard-input" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Time</label>
+                                <input id="ride-time" type="time" class="wizard-input" required>
+                            </div>
+                        </div>
+
+                        <!-- Step 1 CTA -->
+                        <button onclick="goToStep(2)"
+                            class="w-full btn-primary-gradient text-on-primary py-4 rounded-xl font-headline font-bold text-lg active:scale-98 transition-all shadow-lg mt-4 flex items-center justify-center gap-2">
+                            Check Green Fares
+                            <span class="material-symbols-outlined text-base">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form Wizard Step 2: Fleet Selection -->
+                <div class="booking-step" data-step="2">
+                    <h3 class="text-2xl font-headline font-extrabold text-emerald-950 mb-4">Select Electric Ride</h3>
+                    <p class="text-slate-500 text-sm mb-6">100% emission-free travel. Trunks are optimized for battery
+                        placement.</p>
+
+                    <div class="space-y-4">
+                        <!-- Vehicle 1: Nexon EV -->
+                        <div id="fleet-nexon" onclick="selectFleet('nexon', 2150)" onmouseenter="setHeroBg('nexon')"
+                            onmouseleave="restoreSelectedHeroBg()"
+                            class="fleet-selection-card selected p-5 rounded-2xl border-2 bg-white flex justify-between items-center cursor-pointer hover:shadow-md">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-headline font-bold text-lg text-emerald-950">Tata Nexon EV</span>
+                                    <span
+                                        class="text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">SUV</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2 text-[11px] font-semibold text-slate-500">
+                                    <span class="flex items-center gap-0.5">👤 4 Seat</span>
+                                    <span class="flex items-center gap-0.5">🧳 2 Large + 2 Hand</span>
+                                </div>
+                                <div class="text-[11px] font-bold text-emerald-700 flex items-center gap-1">
+                                    <span>🌱 100% Electric - Zero Emissions</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">All-In Fare</div>
+                                <div class="text-2xl font-headline font-extrabold text-primary">₹2,400</div>
+                            </div>
+                        </div>
+
+                        <!-- Vehicle 2: XPRES-T EV -->
+                        <div id="fleet-xprest" onclick="selectFleet('xprest', 1700)" onmouseenter="setHeroBg('xprest')"
+                            onmouseleave="restoreSelectedHeroBg()"
+                            class="fleet-selection-card p-5 rounded-2xl border-2 bg-white flex justify-between items-center cursor-pointer hover:shadow-md">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-headline font-bold text-lg text-emerald-950">Tata XPRES-T
+                                        EV</span>
+                                    <span
+                                        class="text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">Sedan</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2 text-[11px] font-semibold text-slate-500">
+                                    <span class="flex items-center gap-0.5">👤 4 Seat</span>
+                                    <span class="flex items-center gap-0.5">🧳 1 Large + 2 Hand</span>
+                                </div>
+                                <div class="text-[11px] font-bold text-emerald-700 flex items-center gap-1">
+                                    <span>🌱 100% Electric - Zero Emissions</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">All-In Fare</div>
+                                <div class="text-2xl font-headline font-extrabold text-primary">₹1,950</div>
+                            </div>
+                        </div>
+
+                        <!-- Reassurance Note -->
+                        <div
+                            class="p-4 bg-emerald-50/60 rounded-xl flex gap-3 text-xs text-emerald-900 border border-emerald-100">
+                            <span class="material-symbols-outlined text-lg text-emerald-700 flex-shrink-0"
+                                style="font-variation-settings: 'FILL' 1;">bolt</span>
+                            <p class="leading-relaxed font-semibold">"Guaranteed 100% battery charge at pickup.
+                                Continuous drive to destination without charging stops."</p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="grid grid-cols-3 gap-3 mt-4">
+                            <button onclick="goToStep(1)"
+                                class="col-span-1 border-2 border-outline-variant font-bold rounded-xl py-3 text-slate-600 hover:bg-slate-50 transition-colors">Back</button>
+                            <button onclick="goToStep(3)"
+                                class="col-span-2 btn-primary-gradient text-on-primary font-headline font-bold rounded-xl py-3 shadow-lg active:scale-98 transition-all">Select
+                                This Ride</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Wizard Step 3: Passenger & Luggage Verification -->
+                <div class="booking-step" data-step="3">
+                    <h3 class="text-2xl font-headline font-extrabold text-emerald-950 mb-4">Passenger Details</h3>
+                    <p class="text-slate-500 text-sm mb-6">Verify luggage count to ensure EV trunk availability.</p>
+
+                    <div class="space-y-4">
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Lead Rider
+                                Name</label>
+                            <input id="rider-name" type="text" placeholder="Arjun Sharma" class="wizard-input">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Mobile
+                                    Number</label>
+                                <input id="rider-phone" type="tel" placeholder="9876543210" class="wizard-input">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Email
+                                    Address</label>
+                                <input id="rider-email" type="email" placeholder="arjun@gmail.com" class="wizard-input">
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 py-1">
+                            <input id="whatsapp-updates" type="checkbox" checked
+                                class="w-4 h-4 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500">
+                            <label for="whatsapp-updates"
+                                class="text-xs font-semibold text-slate-500 flex items-center gap-1">
+                                Send tickets & driver alerts via WhatsApp ✉️
+                            </label>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Train / Flight
+                                Number (Optional)</label>
+                            <input id="rider-transit" type="text" placeholder="e.g. 12425 Jammu Rajdhani"
+                                class="wizard-input">
+                        </div>
+
+                        <!-- Luggage Counters with Alert Tooltip -->
+                        <div class="relative py-4 px-5 bg-slate-50 rounded-2xl flex justify-between items-center gap-6">
+                            <!-- Floating Danger Tooltip -->
+                            <div id="luggage-warning" class="luggage-tooltip">
+                                EV trunk space is optimized for 2 large suitcases. Excess luggage may need to be placed
+                                in the cabin.
+                            </div>
+
+                            <div class="flex-1 space-y-1">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Large
+                                    Suitcases</label>
+                                <div class="flex items-center gap-3">
+                                    <button onclick="changeLuggage(-1)"
+                                        class="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm">-</button>
+                                    <span id="luggage-count"
+                                        class="font-headline font-extrabold text-lg text-emerald-950">2</span>
+                                    <button onclick="changeLuggage(1)"
+                                        class="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm">+</button>
+                                </div>
+                            </div>
+
+                            <div class="flex-1 space-y-1 border-l pl-6 border-slate-200">
+                                <label
+                                    class="text-xs font-bold uppercase tracking-wider text-slate-500">Handbags</label>
+                                <div class="flex items-center gap-3">
+                                    <button onclick="changeHandbag(-1)"
+                                        class="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm">-</button>
+                                    <span id="handbag-count"
+                                        class="font-headline font-extrabold text-lg text-emerald-950">2</span>
+                                    <button onclick="changeHandbag(1)"
+                                        class="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="grid grid-cols-3 gap-3 mt-4">
+                            <button onclick="goToStep(2)"
+                                class="col-span-1 border-2 border-outline-variant font-bold rounded-xl py-3 text-slate-600 hover:bg-slate-50 transition-colors">Back</button>
+                            <button onclick="goToStep(4)"
+                                class="col-span-2 btn-primary-gradient text-on-primary font-headline font-bold rounded-xl py-3 shadow-lg active:scale-98 transition-all">Confirm
+                                Route Map</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Wizard Step 4: Trip Confirmation & Dynamic Route Map -->
+                <div class="booking-step" data-step="4">
+                    <h3 class="text-2xl font-headline font-extrabold text-emerald-950 mb-3">Confirm Your Route</h3>
+                    <p class="text-slate-500 text-xs mb-4">Review your eco-friendly route path and details below.</p>
+
+                    <div class="space-y-4">
+                        <!-- Summary table inside card -->
+                        <div class="bg-slate-50 p-4 rounded-2xl space-y-2 text-xs font-semibold text-slate-600">
+                            <div class="flex justify-between">
+                                <span>Lead Rider</span>
+                                <span id="confirm-rider-name" class="text-slate-800">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Selected EV</span>
+                                <span id="confirm-vehicle" class="text-slate-800">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Date & Time</span>
+                                <span id="confirm-datetime" class="text-slate-800">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Luggage & Bags</span>
+                                <span id="confirm-luggage" class="text-slate-800">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Stylized Dynamic Route Timeline Map -->
+                        <div class="p-4 rounded-2xl text-white space-y-3 relative overflow-hidden border"
+                            style="background-color: #071e27; border-color: rgba(255, 255, 255, 0.1);">
+                            <!-- Headless inline animation style declarations -->
+                            <style>
+                                @keyframes wizCabGlide {
+                                    0% {
+                                        offset-distance: 0%;
+                                    }
+
+                                    100% {
+                                        offset-distance: 100%;
+                                    }
+                                }
+
+                                .animate-wiz-cab {
+                                    animation: wizCabGlide 8s infinite linear;
+                                }
+
+                                @keyframes wizPulse {
+                                    0% {
+                                        r: 4px;
+                                        opacity: 0.5;
+                                    }
+
+                                    50% {
+                                        r: 8px;
+                                        opacity: 0.9;
+                                    }
+
+                                    100% {
+                                        r: 4px;
+                                        opacity: 0.5;
+                                    }
+                                }
+
+                                .wiz-node-pulse {
+                                    animation: wizPulse 2s infinite ease-in-out;
+                                }
+                            </style>
+
+                            <div class="flex items-center justify-between text-emerald-400">
+                                <div class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider">
+                                    <span class="material-symbols-outlined text-[12px] animate-pulse">route</span>
+
+                                </div>
+                                <span class="text-[9px] text-slate-400 font-semibold italic">EV Route Trace</span>
+                            </div>
+
+                            <!-- Live SVG Map Box -->
+                            <div
+                                class="relative w-full h-[125px] bg-[#05151c]/60 rounded-xl border border-slate-800/40 overflow-hidden flex items-center justify-center select-none">
+                                <svg id="wizard-map-svg" viewBox="0 0 400 150" class="w-full h-full"
+                                    xmlns="http://www.w3.org/2000/svg" style="background: transparent;">
+                                    <defs>
+                                        <filter id="svg-glow-wizard" x="-20%" y="-20%" width="140%" height="140%">
+                                            <feGaussianBlur stdDeviation="3" result="blur" />
+                                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                        </filter>
+                                    </defs>
+
+                                    <!-- Baseline Dotted Route Path -->
+                                    <path id="wiz-svg-base-path" stroke="#1e3a5f" stroke-width="3"
+                                        stroke-linecap="round" stroke-dasharray="5,5" fill="none" />
+
+                                    <!-- Overlay Animated Emerald Green Trace Path -->
+                                    <path id="wiz-svg-trace-path" stroke="#10b981" stroke-width="3"
+                                        stroke-linecap="round" fill="none" />
+
+                                    <!-- SVG Nodes will be dynamically injected here -->
+                                    <g id="wiz-svg-nodes-group"></g>
+
+                                    <!-- Gliding Taxi Dot/Icon -->
+                                    <circle id="wiz-svg-cab-circle" r="6" fill="#34d399" filter="url(#svg-glow-wizard)">
+                                    </circle>
+                                    <circle id="wiz-svg-cab-inner" r="3" fill="#047857"></circle>
+                                </svg>
+                            </div>
+
+                            <!-- Custom CSS Route Timeline Graph -->
+                            <div
+                                class="space-y-3 pl-6 relative before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:border-l-2 before:border-dashed before:border-emerald-500/50">
+                                <!-- Start node -->
+                                <div class="relative flex items-center gap-3">
+                                    <div class="absolute -left-[21px] w-3 h-3 rounded-full flex items-center justify-center"
+                                        style="background-color: #34d399; box-shadow: 0 0 0 4px #071e27;"></div>
+                                    <div class="text-xs">
+                                        <div class="font-extrabold uppercase text-[9px] tracking-wider"
+                                            style="color: #6ee7b7;">Start</div>
+                                        <div id="route-map-start" class="font-bold" style="color: #f1f5f9;">-</div>
+                                    </div>
+                                </div>
+                                <!-- EV Charger node -->
+                                <div class="relative flex items-center gap-3">
+                                    <div class="absolute -left-[21px] w-3 h-3 rounded-full flex items-center justify-center"
+                                        style="background-color: #fbbf24; box-shadow: 0 0 0 4px #071e27;">
+                                        <div class="w-1.5 h-1.5 bg-amber-300 rounded-full animate-ping"></div>
+                                    </div>
+                                    <div class="text-xs">
+                                        <div class="font-extrabold uppercase text-[9px] tracking-wider flex items-center gap-0.5"
+                                            style="color: #fcd34d;">Green Power Hub ⚡</div>
+                                        <div id="route-map-charger" style="color: #e2e8f0;">-</div>
+                                    </div>
+                                </div>
+                                <!-- Scenic node -->
+                                <div class="relative flex items-center gap-3">
+                                    <div class="absolute -left-[21px] w-3 h-3 rounded-full flex items-center justify-center"
+                                        style="background-color: #38bdf8; box-shadow: 0 0 0 4px #071e27;"></div>
+                                    <div class="text-xs">
+                                        <div class="font-extrabold uppercase text-[9px] tracking-wider flex items-center gap-0.5"
+                                            style="color: #7dd3fc;">Scenic Stop 🏔️</div>
+                                        <div id="route-map-scenic" style="color: #e2e8f0;">-</div>
+                                    </div>
+                                </div>
+                                <!-- Drop-off node -->
+                                <div class="relative flex items-center gap-3">
+                                    <div class="absolute -left-[21px] w-3 h-3 rounded-full flex items-center justify-center"
+                                        style="background-color: #10b981; box-shadow: 0 0 0 4px #071e27;"></div>
+                                    <div class="text-xs">
+                                        <div class="font-extrabold uppercase text-[9px] tracking-wider"
+                                            style="color: #6ee7b7;">Drop-off</div>
+                                        <div id="route-map-end" class="font-bold" style="color: #f1f5f9;">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Carbon Savings Badge inside Card -->
+                        <div
+                            class="p-3 bg-emerald-50/60 rounded-xl flex gap-3 text-xs text-emerald-900 border border-emerald-100">
+                            <span class="material-symbols-outlined text-lg text-emerald-700 flex-shrink-0"
+                                style="font-variation-settings: 'FILL' 1;">eco</span>
+                            <p class="leading-relaxed font-semibold">
+                                <span class="font-extrabold">Sustainable Transit:</span> You are saving <span
+                                    id="confirm-co2-val" class="text-emerald-700 font-black">0 kg</span> over standard
+                                diesel alternatives!
+                            </p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="grid grid-cols-3 gap-3 mt-4">
+                            <button onclick="goToStep(3)"
+                                class="col-span-1 border-2 border-outline-variant font-bold rounded-xl py-3 text-slate-600 hover:bg-slate-50 transition-colors">Back</button>
+                            <button onclick="goToStep(5)"
+                                class="col-span-2 btn-primary-gradient text-on-primary font-headline font-bold rounded-xl py-3 shadow-lg active:scale-98 transition-all">Confirm
+                                Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Wizard Step 5: Fare Review & Transparent Breakdown -->
+                <div class="booking-step" data-step="5">
+                    <h3 class="text-2xl font-headline font-extrabold text-emerald-950 mb-4">Fare Review</h3>
+                    <p class="text-slate-500 text-sm mb-6">Guaranteed transparent pricing. No hidden mountain
+                        surcharges.</p>
+
+                    <div class="space-y-4">
+                        <!-- Fee Breakdown Box -->
+                        <div class="bg-slate-50 p-6 rounded-2xl space-y-3 font-semibold text-sm">
+                            <div class="flex justify-between items-center text-slate-500">
+                                <span>Base Route Fare</span>
+                                <span id="review-base-fare" class="text-emerald-950">₹2,150</span>
+                            </div>
+                            <div class="flex justify-between items-center text-slate-500">
+                                <span>Himachal Green Tolls</span>
+                                <span
+                                    class="text-emerald-700 font-bold text-xs uppercase tracking-wider">Included</span>
+                            </div>
+                            <div class="flex justify-between items-center text-slate-500">
+                                <span>NH FASTag Tolls</span>
+                                <span
+                                    class="text-emerald-700 font-bold text-xs uppercase tracking-wider">Included</span>
+                            </div>
+                            <div class="flex justify-between items-center text-slate-500">
+                                <span>GST (5% Ecommerce)</span>
+                                <span id="review-gst" class="text-emerald-950">₹120</span>
+                            </div>
+                            <div class="h-px bg-slate-200 my-2"></div>
+                            <div class="flex justify-between items-center text-base font-extrabold">
+                                <span class="text-emerald-950">Total Payable</span>
+                                <span id="review-total-payable" class="text-primary text-xl font-headline">₹2,270</span>
+                            </div>
+                        </div>
+
+                        <!-- Legal Transit Prebook Union Shield -->
+                        <div class="flex items-start gap-3 py-2">
+                            <input id="union-shield-chk" type="checkbox" checked
+                                class="w-5 h-5 mt-0.5 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500">
+                            <label for="union-shield-chk" class="text-xs font-semibold leading-relaxed text-slate-500">
+                                I understand this is a pre-booked digital ride. My digital boarding invoice acts as my
+                                transit pass to comply with local station union transit regulations.
+                            </label>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="grid grid-cols-3 gap-3 mt-4">
+                            <button onclick="goToStep(4)"
+                                class="col-span-1 border-2 border-outline-variant font-bold rounded-xl py-3 text-slate-600 hover:bg-slate-50 transition-colors">Back</button>
+                            <button onclick="goToStep(6)"
+                                class="col-span-2 btn-primary-gradient text-on-primary font-headline font-bold rounded-xl py-3 shadow-lg active:scale-98 transition-all">Proceed
+                                to Payment</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Wizard Step 6: Secure Payment Gateway Simulator -->
+                <div class="booking-step" data-step="6">
+                    <h3 class="text-2xl font-headline font-extrabold text-emerald-950 mb-4">Secure Payment</h3>
+                    <p class="text-slate-500 text-sm mb-6">Select your preferred secure payment method.</p>
+
+                    <div class="space-y-4">
+                        <!-- UPI Intent Mockup -->
+                        <div class="space-y-3">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Instant
+                                Mobile UPI</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div onclick="selectPaymentMethod('upi')"
+                                    class="border-2 border-primary bg-emerald-50/40 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors">
+                                    <span class="text-lg mb-1">📱</span>
+                                    <span class="text-[10px] font-bold text-slate-600">UPI App</span>
+                                </div>
+                                <div onclick="selectPaymentMethod('card')"
+                                    class="border-2 border-outline-variant rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors">
+                                    <span class="text-lg mb-1">💳</span>
+                                    <span class="text-[10px] font-bold text-slate-600">Card</span>
+                                </div>
+                                <div onclick="selectPaymentMethod('partial')"
+                                    class="border-2 border-outline-variant rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors">
+                                    <span class="text-lg mb-1">🪙</span>
+                                    <span class="text-[10px] font-bold text-slate-600">Token</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Option Description Box -->
+                        <div id="payment-description"
+                            class="p-4 bg-slate-50 rounded-xl text-xs leading-relaxed text-slate-500 font-semibold">
+                            UPI Intent flow will launch Google Pay, PhonePe, or Paytm instantly on your mobile device.
+                            Fast & 100% secure.
+                        </div>
+
+                        <!-- Amount to pay details -->
+                        <div class="bg-slate-50 p-4 rounded-xl flex justify-between items-center text-sm font-bold">
+                            <span class="text-slate-500">Amount Payable Now:</span>
+                            <span id="payment-amount" class="text-primary text-lg font-headline">₹2,400</span>
+                        </div>
+
+                        <!-- Payment Processing Simulator Overlay -->
+                        <div id="payment-loader"
+                            class="hidden absolute inset-0 bg-white/95 rounded-[32px] flex-col items-center justify-center space-y-4 z-50 animate-fade-in">
+                            <div
+                                class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin">
+                            </div>
+                            <p class="font-headline font-bold text-emerald-950 text-lg">Contacting secure gateway...</p>
+                            <p class="text-slate-400 text-xs font-semibold">Do not close or reload this window</p>
+                        </div>
+
+
+                        <!-- Action Buttons -->
+                        <div class="grid grid-cols-3 gap-3 mt-4">
+                            <button onclick="goToStep(5)"
+                                class="col-span-1 border-2 border-outline-variant font-bold rounded-xl py-3 text-slate-600 hover:bg-slate-50 transition-colors">Back</button>
+                            <button onclick="triggerPayment()"
+                                class="col-span-2 btn-primary-gradient text-on-primary font-headline font-bold rounded-xl py-3 shadow-lg active:scale-98 transition-all">Complete
+                                Secure Payment</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Wizard Step 7: Booking Confirmation -->
+                <div class="booking-step" data-step="7">
+                    <div class="text-center space-y-6 py-4">
+                        <div
+                            class="w-16 h-16 bg-green-100 text-green-700 rounded-full flex items-center justify-center mx-auto shadow-inner">
+                            <span class="material-symbols-outlined text-4xl"
+                                style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-2xl font-headline font-extrabold text-emerald-950">Booking Confirmed!</h3>
+                            <p class="text-emerald-700 font-bold text-xs uppercase tracking-widest">Your green ride is
+                                secured 🌱</p>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-xl inline-block">
+                            <span
+                                class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-0.5">Booking
+                                Transit ID</span>
+                            <span id="confirm-booking-id"
+                                class="font-headline font-extrabold text-lg text-emerald-950">EV-HP-1048</span>
+                        </div>
+
+                        <!-- WhatsApp Notification Mockup -->
+                        <div
+                            class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-5 text-left text-xs text-emerald-950 font-semibold space-y-3 relative overflow-hidden">
+                            <div class="flex items-center justify-between border-b border-emerald-100/50 pb-2">
+                                <span class="text-emerald-700 flex items-center gap-1 font-bold"><span
+                                        class="material-symbols-outlined text-sm">chat</span> WhatsApp Alert Sent</span>
+                                <span class="text-[10px] text-slate-400">Just Now</span>
+                            </div>
+                            <p id="whatsapp-message-preview" class="leading-relaxed text-emerald-900 italic">
+                                "Hello Arjun Sharma, your eco-friendly Nexon EV ride is confirmed for 31-05-2026 at
+                                17:30. Driver contact will be sent 2 hrs before pickup. Show this ticket upon arrival to
+                                comply with station pre-booking transit laws."
+                            </p>
+                        </div>
+
+                        <button onclick="resetBooking()"
+                            class="w-full btn-primary-gradient text-on-primary py-4 rounded-xl font-headline font-bold text-lg active:scale-98 transition-all shadow-lg">
+                            Book Another Ride
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Login Alert Prompt Overlay -->
+                <div id="login-prompt-overlay" class="hidden absolute inset-0 bg-white/95 rounded-[32px] flex flex-col items-center justify-center p-6 space-y-6 z-50 animate-fade-in text-center">
+                    <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center shadow-inner">
+                        <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-xl font-headline font-extrabold text-emerald-950">Login Required</h3>
+                        <p class="text-slate-500 text-sm max-w-xs leading-relaxed">Please sign in to secure your electric cab booking. Your travel details will be saved directly to your account profile.</p>
+                    </div>
+                    <div class="flex flex-col w-full gap-3 px-4">
+                        <a href="login.html?redirect=index.html&step=6" class="w-full btn-primary-gradient text-on-primary py-3.5 rounded-xl font-headline font-bold text-base text-center active:scale-98 transition-all shadow-md flex items-center justify-center gap-2">
+                            Log In &nbsp;🔑
+                        </a>
+                        <button onclick="document.getElementById('login-prompt-overlay').classList.add('hidden')" class="w-full py-3 border-2 border-outline-variant font-bold rounded-xl text-sm text-slate-500 hover:bg-slate-50 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -159,7 +723,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
             <!-- Card 1 -->
-            <div class="alpine-card p-10 rounded-[32px] flex flex-col justify-between group">
+            <div class="alpine-card hover-brown p-10 rounded-[32px] flex flex-col group">
                 <div class="space-y-6">
                     <div
                         class="w-16 h-16 rounded-2xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shadow-inner">
@@ -169,15 +733,9 @@
                     <p class="text-tertiary leading-relaxed text-lg">Specially calibrated drivetrains tailored for local
                         traffic nuances and the unique Himalayan climate challenges.</p>
                 </div>
-                <div class="mt-8 pt-8 ghost-border border-t-1 border-l-0 border-r-0 border-b-0">
-                    <span
-                        class="text-primary font-bold flex items-center gap-2 group-hover:gap-4 transition-all cursor-pointer">
-                        Learn More <span class="material-symbols-outlined">trending_flat</span>
-                    </span>
-                </div>
             </div>
             <!-- Card 2 -->
-            <div class="alpine-card p-10 rounded-[32px] flex flex-col justify-between group">
+            <div class="alpine-card hover-blue p-10 rounded-[32px] flex flex-col group">
                 <div class="space-y-6">
                     <div
                         class="w-16 h-16 rounded-2xl bg-primary-fixed flex items-center justify-center text-on-primary-fixed shadow-inner">
@@ -187,15 +745,9 @@
                     <p class="text-tertiary leading-relaxed text-lg">Next-gen long-range batteries featuring
                         fast-charging capabilities that work efficiently even at high altitudes.</p>
                 </div>
-                <div class="mt-8 pt-8 ghost-border border-t-1 border-l-0 border-r-0 border-b-0">
-                    <span
-                        class="text-primary font-bold flex items-center gap-2 group-hover:gap-4 transition-all cursor-pointer">
-                        Battery Specs <span class="material-symbols-outlined">trending_flat</span>
-                    </span>
-                </div>
             </div>
             <!-- Card 3 -->
-            <div class="alpine-card p-10 rounded-[32px] flex flex-col justify-between group">
+            <div class="alpine-card hover-green p-10 rounded-[32px] flex flex-col group">
                 <div class="space-y-6">
                     <div
                         class="w-16 h-16 rounded-2xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed shadow-inner">
@@ -204,12 +756,6 @@
                     <h3 class="text-2xl font-headline font-bold text-on-surface">Eco-Friendly</h3>
                     <p class="text-tertiary leading-relaxed text-lg">Zero tailpipe emissions to preserve the pristine
                         mountain air and delicate ecosystem of the valley.</p>
-                </div>
-                <div class="mt-8 pt-8 ghost-border border-t-1 border-l-0 border-r-0 border-b-0">
-                    <span
-                        class="text-primary font-bold flex items-center gap-2 group-hover:gap-4 transition-all cursor-pointer">
-                        Impact Report <span class="material-symbols-outlined">trending_flat</span>
-                    </span>
                 </div>
             </div>
         </div>
@@ -302,16 +848,15 @@
     <section class="py-20 px-8 bg-surface-container-low reveal">
         <div class="max-w-4xl mx-auto text-center space-y-8">
             <h3 class="text-3xl font-headline font-bold text-on-surface">Ready to streamline your company's travel?</h3>
-            <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-4 text-sm font-semibold text-slate-500">
-                <a href="#" class="hover:text-primary transition-colors">Download the App</a>
+            <div
+                class="flex flex-wrap justify-center items-center gap-x-6 gap-y-4 text-sm font-semibold text-slate-500">
+                <a href="popular-routes.html" class="hover:text-primary transition-colors">Popular Routes</a>
                 <span class="hidden sm:inline text-outline-variant">|</span>
-                <a href="#" class="hover:text-primary transition-colors">Contact Us</a>
+                <a href="packaged-tours.html" class="hover:text-primary transition-colors">Packaged Tours</a>
                 <span class="hidden sm:inline text-outline-variant">|</span>
-                <a href="#" class="hover:text-primary transition-colors">Operations and routes</a>
+                <a href="tourist-attractions.html" class="hover:text-primary transition-colors">Tourist Attractions</a>
                 <span class="hidden sm:inline text-outline-variant">|</span>
-                <a href="#" class="hover:text-primary transition-colors">Suggestions</a>
-                <span class="hidden sm:inline text-outline-variant">|</span>
-                <a href="#" class="hover:text-primary transition-colors">View Fleet</a>
+                <a href="contact.html" class="hover:text-primary transition-colors">Contact Us</a>
             </div>
         </div>
     </section>
@@ -366,6 +911,31 @@
             </div>
         </div>
     </footer>
+    <!-- Under Development Ribbon -->
+    <div id="dev-ribbon" class="fixed bottom-0 left-0 right-0 z-[999] flex items-center justify-between px-6 py-3"
+        style="background: linear-gradient(90deg, #92400e, #b45309, #d97706); box-shadow: 0 -4px 20px rgba(180,83,9,0.3);">
+        <div class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-amber-200 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                    d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+                    clip-rule="evenodd" />
+            </svg>
+            <span class="text-amber-100 text-sm font-semibold font-headline tracking-wide">🚧 &nbsp;This website is
+                currently under development. Some features may be incomplete or subject to change.</span>
+        </div>
+        <button onclick="document.getElementById('dev-ribbon').style.display='none'"
+            class="text-amber-200 hover:text-white transition-colors ml-4 flex-shrink-0" aria-label="Dismiss">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Script Dependencies -->
+    <script src="auth.js"></script>
+    <script src="bookings.js"></script>
     <script>
         const menuToggle = document.getElementById('menu-toggle');
         const navMenu = document.getElementById('nav-menu');
@@ -407,6 +977,579 @@
         }, observerOptions);
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ==========================================
+        // E-TAXI BOOKING WIZARD INTERACTIVE SCRIPT
+        // ==========================================
+
+        // Booking State Variables
+        let currentStep = 1;
+        let selectedFleetType = 'nexon';
+        let currentBaseFare = 2150;
+        let selectedPayment = 'upi';
+        let suitcaseCount = 2;
+        let handbagCount = 2;
+
+        // Dynamic Background Swapping
+        function setHeroBg(car) {
+            const heroImg = document.getElementById('hero-bg-img');
+            if (!heroImg) return;
+
+            if (car === 'nexon') {
+                heroImg.src = 'assets/nexonimg.png';
+            } else if (car === 'xprest') {
+                heroImg.src = 'assets/xprest.png';
+            } else {
+                heroImg.src = 'assets/heroimage.png';
+            }
+        }
+
+        function restoreSelectedHeroBg() {
+            if (currentStep >= 2) {
+                setHeroBg(selectedFleetType);
+            } else {
+                setHeroBg('default');
+            }
+        }
+
+        // Pricing Matrix (Source -> Destination -> Nexon Base)
+        const pricingMatrix = {
+            'pathankot': {
+                'dharamshala': 2150,
+                'mcleodganj': 2400,
+                'kangra_temple': 2250
+            },
+            'gaggal': {
+                'dharamshala': 450,
+                'mcleodganj': 650,
+                'kangra_temple': 700
+            },
+            'kandwal': {
+                'dharamshala': 1600,
+                'mcleodganj': 1850,
+                'kangra_temple': 1500
+            }
+        };
+
+        // Form Validation for Step 1
+        function validateStep1() {
+            const pickup = document.getElementById('pickup-loc').value;
+            const drop = document.getElementById('drop-loc').value;
+            const date = document.getElementById('ride-date').value;
+            const time = document.getElementById('ride-time').value;
+
+            if (!pickup || !drop || !date || !time) {
+                alert('Please fill in all details (Pick-up, Drop-off, Date, and Time) to check green fares!');
+                return false;
+            }
+            return true;
+        }
+
+        // Main Navigation
+        function goToStep(step) {
+            if (step > currentStep && currentStep === 1) {
+                if (!validateStep1()) return;
+                calculateFares();
+            }
+
+            if (step > currentStep && currentStep === 3) {
+                const name = document.getElementById('rider-name').value;
+                const phone = document.getElementById('rider-phone').value;
+                const email = document.getElementById('rider-email').value;
+
+                if (!name || !phone || !email) {
+                    alert('Please complete your Contact Details (Name, Phone, and Email) before proceeding!');
+                    return;
+                }
+            }
+
+            if (step === 6) {
+                // Check if user is logged in before proceeding to payment
+                const currentUser = (typeof Auth !== 'undefined') ? Auth.getCurrentUser() : null;
+                if (!currentUser) {
+                    // Save temporary details so they are preserved
+                    saveTemporaryBooking();
+                    
+                    // Show custom elegant prompt overlay inside the booking card
+                    const promptOverlay = document.getElementById('login-prompt-overlay');
+                    if (promptOverlay) {
+                        promptOverlay.classList.remove('hidden');
+                        promptOverlay.classList.add('flex');
+                    }
+                    return;
+                }
+            }
+
+            // Toggle active step
+            document.querySelectorAll('.booking-step').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelector(`.booking-step[data-step="${step}"]`).classList.add('active');
+
+            // Update Progress Bar
+            document.querySelectorAll('.progress-bar-segment').forEach(el => {
+                const s = parseInt(el.dataset.step);
+                if (s <= step) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+
+            // Update Header Title / Page text
+            currentStep = step;
+            restoreSelectedHeroBg();
+            document.getElementById('wizard-step-progress-text').textContent = `${step} of 7`;
+
+            const titles = [
+                'Step 1: Check Green Fares',
+                'Step 2: Fleet Selection',
+                'Step 3: Luggage & Details',
+                'Step 4: Confirm Trip Path',
+                'Step 5: Fare Review',
+                'Step 6: Secure Payment',
+                'Step 7: Booking Confirmed'
+            ];
+            document.getElementById('wizard-step-title').textContent = titles[step - 1];
+
+            // Step 4 dynamic confirmation logic
+            if (step === 4) {
+                const riderName = document.getElementById('rider-name').value || 'Guest Rider';
+                const rideDate = document.getElementById('ride-date').value || '31-05-2026';
+                const rideTime = document.getElementById('ride-time').value || '12:00';
+
+                const pickupSelect = document.getElementById('pickup-loc');
+                const pickupText = pickupSelect.options[pickupSelect.selectedIndex]?.text.split('(')[0].trim() || 'Start Station';
+
+                const dropSelect = document.getElementById('drop-loc');
+                const dropText = dropSelect.options[dropSelect.selectedIndex]?.text.split('(')[0].trim() || 'Destination Station';
+
+                const vehicleName = selectedFleetType === 'nexon' ? 'Tata Nexon EV' : 'Tata XPRES-T EV';
+
+                document.getElementById('confirm-rider-name').textContent = riderName;
+                document.getElementById('confirm-vehicle').textContent = vehicleName;
+                document.getElementById('confirm-datetime').textContent = `${rideDate} at ${rideTime}`;
+                document.getElementById('confirm-luggage').textContent = `${suitcaseCount} Suitcase(s), ${handbagCount} Handbag(s)`;
+
+                // Update route map text
+                document.getElementById('route-map-start').textContent = pickupText;
+                document.getElementById('route-map-end').textContent = dropText;
+
+                // Dynamic stops logic based on selected routes
+                const pickupVal = pickupSelect.value;
+                const dropVal = dropSelect.value;
+
+                let chargerName = "Vishambrio Eco Charger Station";
+                let scenicName = "Mountain View Lookout Stop";
+                let co2Saved = 4.2;
+
+                // Define customized winding curves for the SVG route trace
+                let svgCurve = "M 30,75 Q 120,40 200,90 T 370,75"; // Default
+
+                if (pickupVal === 'gaggal') {
+                    chargerName = "Gaggal Airport EV Power Station ⚡";
+                    if (dropVal === 'mcleodganj') {
+                        scenicName = "Bhagsu Pine Canopy Lookout 🌲";
+                        co2Saved = 5.8;
+                        svgCurve = "M 30,100 C 100,50 160,130 220,70 C 280,30 320,110 370,40";
+                    } else if (dropVal === 'dharamshala') {
+                        scenicName = "Dharamshala Valley Vistas 🏔️";
+                        co2Saved = 4.5;
+                        svgCurve = "M 30,100 Q 120,50 200,90 T 370,75";
+                    } else {
+                        scenicName = "Kangra Valley Panoramic View 🏔️";
+                        co2Saved = 5.2;
+                        svgCurve = "M 30,80 C 100,90 160,120 220,95 C 280,75 320,115 370,110";
+                    }
+                } else if (pickupVal === 'pathankot') {
+                    chargerName = "Kandwal Green Charger Hub ⚡";
+                    if (dropVal === 'mcleodganj') {
+                        scenicName = "Dhauladhar Snow Peaks Lookout 🏔️";
+                        co2Saved = 21.5;
+                        svgCurve = "M 30,120 C 110,60 170,140 230,80 C 290,30 330,110 370,40";
+                    } else if (dropVal === 'dharamshala') {
+                        scenicName = "Kangra Ridge Panoramic Stop 🏔️";
+                        co2Saved = 19.8;
+                        svgCurve = "M 30,120 Q 120,70 210,105 T 370,75";
+                    } else {
+                        scenicName = "Ancient Fort Vistas Stop 🏔️";
+                        co2Saved = 18.5;
+                        svgCurve = "M 30,110 C 110,110 170,130 230,105 C 290,80 330,120 370,110";
+                    }
+                } else {
+                    chargerName = "Kandwal Gate EV Charging Hub ⚡";
+                    if (dropVal === 'mcleodganj') {
+                        scenicName = "Naddi Hill Viewpoint 🏔️";
+                        co2Saved = 16.5;
+                        svgCurve = "M 30,110 C 110,55 170,135 230,75 C 290,30 330,110 370,40";
+                    } else if (dropVal === 'dharamshala') {
+                        scenicName = "Dhauladhar Base Scenic Stop 🏔️";
+                        co2Saved = 14.8;
+                        svgCurve = "M 30,110 Q 120,60 210,95 T 370,75";
+                    } else {
+                        scenicName = "Fort Valley Lookout Stop 🏔️";
+                        co2Saved = 13.5;
+                        svgCurve = "M 30,100 C 110,100 170,120 230,100 C 290,80 330,115 370,110";
+                    }
+                }
+
+                document.getElementById('route-map-charger').textContent = chargerName;
+                document.getElementById('route-map-scenic').textContent = scenicName;
+                document.getElementById('confirm-co2-val').textContent = `${co2Saved} kg`;
+
+                // Retrieve SVG dynamic elements
+                const basePath = document.getElementById('wiz-svg-base-path');
+                const tracePath = document.getElementById('wiz-svg-trace-path');
+                const cabCircle = document.getElementById('wiz-svg-cab-circle');
+                const cabInner = document.getElementById('wiz-svg-cab-inner');
+
+                if (basePath && tracePath && cabCircle && cabInner) {
+                    basePath.setAttribute('d', svgCurve);
+                    tracePath.setAttribute('d', svgCurve);
+
+                    // Re-trigger animated dash array sweeping transitions
+                    const length = tracePath.getTotalLength();
+                    tracePath.style.strokeDasharray = length;
+                    tracePath.style.strokeDashoffset = length;
+
+                    // Force DOM reflow
+                    tracePath.getBoundingClientRect();
+                    tracePath.style.transition = 'stroke-dashoffset 2.5s ease-out';
+                    tracePath.style.strokeDashoffset = '0';
+
+                    // Re-trigger gliding EV taxi using CSS path offset keyframes
+                    cabCircle.style.offsetPath = `path("${svgCurve}")`;
+                    cabInner.style.offsetPath = `path("${svgCurve}")`;
+                    cabCircle.classList.remove('animate-wiz-cab');
+                    cabInner.classList.remove('animate-wiz-cab');
+
+                    // Force DOM reflow
+                    cabCircle.getBoundingClientRect();
+                    cabCircle.classList.add('animate-wiz-cab');
+                    cabInner.classList.add('animate-wiz-cab');
+
+                    // Calculate precise node positions on the path using getPointAtLength
+                    const nodesGroup = document.getElementById('wiz-svg-nodes-group');
+                    nodesGroup.innerHTML = '';
+
+                    const numNodes = 4;
+                    const nodeTypes = ['start', 'stop', 'scenic', 'end'];
+                    const nodeColors = ['#34d399', '#fbbf24', '#38bdf8', '#10b981'];
+
+                    for (let i = 0; i < numNodes; i++) {
+                        const pct = i / (numNodes - 1);
+                        const point = tracePath.getPointAtLength(length * pct);
+                        const color = nodeColors[i];
+                        const type = nodeTypes[i];
+
+                        // Pulse indicator ring for stops/charging points
+                        const pulseCircle = (type === 'stop' || type === 'scenic')
+                            ? `<circle cx="${point.x}" cy="${point.y}" r="5" fill="${color}" opacity="0.6" class="wiz-node-pulse"></circle>`
+                            : '';
+
+                        nodesGroup.innerHTML += `
+                            <g>
+                                ${pulseCircle}
+                                <circle cx="${point.x}" cy="${point.y}" r="4.5" fill="${color}" stroke="#ffffff" stroke-width="1.5"></circle>
+                            </g>
+                        `;
+                    }
+                }
+            }
+        }
+
+        // Save temporary booking details for guest users to recover after logging in
+        function saveTemporaryBooking() {
+            const tempBooking = {
+                journeyType: document.querySelector('input[name="journey_type"]:checked')?.value || 'oneway',
+                pickup: document.getElementById('pickup-loc').value,
+                drop: document.getElementById('drop-loc').value,
+                date: document.getElementById('ride-date').value,
+                time: document.getElementById('ride-time').value,
+                riderName: document.getElementById('rider-name').value,
+                riderPhone: document.getElementById('rider-phone').value,
+                riderEmail: document.getElementById('rider-email').value,
+                whatsapp: document.getElementById('whatsapp-updates').checked,
+                transit: document.getElementById('rider-transit').value,
+                suitcases: suitcaseCount,
+                handbags: handbagCount,
+                fleet: selectedFleetType,
+                fare: currentBaseFare
+            };
+            localStorage.setItem('vishambrio_temp_booking', JSON.stringify(tempBooking));
+        }
+
+        // Fleet Selection
+        function selectFleet(fleet, fare) {
+            selectedFleetType = fleet;
+            currentBaseFare = fare;
+
+            document.querySelectorAll('.fleet-selection-card').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            if (fleet === 'nexon') {
+                document.getElementById('fleet-nexon').classList.add('selected');
+            } else {
+                document.getElementById('fleet-xprest').classList.add('selected');
+            }
+            calculateFares();
+            restoreSelectedHeroBg();
+        }
+
+        // Fare Calculator based on Matrix & Fleet selection
+        function calculateFares() {
+            const pickup = document.getElementById('pickup-loc').value || 'pathankot';
+            const drop = document.getElementById('drop-loc').value || 'dharamshala';
+
+            let base = pricingMatrix[pickup]?.[drop] || 2150;
+
+            // XPRES-T (Sedan) gets a discount relative to SUV
+            if (selectedFleetType === 'xprest') {
+                base = Math.round(base * 0.82);
+            }
+
+            currentBaseFare = base;
+            const gst = Math.round(base * 0.05);
+            const total = base + gst;
+
+            // Render prices in selectors & text
+            document.getElementById('review-base-fare').textContent = `₹${base.toLocaleString('en-IN')}`;
+            document.getElementById('review-gst').textContent = `₹${gst.toLocaleString('en-IN')}`;
+            document.getElementById('review-total-payable').textContent = `₹${total.toLocaleString('en-IN')}`;
+
+            // Set final amount payable
+            updatePaymentDetails(total);
+        }
+
+        // Luggage Counters
+        function changeLuggage(val) {
+            suitcaseCount = Math.max(0, suitcaseCount + val);
+            document.getElementById('luggage-count').textContent = suitcaseCount;
+
+            // Show danger warning alert tooltip if suitcases exceed EV battery capacity of 2
+            const warning = document.getElementById('luggage-warning');
+            if (suitcaseCount > 2) {
+                warning.classList.add('show');
+            } else {
+                warning.classList.remove('show');
+            }
+        }
+
+        function changeHandbag(val) {
+            handbagCount = Math.max(0, handbagCount + val);
+            document.getElementById('handbag-count').textContent = handbagCount;
+        }
+
+        // Payment Option Selector
+        function selectPaymentMethod(method) {
+            selectedPayment = method;
+            const desc = document.getElementById('payment-description');
+
+            document.querySelectorAll('[onclick^="selectPaymentMethod"]').forEach(el => {
+                el.classList.remove('border-primary', 'bg-emerald-50/40');
+                el.classList.add('border-outline-variant');
+            });
+
+            // Target correct item to highlight
+            const target = event.currentTarget;
+            target.classList.remove('border-outline-variant');
+            target.classList.add('border-primary', 'bg-emerald-50/40');
+
+            if (method === 'upi') {
+                desc.textContent = 'UPI Intent flow will launch Google Pay, PhonePe, or Paytm instantly on your mobile device. Fast & 100% secure.';
+                calculateFares(); // Restore full pricing
+            } else if (method === 'card') {
+                desc.textContent = 'Accepts Visa, Mastercard, RuPay, and Netbanking via a secure 256-bit SSL gateway transaction.';
+                calculateFares(); // Restore full pricing
+            } else if (method === 'partial') {
+                desc.textContent = 'Pay a ₹500 token booking deposit now via UPI. Secure the reservation, and pay the remaining balance to your driver upon trip completion.';
+                updatePaymentDetails(500);
+            }
+        }
+
+        function updatePaymentDetails(amt) {
+            document.getElementById('payment-amount').textContent = `₹${amt.toLocaleString('en-IN')}`;
+        }
+
+        // simulated Payment trigger
+        function triggerPayment() {
+            // Check Union shielding checkbox
+            const accepted = document.getElementById('union-shield-chk').checked;
+            if (!accepted) {
+                alert('Please acknowledge the Transit Boarding Compliance checkbox before finalizing!');
+                return;
+            }
+
+            const loader = document.getElementById('payment-loader');
+            loader.classList.remove('hidden');
+
+            setTimeout(() => {
+                loader.classList.add('hidden');
+
+                // Generate secure transition details
+                const randomId = 'EV-HP-' + Math.floor(1000 + Math.random() * 9000);
+                document.getElementById('confirm-booking-id').textContent = randomId;
+
+                // Formulate WhatsApp preview alert message
+                const name = document.getElementById('rider-name').value || 'Traveler';
+                const date = document.getElementById('ride-date').value || '31-05-2026';
+                const time = document.getElementById('ride-time').value || '12:00';
+
+                const pickupSelect = document.getElementById('pickup-loc');
+                const pickupText = pickupSelect.options[pickupSelect.selectedIndex].text;
+
+                const vehicleName = selectedFleetType === 'nexon' ? 'Nexon EV' : 'XPRES-T EV';
+
+                const whatsappMsg = `"Hello ${name}, your eco-friendly ${vehicleName} ride from ${pickupText} is confirmed for ${date} at ${time}. Transit ID: ${randomId}. Driver details will be sent 2 hours prior. Present this digital boarding pass upon arrival to comply with station pre-booking transit laws."`;
+                document.getElementById('whatsapp-message-preview').textContent = whatsappMsg;
+
+                // Save to localStorage using the Bookings manager
+                try {
+                    const dropSelect = document.getElementById('drop-loc');
+                    const dropText = dropSelect.options[dropSelect.selectedIndex].text;
+                    const totalPayable = document.getElementById('review-total-payable').textContent;
+
+                    const bookingData = {
+                        id: randomId,
+                        name: name,
+                        phone: document.getElementById('rider-phone').value || '',
+                        email: document.getElementById('rider-email').value || '',
+                        date: date,
+                        time: time,
+                        pickup: pickupText,
+                        drop: dropText,
+                        vehicle: vehicleName,
+                        fare: totalPayable,
+                        status: 'Confirmed',
+                        timestamp: new Date().getTime(),
+                        otp: Math.floor(1000 + Math.random() * 9000)
+                    };
+
+                    const currentUser = (typeof Auth !== 'undefined') ? Auth.getCurrentUser() : null;
+                    const userEmail = currentUser ? currentUser.email : 'guest';
+
+                    if (typeof Bookings !== 'undefined') {
+                        Bookings.addBooking(userEmail, bookingData);
+                    }
+                } catch (e) {
+                    console.error('Error saving booking to localStorage:', e);
+                }
+
+                goToStep(7);
+            }, 2500);
+        }
+
+        // Reset flow
+        function resetBooking() {
+            // Reset all inputs
+            document.getElementById('pickup-loc').selectedIndex = 0;
+            document.getElementById('drop-loc').selectedIndex = 0;
+            document.getElementById('ride-date').value = '';
+            document.getElementById('ride-time').value = '';
+            document.getElementById('rider-name').value = '';
+            document.getElementById('rider-phone').value = '';
+            document.getElementById('rider-email').value = '';
+            document.getElementById('rider-transit').value = '';
+
+            suitcaseCount = 2;
+            handbagCount = 2;
+            document.getElementById('luggage-count').textContent = 2;
+            document.getElementById('handbag-count').textContent = 2;
+            document.getElementById('luggage-warning').classList.remove('show');
+
+            goToStep(1);
+            setHeroBg('default');
+        }
+
+        // Query Parameter Parser and Auto-filler on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const pickup = params.get('pickup');
+            const drop = params.get('drop');
+            const openBookings = params.get('openBookings');
+            const stepParam = params.get('step');
+
+            if (pickup) {
+                const pickupEl = document.getElementById('pickup-loc');
+                if (pickupEl) pickupEl.value = pickup;
+            }
+            if (drop) {
+                const dropEl = document.getElementById('drop-loc');
+                if (dropEl) dropEl.value = drop;
+            }
+
+            if (pickup && drop) {
+                // Scroll straight to the booking widget
+                const card = document.getElementById('booking-card');
+                if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            if (openBookings === 'true') {
+                openBookingsDrawer();
+            }
+            if (params.get('openProfile') === 'true') {
+                openProfileDrawer();
+            }
+
+            // Restore temporary booking if redirected from login page at Step 6
+            if (stepParam && parseInt(stepParam) === 6) {
+                try {
+                    const tempJson = localStorage.getItem('vishambrio_temp_booking');
+                    if (tempJson) {
+                        const data = JSON.parse(tempJson);
+                        
+                        // Restore inputs
+                        if (data.journeyType) {
+                            const radio = document.getElementById(data.journeyType === 'oneway' ? 'one-way' : 'round-trip');
+                            if (radio) radio.checked = true;
+                        }
+                        if (data.pickup) document.getElementById('pickup-loc').value = data.pickup;
+                        if (data.drop) document.getElementById('drop-loc').value = data.drop;
+                        if (data.date) document.getElementById('ride-date').value = data.date;
+                        if (data.time) document.getElementById('ride-time').value = data.time;
+                        if (data.riderName) document.getElementById('rider-name').value = data.riderName;
+                        if (data.riderPhone) document.getElementById('rider-phone').value = data.riderPhone;
+                        if (data.riderEmail) document.getElementById('rider-email').value = data.riderEmail;
+                        if (data.whatsapp !== undefined) document.getElementById('whatsapp-updates').checked = data.whatsapp;
+                        if (data.transit) document.getElementById('rider-transit').value = data.transit;
+                        
+                        if (data.suitcases !== undefined) {
+                            suitcaseCount = data.suitcases;
+                            document.getElementById('luggage-count').textContent = suitcaseCount;
+                        }
+                        if (data.handbags !== undefined) {
+                            handbagCount = data.handbags;
+                            document.getElementById('handbag-count').textContent = handbagCount;
+                        }
+                        if (data.fleet) {
+                            selectedFleetType = data.fleet;
+                        }
+                        if (data.fare) {
+                            currentBaseFare = data.fare;
+                        }
+
+                        // Re-calculate fares & update reviews
+                        calculateFares();
+
+                        // Scroll straight to the booking card and show Step 6 directly!
+                        const card = document.getElementById('booking-card');
+                        if (card) {
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+
+                        goToStep(6);
+                        
+                        // Clean up temp booking
+                        localStorage.removeItem('vishambrio_temp_booking');
+                    }
+                } catch (e) {
+                    console.error('Error restoring temp booking:', e);
+                }
+            }
+        });
     </script>
 </body>
 
