@@ -664,14 +664,6 @@
             });
         }
 
-        if (menuToggle && navMenu) {
-            const menuIcon = menuToggle.querySelector('.material-symbols-outlined');
-            menuToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('hidden');
-                navMenu.classList.toggle('active');
-                menuIcon.textContent = navMenu.classList.contains('active') ? 'close' : 'menu';
-            });
-        }
 
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
