@@ -1,0 +1,15 @@
+{
+  "name": "vishambrio",
+  "version": "1.0.0",
+  "description": "Sustainable Himachal Cabs",
+  "main": "index.html",
+  "scripts": {
+    "build": "tailwindcss -i ./tailwind-input.css -o ./tailwind.css --minify",
+    "watch": "tailwindcss -i ./tailwind-input.css -o ./tailwind.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.7",
+    "tailwindcss": "^3.4.1"
+  }
+}
