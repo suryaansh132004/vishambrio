@@ -4,3 +4,8 @@ Thumbs.db
 *.zip
 *.log
 .gemini/
+# [L8] Generated Tailwind CSS output — do not commit, regenerate via npm run build
+tailwind.css
+.next/
+.env
+.env.local
