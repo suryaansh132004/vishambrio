@@ -20,17 +20,13 @@ export default function Home() {
         
         <div className="relative z-10 max-w-screen-2xl mx-auto px-8 grid lg:grid-cols-2 gap-12 items-center w-full">
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-fixed/90 backdrop-blur-md border border-primary-fixed-dim/30 animate-entrance opacity-0" style={{ animationFillMode: 'forwards' }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-lg border border-white/30 shadow-sm animate-entrance opacity-0" style={{ animationFillMode: 'forwards' }}>
               <span className="material-symbols-outlined text-on-primary-fixed text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>eco</span>
               <span className="text-xs font-bold uppercase tracking-widest text-on-primary-fixed">Sustainable Future</span>
             </div>
             <h1 className="display-lg text-white drop-shadow-2xl animate-entrance opacity-0 delay-100" style={{ animationFillMode: 'forwards' }}>
               <span className="text-secondary-fixed-dim">Revolutionizing</span> How <span className="text-primary-fixed">Himachal</span> Moves
             </h1>
-
-            <p className="text-xl md:text-2xl text-slate-300 max-w-xl font-medium leading-relaxed drop-shadow-md animate-entrance opacity-0 delay-200" style={{ animationFillMode: 'forwards' }}>
-              Eco-friendly, affordable, and reliable electric cabs for urban and rural commuters navigating the peaks.
-            </p>
             <div className="flex flex-wrap gap-4 animate-entrance opacity-0 delay-300" style={{ animationFillMode: 'forwards' }}>
               <button 
                 onClick={() => {
@@ -93,6 +89,13 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {/* Eco-friendly statement moved from Hero */}
+        <div className="mt-28 text-center px-4">
+          <p className="text-2xl md:text-3xl text-tertiary font-medium leading-relaxed max-w-4xl mx-auto">
+            Eco-friendly, affordable, and reliable electric cabs for urban and rural commuters navigating the peaks.
+          </p>
+        </div>
       </section>
 
       {/* Safety & Convenience */}
@@ -102,7 +105,7 @@ export default function Home() {
             <div className="aspect-square rounded-[48px] overflow-hidden ambient-shadow">
               <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxnm2lkwHRKgOKolfxACC_FOolaIwd9RgQMUGoPbBQZxuN2nncyubAbqtbFheO3JqgrucqUjyJRswXaKmpU3FENRn7rG-VSYloHCQ_QZ8KeSJPxhwmgf95jp2gsRhbNfyq8g7Y7CNh9vN2MZrrdeo_EhYNWxnelOygAht_HIQxTIiAVb_EvwOwyCVikv0fHgJ09Qmbu66RTomFQK7_nIdwPcvlPEGpIVjvUprjT_4VUA-mqI2x7WYbEXIv_aljLE2aYZWBzevjid8" alt="EV dashboard navigation" />
             </div>
-            <div className="absolute -bottom-10 -right-10 glass-card p-8 rounded-3xl ambient-shadow max-w-xs transition-transform hover:scale-105 duration-500">
+            <div className="absolute -bottom-10 -right-10 bg-surface p-8 rounded-3xl ambient-shadow max-w-xs transition-transform hover:scale-105 duration-500">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-700">
                   <span className="material-symbols-outlined">verified_user</span>
@@ -118,17 +121,21 @@ export default function Home() {
               <p className="text-xl text-tertiary leading-relaxed">We've integrated high-end security protocols with a seamless booking interface to ensure your journey is as smooth as the electric drive.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="flex gap-6">
-                <span className="material-symbols-outlined text-primary text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>person_pin_circle</span>
+              <div className="p-6 rounded-2xl border border-slate-200 bg-white/70 shadow-sm flex gap-4 items-start transition-all hover:border-primary/30 hover:shadow-md">
+                <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-primary flex-shrink-0">
+                  <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>person_pin_circle</span>
+                </div>
                 <div>
-                  <h4 className="font-headline font-bold text-lg mb-1">Trained Drivers</h4>
+                  <h4 className="font-headline font-bold text-lg text-emerald-950 mb-1">Trained Drivers</h4>
                   <p className="text-sm text-tertiary">Professionals trained specifically for electric vehicle handling.</p>
                 </div>
               </div>
-              <div className="flex gap-6">
-                <span className="material-symbols-outlined text-primary text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>emergency_share</span>
+              <div className="p-6 rounded-2xl border border-slate-200 bg-white/70 shadow-sm flex gap-4 items-start transition-all hover:border-primary/30 hover:shadow-md">
+                <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-primary flex-shrink-0">
+                  <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>emergency_share</span>
+                </div>
                 <div>
-                  <h4 className="font-headline font-bold text-lg mb-1">Emergency Response</h4>
+                  <h4 className="font-headline font-bold text-lg text-emerald-950 mb-1">Emergency Response</h4>
                   <p className="text-sm text-tertiary">Instant SOS alerts and 24/7 rapid response teams.</p>
                 </div>
               </div>

@@ -1,9 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function DevRibbon() {
   const [isVisible, setIsVisible] = useState(true);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, [pathname]);
 
   if (!isVisible) return null;
 

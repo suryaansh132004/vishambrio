@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { BookingFormData, PICKUP_OPTIONS, DROP_OPTIONS } from '@/lib/types';
+import { BookingFormData, PICKUP_OPTIONS, DROP_OPTIONS, RETURN_PICKUP_OPTIONS } from '@/lib/types';
 
 interface Props {
   formData: BookingFormData;
@@ -10,7 +10,15 @@ interface Props {
 }
 
 export default function Step1Location({ formData, updateFormData, nextStep }: Props) {
-  const isFormValid = formData.pickup && formData.drop && formData.date && formData.time;
+  const isFormValid =
+    formData.pickup &&
+    formData.drop &&
+    formData.date &&
+    formData.time &&
+    (formData.journeyType === 'oneway' ||
+      (formData.returnTime &&
+        formData.returnPickup &&
+        (formData.returnType === 'sameday' || formData.returnDate)));
 
   return (
     <div className="booking-step active animate-entrance">
@@ -29,7 +37,11 @@ export default function Step1Location({ formData, updateFormData, nextStep }: Pr
               onChange={() => updateFormData({ journeyType: 'oneway' })}
             />
             <label
-              className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-outline-variant text-sm font-semibold cursor-pointer select-none text-slate-600 transition-all text-center hover:bg-slate-50"
+              className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 text-sm font-semibold cursor-pointer select-none transition-all text-center ${
+                formData.journeyType === 'oneway'
+                  ? 'border-emerald-950 bg-emerald-950 text-white shadow-md'
+                  : 'border-slate-200 bg-white/40 text-slate-600 hover:bg-slate-50 hover:border-slate-300'
+              }`}
               htmlFor="one-way"
             >
               <span className="material-symbols-outlined text-sm">trending_flat</span> One-Way
@@ -43,10 +55,22 @@ export default function Step1Location({ formData, updateFormData, nextStep }: Pr
               name="journey_type"
               value="roundtrip"
               checked={formData.journeyType === 'roundtrip'}
-              onChange={() => updateFormData({ journeyType: 'roundtrip' })}
+              onChange={() => {
+                const returnOpts = RETURN_PICKUP_OPTIONS[formData.drop] || [];
+                updateFormData({
+                  journeyType: 'roundtrip',
+                  returnDate: formData.date,
+                  returnPickup: formData.returnPickup || returnOpts[0]?.value || '',
+                  returnPickupLabel: formData.returnPickupLabel || returnOpts[0]?.label || '',
+                });
+              }}
             />
             <label
-              className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-outline-variant text-sm font-semibold cursor-pointer select-none text-slate-600 transition-all text-center hover:bg-slate-50"
+              className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 text-sm font-semibold cursor-pointer select-none transition-all text-center ${
+                formData.journeyType === 'roundtrip'
+                  ? 'border-emerald-950 bg-emerald-950 text-white shadow-md'
+                  : 'border-slate-200 bg-white/40 text-slate-600 hover:bg-slate-50 hover:border-slate-300'
+              }`}
               htmlFor="round-trip"
             >
               <span className="material-symbols-outlined text-sm">sync</span> Round-Trip
@@ -78,8 +102,17 @@ export default function Step1Location({ formData, updateFormData, nextStep }: Pr
           <select
             value={formData.drop}
             onChange={(e) => {
+              const val = e.target.value;
               const label = e.target.options[e.target.selectedIndex].text;
-              updateFormData({ drop: e.target.value, dropLabel: label });
+              const returnOpts = RETURN_PICKUP_OPTIONS[val] || [];
+              const defaultReturnPickup = returnOpts[0]?.value || '';
+              const defaultReturnPickupLabel = returnOpts[0]?.label || '';
+              updateFormData({
+                drop: val,
+                dropLabel: label,
+                returnPickup: defaultReturnPickup,
+                returnPickupLabel: defaultReturnPickupLabel,
+              });
             }}
             className="wizard-input"
             required
@@ -98,7 +131,13 @@ export default function Step1Location({ formData, updateFormData, nextStep }: Pr
             <input
               type="date"
               value={formData.date}
-              onChange={(e) => updateFormData({ date: e.target.value })}
+              onChange={(e) => {
+                const newDate = e.target.value;
+                updateFormData({
+                  date: newDate,
+                  returnDate: formData.returnType === 'sameday' ? newDate : formData.returnDate,
+                });
+              }}
               className="wizard-input"
               required
             />
@@ -114,6 +153,74 @@ export default function Step1Location({ formData, updateFormData, nextStep }: Pr
             />
           </div>
         </div>
+
+        {/* Round Trip Return Details */}
+        {formData.journeyType === 'roundtrip' && (
+          <div className="space-y-4 pt-4 border-t border-dashed border-slate-200 animate-entrance">
+            {/* Return Pickup Location */}
+            {formData.drop && (
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Pick-up Location (Return)</label>
+                <select
+                  value={formData.returnPickup}
+                  onChange={(e) => {
+                    const label = e.target.options[e.target.selectedIndex].text;
+                    updateFormData({ returnPickup: e.target.value, returnPickupLabel: label });
+                  }}
+                  className="wizard-input"
+                  required
+                >
+                  <option value="" disabled>Select return pick-up...</option>
+                  {(RETURN_PICKUP_OPTIONS[formData.drop] || []).map((opt) => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Return Option</label>
+              <select
+                value={formData.returnType}
+                onChange={(e) => {
+                  const type = e.target.value as 'sameday' | 'multiday';
+                  updateFormData({
+                    returnType: type,
+                    returnDate: type === 'sameday' ? formData.date : '',
+                  });
+                }}
+                className="wizard-input"
+              >
+                <option value="sameday">Same-Day Return</option>
+                <option value="multiday">Different-Day Return</option>
+              </select>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Return Date</label>
+                <input
+                  type="date"
+                  value={formData.returnType === 'sameday' ? formData.date : formData.returnDate}
+                  onChange={(e) => updateFormData({ returnDate: e.target.value })}
+                  disabled={formData.returnType === 'sameday'}
+                  className="wizard-input disabled:opacity-60 disabled:bg-slate-100/50 disabled:cursor-not-allowed"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Return Time</label>
+                <input
+                  type="time"
+                  value={formData.returnTime}
+                  onChange={(e) => updateFormData({ returnTime: e.target.value })}
+                  className="wizard-input"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* CTA */}
         <button

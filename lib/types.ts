@@ -55,6 +55,11 @@ export interface BookingFormData {
   dropLabel: string;
   date: string;
   time: string;
+  returnDate: string;
+  returnTime: string;
+  returnType: 'sameday' | 'multiday';
+  returnPickup: string;
+  returnPickupLabel: string;
   riderName: string;
   riderPhone: string;
   riderEmail: string;
@@ -77,6 +82,11 @@ export const INITIAL_FORM_DATA: BookingFormData = {
   dropLabel: '',
   date: '',
   time: '',
+  returnDate: '',
+  returnTime: '',
+  returnType: 'sameday',
+  returnPickup: '',
+  returnPickupLabel: '',
   riderName: '',
   riderPhone: '',
   riderEmail: '',
@@ -121,3 +131,24 @@ export const DROP_OPTIONS = [
   { value: 'mcleodganj', label: 'McLeodganj Main Square' },
   { value: 'kangra_temple', label: 'Kangra Devi Temple' },
 ];
+
+export const RETURN_PICKUP_OPTIONS: Record<string, { value: string; label: string }[]> = {
+  dharamshala: [
+    { value: 'dharamshala_skyway', label: 'Dharamshala Skyway Terminal' },
+    { value: 'hpca_stadium', label: 'HPCA Cricket Stadium Parking' },
+    { value: 'kotwali_bazaar', label: 'Kotwali Bazaar (Main Market)' },
+    { value: 'dari_ground', label: 'Dari Mela Ground' },
+  ],
+  mcleodganj: [
+    { value: 'mcleod_square', label: 'McLeodganj Main Square' },
+    { value: 'bhagsunag_parking', label: 'Bhagsunag Waterfall Parking' },
+    { value: 'dharamkot_tushita', label: 'Dharamkot (Tushita Road)' },
+    { value: 'dal_lake', label: 'Dal Lake Parking' },
+  ],
+  kangra_temple: [
+    { value: 'kangra_temple_ent', label: 'Kangra Devi Temple Entrance' },
+    { value: 'kangra_fort', label: 'Kangra Fort Parking' },
+    { value: 'kangra_railway', label: 'Kangra Railway Station' },
+    { value: 'ranital_chowk', label: 'Ranital Chowk' },
+  ],
+};
