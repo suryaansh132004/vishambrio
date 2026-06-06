@@ -20,15 +20,15 @@ export default function Home() {
         
         <div className="relative z-10 max-w-screen-2xl mx-auto px-8 grid lg:grid-cols-2 gap-12 items-center w-full">
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container/20 backdrop-blur-md border border-primary/20 animate-entrance opacity-0" style={{ animationFillMode: 'forwards' }}>
-              <span className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>eco</span>
-              <span className="text-xs font-bold uppercase tracking-widest text-primary">Sustainable Future</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-fixed/90 backdrop-blur-md border border-primary-fixed-dim/30 animate-entrance opacity-0" style={{ animationFillMode: 'forwards' }}>
+              <span className="material-symbols-outlined text-on-primary-fixed text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>eco</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-on-primary-fixed">Sustainable Future</span>
             </div>
             <h1 className="display-lg text-white drop-shadow-2xl animate-entrance opacity-0 delay-100" style={{ animationFillMode: 'forwards' }}>
-              Revolutionizing How <span className="text-primary-fixed">Himachal</span> Moves
+              <span className="text-secondary-fixed-dim">Revolutionizing</span> How <span className="text-primary-fixed">Himachal</span> Moves
             </h1>
 
-            <p className="text-xl md:text-2xl text-white/90 max-w-xl font-medium leading-relaxed drop-shadow-md animate-entrance opacity-0 delay-200" style={{ animationFillMode: 'forwards' }}>
+            <p className="text-xl md:text-2xl text-slate-300 max-w-xl font-medium leading-relaxed drop-shadow-md animate-entrance opacity-0 delay-200" style={{ animationFillMode: 'forwards' }}>
               Eco-friendly, affordable, and reliable electric cabs for urban and rural commuters navigating the peaks.
             </p>
             <div className="flex flex-wrap gap-4 animate-entrance opacity-0 delay-300" style={{ animationFillMode: 'forwards' }}>
