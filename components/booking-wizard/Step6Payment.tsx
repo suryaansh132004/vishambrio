@@ -5,6 +5,7 @@ import { BookingFormData, Booking } from '@/lib/types';
 import { useAuth } from '@/context/AuthContext';
 import { useBookings } from '@/context/BookingsContext';
 import { useRouter } from 'next/navigation';
+import CustomDialog from '../CustomDialog';
 
 interface Props {
   formData: BookingFormData;
@@ -16,6 +17,7 @@ interface Props {
 
 export default function Step6Payment({ formData, updateFormData, nextStep, prevStep, setConfirmedBookingId }: Props) {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [alertDialog, setAlertDialog] = useState<{ isOpen: boolean; title: string; message: string } | null>(null);
   const { user } = useAuth();
   const { addBooking } = useBookings();
   const router = useRouter();
@@ -37,12 +39,11 @@ export default function Step6Payment({ formData, updateFormData, nextStep, prevS
   const triggerPayment = () => {
     // H4 Security Patch: Re-verify login state right before payment
     if (!user) {
-      alert('Your session has expired or you are not logged in. Please log in to complete payment.');
-      // Save temp booking to allow resuming
-      if (typeof window !== 'undefined') {
-         localStorage.setItem('vishambrio_temp_booking', JSON.stringify(formData));
-      }
-      router.push('/login?redirect=/&step=6');
+      setAlertDialog({
+        isOpen: true,
+        title: 'Authentication Required',
+        message: 'Your session has expired or you are not logged in. Please log in to complete your secure payment transaction.'
+      });
       return;
     }
 
@@ -93,27 +94,54 @@ export default function Step6Payment({ formData, updateFormData, nextStep, prevS
         {/* Payment Methods */}
         <div className="space-y-3">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block">Instant Mobile UPI</label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Select secure payment method">
             {/* H1 Security Patch: Event is handled implicitly by React, no global window.event issues */}
             <div 
               onClick={() => handlePaymentSelect('upi')}
-              className={`rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors border-2 ${formData.paymentMethod === 'upi' ? 'border-primary bg-emerald-50/40' : 'border-outline-variant hover:bg-slate-50'}`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handlePaymentSelect('upi');
+                }
+              }}
+              tabIndex={0}
+              role="radio"
+              aria-checked={formData.paymentMethod === 'upi'}
+              className={`rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors border-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 ${formData.paymentMethod === 'upi' ? 'border-primary bg-emerald-50/40' : 'border-outline-variant hover:bg-slate-50'}`}
             >
-              <span className="text-lg mb-1">📱</span>
+              <span className="text-lg mb-1" aria-hidden="true">📱</span>
               <span className="text-[10px] font-bold text-slate-600">UPI App</span>
             </div>
             <div 
               onClick={() => handlePaymentSelect('card')}
-              className={`rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors border-2 ${formData.paymentMethod === 'card' ? 'border-primary bg-emerald-50/40' : 'border-outline-variant hover:bg-slate-50'}`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handlePaymentSelect('card');
+                }
+              }}
+              tabIndex={0}
+              role="radio"
+              aria-checked={formData.paymentMethod === 'card'}
+              className={`rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors border-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 ${formData.paymentMethod === 'card' ? 'border-primary bg-emerald-50/40' : 'border-outline-variant hover:bg-slate-50'}`}
             >
-              <span className="text-lg mb-1">💳</span>
+              <span className="text-lg mb-1" aria-hidden="true">💳</span>
               <span className="text-[10px] font-bold text-slate-600">Card</span>
             </div>
             <div 
               onClick={() => handlePaymentSelect('partial')}
-              className={`rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors border-2 ${formData.paymentMethod === 'partial' ? 'border-primary bg-emerald-50/40' : 'border-outline-variant hover:bg-slate-50'}`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handlePaymentSelect('partial');
+                }
+              }}
+              tabIndex={0}
+              role="radio"
+              aria-checked={formData.paymentMethod === 'partial'}
+              className={`rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors border-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 ${formData.paymentMethod === 'partial' ? 'border-primary bg-emerald-50/40' : 'border-outline-variant hover:bg-slate-50'}`}
             >
-              <span className="text-lg mb-1">🪙</span>
+              <span className="text-lg mb-1" aria-hidden="true">🪙</span>
               <span className="text-[10px] font-bold text-slate-600">Token</span>
             </div>
           </div>
@@ -132,10 +160,10 @@ export default function Step6Payment({ formData, updateFormData, nextStep, prevS
 
         {/* Action Buttons */}
         <div className="grid grid-cols-3 gap-3 mt-4">
-          <button onClick={prevStep} disabled={isProcessing} className="col-span-1 border-2 border-outline-variant font-bold rounded-xl py-3 text-slate-600 hover:bg-slate-50 transition-colors disabled:opacity-50">
+          <button onClick={prevStep} disabled={isProcessing} className="col-span-1 border-2 border-outline-variant font-bold rounded-xl py-3 text-slate-600 hover:bg-slate-50 transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
             Back
           </button>
-          <button onClick={triggerPayment} disabled={isProcessing} className="col-span-2 btn-primary-gradient text-on-primary font-headline font-bold rounded-xl py-3 shadow-lg active:scale-98 transition-all disabled:opacity-50">
+          <button onClick={triggerPayment} disabled={isProcessing} className="col-span-2 btn-primary-gradient text-on-primary font-headline font-bold rounded-xl py-3 shadow-lg active:scale-98 transition-all disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700">
             Complete Secure Payment
           </button>
         </div>
@@ -149,6 +177,21 @@ export default function Step6Payment({ formData, updateFormData, nextStep, prevS
           <p className="text-slate-400 text-xs font-semibold">Do not close or reload this window</p>
         </div>
       )}
+
+      <CustomDialog
+        isOpen={alertDialog !== null}
+        title={alertDialog?.title || ''}
+        message={alertDialog?.message || ''}
+        type="alert"
+        onConfirm={() => {
+          setAlertDialog(null);
+          // Redirect on confirm
+          if (typeof window !== 'undefined') {
+             localStorage.setItem('vishambrio_temp_booking', JSON.stringify(formData));
+          }
+          router.push('/login?redirect=/&step=6');
+        }}
+      />
     </div>
   );
 }

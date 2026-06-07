@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { BookingFormData } from '@/lib/types';
+import CustomDialog from '../CustomDialog';
 
 interface Props {
   formData: BookingFormData;
@@ -13,11 +14,16 @@ interface Props {
 export default function Step5Fare({ formData, nextStep, prevStep }: Props) {
   // Use a local state for the checkbox just to ensure it's checked before proceeding,
   // or we can just require it to continue.
-  const [unionShieldAccepted, setUnionShieldAccepted] = React.useState(true);
+  const [unionShieldAccepted, setUnionShieldAccepted] = useState(true);
+  const [alertDialog, setAlertDialog] = useState<{ isOpen: boolean; title: string; message: string } | null>(null);
 
   const handleNext = () => {
     if (!unionShieldAccepted) {
-      alert('Please acknowledge the Transit Boarding Compliance checkbox before finalizing!');
+      setAlertDialog({
+        isOpen: true,
+        title: 'Boarding Compliance Check',
+        message: 'Please acknowledge the Transit Boarding Compliance checkbox before finalizing your fare review!'
+      });
       return;
     }
     nextStep();
@@ -61,7 +67,7 @@ export default function Step5Fare({ formData, nextStep, prevStep }: Props) {
             type="checkbox"
             checked={unionShieldAccepted}
             onChange={(e) => setUnionShieldAccepted(e.target.checked)}
-            className="w-5 h-5 mt-0.5 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500"
+            className="w-5 h-5 mt-0.5 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700"
           />
           <label htmlFor="union-shield-chk" className="text-xs font-semibold leading-relaxed text-slate-500">
             I understand this is a pre-booked digital ride. My digital boarding invoice acts as my transit pass to comply with local station union transit regulations.
@@ -70,14 +76,22 @@ export default function Step5Fare({ formData, nextStep, prevStep }: Props) {
 
         {/* Action Buttons */}
         <div className="grid grid-cols-3 gap-3 mt-4">
-          <button onClick={prevStep} className="col-span-1 border-2 border-outline-variant font-bold rounded-xl py-3 text-slate-600 hover:bg-slate-50 transition-colors">
+          <button onClick={prevStep} className="col-span-1 border-2 border-outline-variant font-bold rounded-xl py-3 text-slate-600 hover:bg-slate-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
             Back
           </button>
-          <button onClick={handleNext} className="col-span-2 btn-primary-gradient text-on-primary font-headline font-bold rounded-xl py-3 shadow-lg active:scale-98 transition-all">
+          <button onClick={handleNext} className="col-span-2 btn-primary-gradient text-on-primary font-headline font-bold rounded-xl py-3 shadow-lg active:scale-98 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700">
             Proceed to Payment
           </button>
         </div>
       </div>
+
+      <CustomDialog
+        isOpen={alertDialog !== null}
+        title={alertDialog?.title || ''}
+        message={alertDialog?.message || ''}
+        type="alert"
+        onConfirm={() => setAlertDialog(null)}
+      />
     </div>
   );
 }

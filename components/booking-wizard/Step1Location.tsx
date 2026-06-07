@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
-import { BookingFormData, PICKUP_OPTIONS, DROP_OPTIONS, RETURN_PICKUP_OPTIONS } from '@/lib/types';
+import React, { useState } from 'react';
+import { BookingFormData, PICKUP_OPTIONS, DROP_OPTIONS, RETURN_PICKUP_OPTIONS, TRAVEL_TIME_MATRIX_MINUTES } from '@/lib/types';
+import CustomDialog from '../CustomDialog';
 
 interface Props {
   formData: BookingFormData;
@@ -10,6 +11,8 @@ interface Props {
 }
 
 export default function Step1Location({ formData, updateFormData, nextStep }: Props) {
+  const [alertDialog, setAlertDialog] = useState<{ isOpen: boolean; title: string; message: string } | null>(null);
+
   const isFormValid =
     formData.pickup &&
     formData.drop &&
@@ -28,7 +31,7 @@ export default function Step1Location({ formData, updateFormData, nextStep }: Pr
         <div className="flex gap-4">
           <div className="relative flex-1">
             <input
-              className="sr-only wizard-radio"
+              className="sr-only wizard-radio peer"
               type="radio"
               id="one-way"
               name="journey_type"
@@ -37,19 +40,19 @@ export default function Step1Location({ formData, updateFormData, nextStep }: Pr
               onChange={() => updateFormData({ journeyType: 'oneway' })}
             />
             <label
-              className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 text-sm font-semibold cursor-pointer select-none transition-all text-center ${
+              className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 text-sm font-semibold cursor-pointer select-none transition-all text-center peer-focus-visible:ring-4 peer-focus-visible:ring-emerald-950/20 peer-focus-visible:border-emerald-950 ${
                 formData.journeyType === 'oneway'
                   ? 'border-emerald-950 bg-emerald-950 text-white shadow-md'
                   : 'border-slate-200 bg-white/40 text-slate-600 hover:bg-slate-50 hover:border-slate-300'
               }`}
               htmlFor="one-way"
             >
-              <span className="material-symbols-outlined text-sm">trending_flat</span> One-Way
+              <span className="material-symbols-outlined text-sm" aria-hidden="true">trending_flat</span> One-Way
             </label>
           </div>
           <div className="relative flex-1">
             <input
-              className="sr-only wizard-radio"
+              className="sr-only wizard-radio peer"
               type="radio"
               id="round-trip"
               name="journey_type"
@@ -66,14 +69,14 @@ export default function Step1Location({ formData, updateFormData, nextStep }: Pr
               }}
             />
             <label
-              className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 text-sm font-semibold cursor-pointer select-none transition-all text-center ${
+              className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 text-sm font-semibold cursor-pointer select-none transition-all text-center peer-focus-visible:ring-4 peer-focus-visible:ring-emerald-950/20 peer-focus-visible:border-emerald-950 ${
                 formData.journeyType === 'roundtrip'
                   ? 'border-emerald-950 bg-emerald-950 text-white shadow-md'
                   : 'border-slate-200 bg-white/40 text-slate-600 hover:bg-slate-50 hover:border-slate-300'
               }`}
               htmlFor="round-trip"
             >
-              <span className="material-symbols-outlined text-sm">sync</span> Round-Trip
+              <span className="material-symbols-outlined text-sm" aria-hidden="true">sync</span> Round-Trip
             </label>
           </div>
         </div>
@@ -224,14 +227,90 @@ export default function Step1Location({ formData, updateFormData, nextStep }: Pr
 
         {/* CTA */}
         <button
-          onClick={nextStep}
-          disabled={!isFormValid}
-          className="w-full btn-primary-gradient text-on-primary py-4 rounded-xl font-headline font-bold text-lg active:scale-98 transition-all shadow-lg mt-4 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={() => {
+            if (!formData.pickup) {
+              setAlertDialog({ isOpen: true, title: 'Missing Information', message: 'Please select a Pick-up Location.' });
+              return;
+            }
+            if (!formData.drop) {
+              setAlertDialog({ isOpen: true, title: 'Missing Information', message: 'Please select a Drop-off Location.' });
+              return;
+            }
+            if (!formData.date) {
+              setAlertDialog({ isOpen: true, title: 'Missing Information', message: 'Please select a travel Date.' });
+              return;
+            }
+            if (!formData.time) {
+              setAlertDialog({ isOpen: true, title: 'Missing Information', message: 'Please select a travel Time.' });
+              return;
+            }
+            if (formData.journeyType === 'roundtrip') {
+              if (!formData.returnPickup) {
+                setAlertDialog({ isOpen: true, title: 'Missing Information', message: 'Please select a Return Pick-up Location.' });
+                return;
+              }
+              if (formData.returnType === 'multiday' && !formData.returnDate) {
+                setAlertDialog({ isOpen: true, title: 'Missing Information', message: 'Please select a Return Date.' });
+                return;
+              }
+              if (!formData.returnTime) {
+                setAlertDialog({ isOpen: true, title: 'Missing Information', message: 'Please select a Return Time.' });
+                return;
+              }
+
+              // Same-day round trip buffer validation
+              if (formData.returnType === 'sameday') {
+                const parseTimeToMinutes = (timeStr: string) => {
+                  const [hours, minutes] = timeStr.split(':').map(Number);
+                  return hours * 60 + minutes;
+                };
+
+                const travelTimeMinutes = TRAVEL_TIME_MATRIX_MINUTES[formData.pickup]?.[formData.drop] || 120; // default 2 hrs if not found
+                const pickupMins = parseTimeToMinutes(formData.time);
+                const returnMins = parseTimeToMinutes(formData.returnTime);
+                const bufferMins = 60; // 1 hour buffer
+
+                const requiredTotalMins = pickupMins + travelTimeMinutes + bufferMins;
+
+                if (requiredTotalMins >= 1440) {
+                  setAlertDialog({
+                    isOpen: true,
+                    title: 'Time Constraint',
+                    message: 'The journey and required driver rest buffer exceed midnight. Please select a Different-Day Return.'
+                  });
+                  return;
+                }
+
+                if (returnMins < requiredTotalMins) {
+                  const requiredHours = Math.floor(requiredTotalMins / 60);
+                  const requiredMinsStr = String(requiredTotalMins % 60).padStart(2, '0');
+                  const requiredTimeStr = `${String(requiredHours).padStart(2, '0')}:${requiredMinsStr}`;
+                  
+                  setAlertDialog({
+                    isOpen: true,
+                    title: 'Invalid Return Time',
+                    message: `For a same-day round trip, your return time must be at least ${requiredTimeStr} to safely account for travel time and a 1-hour driver rest buffer.`
+                  });
+                  return;
+                }
+              }
+            }
+            nextStep();
+          }}
+          className="w-full btn-primary-gradient text-on-primary py-4 rounded-xl font-headline font-bold text-lg active:scale-98 transition-all shadow-lg mt-4 flex items-center justify-center gap-2"
         >
           Check Green Fares
           <span className="material-symbols-outlined text-base">arrow_forward</span>
         </button>
       </div>
+
+      <CustomDialog
+        isOpen={alertDialog !== null}
+        title={alertDialog?.title || ''}
+        message={alertDialog?.message || ''}
+        type="alert"
+        onConfirm={() => setAlertDialog(null)}
+      />
     </div>
   );
 }

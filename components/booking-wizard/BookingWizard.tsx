@@ -45,6 +45,20 @@ export default function BookingWizard() {
     }));
   }, [formData.pickup, formData.drop, formData.fleet]);
 
+  // Emit custom event to update hero background image when vehicle or step changes
+  useEffect(() => {
+    let src = '/assets/heroimage.png';
+    if (step > 1 && step < 7) {
+      if (formData.fleet === 'nexon') {
+        src = '/assets/nexonimg.png';
+      } else if (formData.fleet === 'xprest') {
+        src = '/assets/xprest.png';
+      }
+    }
+    const event = new CustomEvent('update-hero-bg', { detail: { src } });
+    window.dispatchEvent(event);
+  }, [step, formData.fleet]);
+
   const updateFormData = (updates: Partial<BookingFormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));
   };

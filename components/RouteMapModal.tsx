@@ -15,6 +15,7 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
   const [activeScenicIdx, setActiveScenicIdx] = useState(0);
   const [isRendered, setIsRendered] = useState(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen && routeId) {
@@ -39,6 +40,59 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
     
     return () => clearInterval(timer);
   }, [isOpen, routeId, activeScenicIdx]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+      if (e.key === 'Tab') {
+        if (!modalRef.current) return;
+        const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
+          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"], g[tabindex="0"]'
+        );
+        if (focusableElements.length === 0) return;
+        
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+        
+        if (e.shiftKey) { // Shift + Tab
+          if (document.activeElement === firstElement) {
+            lastElement.focus();
+            e.preventDefault();
+          }
+        } else { // Tab
+          if (document.activeElement === lastElement) {
+            firstElement.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    const previousActiveElement = document.activeElement as HTMLElement;
+
+    const timer = setTimeout(() => {
+      const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"], g[tabindex="0"]'
+      );
+      if (focusableElements && focusableElements.length > 0) {
+        // Focus close button or first action
+        focusableElements[0].focus();
+      }
+    }, 50);
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      clearTimeout(timer);
+      if (previousActiveElement) {
+        previousActiveElement.focus();
+      }
+    };
+  }, [isOpen, onClose]);
 
   if (!isRendered || !routeId) return null;
 
@@ -67,9 +121,15 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
 
   return (
     <div className={`fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-6 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-      <div className="fixed inset-0 bg-emerald-950/60 backdrop-blur-md" onClick={onClose}></div>
+      <div className="fixed inset-0 bg-emerald-950/60 backdrop-blur-md" onClick={onClose} aria-hidden="true"></div>
       
-      <div className={`relative w-full max-w-4xl bg-white rounded-[32px] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-white/20 h-[85vh] md:h-auto max-h-[85vh] transition-all duration-300 transform ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
+      <div 
+        ref={modalRef}
+        className={`relative w-full max-w-4xl bg-white rounded-[32px] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-white/20 h-[85vh] md:h-auto max-h-[85vh] transition-all duration-300 transform ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Route details and live map"
+      >
         
         {/* Left Column: Dynamic Map Canvas */}
         <div className="w-full md:w-[45%] bg-[#081f2c] p-6 flex flex-col justify-between relative text-white min-h-[340px] md:min-h-auto">
@@ -105,11 +165,24 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
                 else if (node.type === 'end') fill = '#0d631b';
 
                 return (
-                  <g key={idx} className="cursor-pointer group" onClick={() => selectNode(idx)}>
+                  <g 
+                    key={idx} 
+                    className="cursor-pointer group focus:outline-none" 
+                    onClick={() => selectNode(idx)}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`Select checkpoint: ${node.name}`}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        selectNode(idx);
+                      }
+                    }}
+                  >
                     {(node.type === 'stop' || node.type === 'scenic') && (
                       <circle cx={node.x} cy={node.y} r="6" fill={fill} opacity="0.6" className="animate-pulse" />
                     )}
-                    <circle cx={node.x} cy={node.y} r="5" fill={fill} stroke={activeNodeIdx === idx ? '#ffffff' : fill} strokeWidth={activeNodeIdx === idx ? 2 : 1.5} className="group-hover:stroke-white group-hover:stroke-2" />
+                    <circle cx={node.x} cy={node.y} r="5" fill={fill} stroke={activeNodeIdx === idx ? '#ffffff' : fill} strokeWidth={activeNodeIdx === idx ? 2 : 1.5} className="group-hover:stroke-white group-hover:stroke-2 group-focus:stroke-white group-focus:stroke-2" />
                   </g>
                 );
               })}
@@ -162,8 +235,12 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
         
         {/* Right Column: Timeline & Gallery */}
         <div className="w-full md:w-[55%] p-6 md:p-8 flex flex-col justify-between overflow-y-auto max-h-[50vh] md:max-h-[85vh] relative">
-          <button onClick={onClose} className="absolute top-4 right-4 z-30 p-2 text-slate-400 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-full transition-all">
-            <span className="material-symbols-outlined text-xl block">close</span>
+          <button 
+            onClick={onClose} 
+            className="absolute top-4 right-4 z-30 p-2 text-slate-400 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700"
+            aria-label="Close route details"
+          >
+            <span className="material-symbols-outlined text-xl block" aria-hidden="true">close</span>
           </button>
           
           <div className="space-y-6">
@@ -182,9 +259,22 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
                 else if (node.type === 'end') { badgeClass = 'bg-emerald-950 text-white'; icon = 'flag'; }
 
                 return (
-                  <div key={idx} onClick={() => selectNode(idx)} className={`timeline-step flex items-start gap-4 p-3 rounded-2xl border cursor-pointer transition-all ${activeNodeIdx === idx ? 'bg-green-50 border-green-200 translate-x-1' : 'border-slate-100 hover:bg-slate-50'}`}>
+                  <div 
+                    key={idx} 
+                    onClick={() => selectNode(idx)} 
+                    tabIndex={0}
+                    role="button"
+                    aria-pressed={activeNodeIdx === idx}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        selectNode(idx);
+                      }
+                    }}
+                    className={`timeline-step flex items-start gap-4 p-3 rounded-2xl border cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-600/20 focus-visible:border-emerald-600 ${activeNodeIdx === idx ? 'bg-green-50 border-green-200 translate-x-1' : 'border-slate-100 hover:bg-slate-50'}`}
+                  >
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 relative z-10 ${badgeClass}`}>
-                      <span className="material-symbols-outlined text-sm font-bold">{icon}</span>
+                      <span className="material-symbols-outlined text-sm font-bold" aria-hidden="true">{icon}</span>
                     </div>
                     <div className="space-y-0.5">
                       <h4 className="font-bold text-sm text-slate-800">{node.name}</h4>
@@ -200,7 +290,7 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
               <div className="flex flex-wrap gap-2">
                 {data.dropPoints.map((pt, idx) => (
                   <span key={idx} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 text-xs font-semibold text-slate-600 border border-slate-200">
-                    <span className="material-symbols-outlined text-[14px]">pin_drop</span> {pt}
+                    <span className="material-symbols-outlined text-[14px]" aria-hidden="true">pin_drop</span> {pt}
                   </span>
                 ))}
               </div>
@@ -220,20 +310,28 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
                     </div>
                   ))}
                 </div>
-                <button onClick={handlePrevPhoto} className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                  <span className="material-symbols-outlined text-sm block">chevron_left</span>
+                <button 
+                  onClick={handlePrevPhoto} 
+                  className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity z-20 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
+                  aria-label="Previous image"
+                >
+                  <span className="material-symbols-outlined text-sm block" aria-hidden="true">chevron_left</span>
                 </button>
-                <button onClick={handleNextPhoto} className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                  <span className="material-symbols-outlined text-sm block">chevron_right</span>
+                <button 
+                  onClick={handleNextPhoto} 
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity z-20 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
+                  aria-label="Next image"
+                >
+                  <span className="material-symbols-outlined text-sm block" aria-hidden="true">chevron_right</span>
                 </button>
               </div>
             </div>
           </div>
           
           <div className="pt-6 mt-6 border-t border-slate-100 flex gap-4">
-            <button onClick={onClose} className="flex-1 py-3 text-center border-2 border-slate-200 text-slate-600 hover:text-slate-900 rounded-xl font-headline font-bold hover:bg-slate-50 transition-colors">Close Details</button>
-            <Link href={`/?pickup=${data.pickupVal}&drop=${data.dropVal}&step=1`} className="flex-1 py-3 text-center bg-primary hover:bg-emerald-700 text-white rounded-xl font-headline font-bold transition-all shadow-lg flex items-center justify-center gap-1.5">
-              <span className="material-symbols-outlined text-base">bolt</span> Book Route Now
+            <button onClick={onClose} className="flex-1 py-3 text-center border-2 border-slate-200 text-slate-600 hover:text-slate-900 rounded-xl font-headline font-bold hover:bg-slate-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">Close Details</button>
+            <Link href={`/?pickup=${data.pickupVal}&drop=${data.dropVal}&step=1`} className="flex-1 py-3 text-center bg-primary hover:bg-emerald-700 text-white rounded-xl font-headline font-bold transition-all shadow-lg flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700">
+              <span className="material-symbols-outlined text-base" aria-hidden="true">bolt</span> Book Route Now
             </Link>
           </div>
         </div>

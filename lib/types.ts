@@ -120,6 +120,25 @@ export const PRICING_MATRIX: Record<string, Record<string, number>> = {
   },
 };
 
+// Approximate travel times: pickup -> drop -> time (in minutes)
+export const TRAVEL_TIME_MATRIX_MINUTES: Record<string, Record<string, number>> = {
+  pathankot: {
+    dharamshala: 150, // 2.5 hours
+    mcleodganj: 180,  // 3 hours
+    kangra_temple: 120, // 2 hours
+  },
+  gaggal: {
+    dharamshala: 45,
+    mcleodganj: 60,
+    kangra_temple: 30,
+  },
+  kandwal: {
+    dharamshala: 120,
+    mcleodganj: 150,
+    kangra_temple: 90,
+  },
+};
+
 export const PICKUP_OPTIONS = [
   { value: 'pathankot', label: 'Pathankot Cantt Railway Station (PTK)' },
   { value: 'gaggal', label: 'Gaggal Airport (DHM)' },

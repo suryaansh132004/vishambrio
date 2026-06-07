@@ -68,19 +68,35 @@ function LoginForm() {
           }}
         >
           {/* Navigation Tabs */}
-          <div className="flex border-b border-white/5">
-            <div 
-              className={`flex-1 p-4 font-headline font-extrabold text-sm text-center cursor-pointer transition-all border-b-2 ${tab === 'login' ? 'text-[#34d399] border-[#34d399] bg-white/5' : 'text-white/50 border-transparent'}`}
+          <div className="flex border-b border-white/5" role="tablist">
+            <button 
+              role="tab"
+              aria-selected={tab === 'login'}
+              className={`flex-1 p-4 font-headline font-extrabold text-sm text-center cursor-pointer transition-all border-b-2 focus-visible:outline-none focus-visible:bg-white/5 ${tab === 'login' ? 'text-[#34d399] border-[#34d399] bg-white/5' : 'text-white/75 border-transparent'}`}
               onClick={() => setTab('login')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setTab('login');
+                }
+              }}
             >
               Log In
-            </div>
-            <div 
-              className={`flex-1 p-4 font-headline font-extrabold text-sm text-center cursor-pointer transition-all border-b-2 ${tab === 'signup' ? 'text-[#34d399] border-[#34d399] bg-white/5' : 'text-white/50 border-transparent'}`}
+            </button>
+            <button 
+              role="tab"
+              aria-selected={tab === 'signup'}
+              className={`flex-1 p-4 font-headline font-extrabold text-sm text-center cursor-pointer transition-all border-b-2 focus-visible:outline-none focus-visible:bg-white/5 ${tab === 'signup' ? 'text-[#34d399] border-[#34d399] bg-white/5' : 'text-white/75 border-transparent'}`}
               onClick={() => setTab('signup')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setTab('signup');
+                }
+              }}
             >
               Sign Up
-            </div>
+            </button>
           </div>
 
           {/* Forms Area */}
@@ -105,7 +121,7 @@ function LoginForm() {
                       value={name} 
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Arjun Sharma"
-                      className="w-full bg-white/5 border-2 border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all focus:border-[#34d399] focus:bg-white/10 focus:ring-4 focus:ring-[#34d399]/10"
+                      className="w-full bg-white/5 border-2 border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all focus:border-[#34d399] focus:bg-white/10 focus:ring-4 focus:ring-[#34d399]/10 focus-visible:outline-none"
                     />
                   </div>
                 )}
@@ -118,7 +134,7 @@ function LoginForm() {
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="arjun@gmail.com"
-                    className="w-full bg-white/5 border-2 border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all focus:border-[#34d399] focus:bg-white/10 focus:ring-4 focus:ring-[#34d399]/10"
+                    className="w-full bg-white/5 border-2 border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all focus:border-[#34d399] focus:bg-white/10 focus:ring-4 focus:ring-[#34d399]/10 focus-visible:outline-none"
                   />
                 </div>
                 
@@ -130,12 +146,12 @@ function LoginForm() {
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-white/5 border-2 border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all focus:border-[#34d399] focus:bg-white/10 focus:ring-4 focus:ring-[#34d399]/10"
+                    className="w-full bg-white/5 border-2 border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all focus:border-[#34d399] focus:bg-white/10 focus:ring-4 focus:ring-[#34d399]/10 focus-visible:outline-none"
                   />
                 </div>
               </div>
 
-              <button className="w-full btn-primary-gradient text-on-primary py-4 rounded-xl font-headline font-bold text-lg hover:shadow-lg active:scale-98 transition-all shadow-md mt-6 flex items-center justify-center gap-2">
+              <button className="w-full btn-primary-gradient text-on-primary py-4 rounded-xl font-headline font-bold text-lg hover:shadow-lg active:scale-98 transition-all shadow-md mt-6 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34d399]">
                 {tab === 'login' ? 'Log In \u00a0🔑' : 'Sign Up \u00a0🌱'}
               </button>
             </form>
@@ -143,8 +159,8 @@ function LoginForm() {
         </div>
 
         {/* Bottom Back Link */}
-        <Link href="/" className="mt-8 text-sm font-semibold text-emerald-300/80 hover:text-emerald-300 transition-colors flex items-center gap-1.5 animate-entrance opacity-0 delay-200" style={{ animationFillMode: 'forwards' }}>
-          <span className="material-symbols-outlined text-base">arrow_back</span>
+        <Link href="/" className="mt-8 text-sm font-semibold text-emerald-300/80 hover:text-emerald-300 transition-colors flex items-center gap-1.5 animate-entrance opacity-0 delay-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34d399] rounded p-1" style={{ animationFillMode: 'forwards' }}>
+          <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span>
           Back to Home Page
         </Link>
       </div>

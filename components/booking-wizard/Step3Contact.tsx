@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { BookingFormData } from '@/lib/types';
+import CustomDialog from '../CustomDialog';
 
 interface Props {
   formData: BookingFormData;
@@ -11,6 +12,8 @@ interface Props {
 }
 
 export default function Step3Contact({ formData, updateFormData, nextStep, prevStep }: Props) {
+  const [alertDialog, setAlertDialog] = useState<{ isOpen: boolean; title: string; message: string } | null>(null);
+
   const isFormValid = formData.riderName && formData.riderPhone && formData.riderEmail;
 
   return (
@@ -93,14 +96,16 @@ export default function Step3Contact({ formData, updateFormData, nextStep, prevS
             <div className="flex items-center gap-3">
               <button
                 onClick={() => updateFormData({ suitcases: Math.max(0, formData.suitcases - 1) })}
-                className="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm"
+                className="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700"
+                aria-label="Decrease suitcases"
               >
                 -
               </button>
               <span className="font-headline font-extrabold text-lg text-emerald-950">{formData.suitcases}</span>
               <button
                 onClick={() => updateFormData({ suitcases: Math.max(0, formData.suitcases + 1) })}
-                className="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm"
+                className="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700"
+                aria-label="Increase suitcases"
               >
                 +
               </button>
@@ -112,14 +117,16 @@ export default function Step3Contact({ formData, updateFormData, nextStep, prevS
             <div className="flex items-center gap-3">
               <button
                 onClick={() => updateFormData({ handbags: Math.max(0, formData.handbags - 1) })}
-                className="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm"
+                className="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700"
+                aria-label="Decrease handbags"
               >
                 -
               </button>
               <span className="font-headline font-extrabold text-lg text-emerald-950">{formData.handbags}</span>
               <button
                 onClick={() => updateFormData({ handbags: Math.max(0, formData.handbags + 1) })}
-                className="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm"
+                className="w-8 h-8 rounded-full bg-white border border-outline-variant flex items-center justify-center font-bold text-slate-600 active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700"
+                aria-label="Increase handbags"
               >
                 +
               </button>
@@ -129,18 +136,39 @@ export default function Step3Contact({ formData, updateFormData, nextStep, prevS
 
         {/* Action Buttons */}
         <div className="grid grid-cols-3 gap-3 mt-4">
-          <button onClick={prevStep} className="col-span-1 border-2 border-outline-variant font-bold rounded-xl py-3 text-slate-600 hover:bg-slate-50 transition-colors">
+          <button onClick={prevStep} className="col-span-1 border-2 border-outline-variant font-bold rounded-xl py-3 text-slate-600 hover:bg-slate-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
             Back
           </button>
           <button
-            onClick={nextStep}
-            disabled={!isFormValid}
-            className="col-span-2 btn-primary-gradient text-on-primary font-headline font-bold rounded-xl py-3 shadow-lg active:scale-98 transition-all disabled:opacity-50"
+            onClick={() => {
+              if (!formData.riderName) {
+                setAlertDialog({ isOpen: true, title: 'Missing Information', message: 'Please enter the Lead Rider Name.' });
+                return;
+              }
+              if (!formData.riderPhone) {
+                setAlertDialog({ isOpen: true, title: 'Missing Information', message: 'Please enter a Mobile Number.' });
+                return;
+              }
+              if (!formData.riderEmail) {
+                setAlertDialog({ isOpen: true, title: 'Missing Information', message: 'Please enter an Email Address.' });
+                return;
+              }
+              nextStep();
+            }}
+            className="col-span-2 btn-primary-gradient text-on-primary font-headline font-bold rounded-xl py-3 shadow-lg active:scale-98 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700"
           >
             Confirm Route Map
           </button>
         </div>
       </div>
+
+      <CustomDialog
+        isOpen={alertDialog !== null}
+        title={alertDialog?.title || ''}
+        message={alertDialog?.message || ''}
+        type="alert"
+        onConfirm={() => setAlertDialog(null)}
+      />
     </div>
   );
 }

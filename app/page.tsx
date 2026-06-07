@@ -1,9 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import BookingWizard from '@/components/booking-wizard/BookingWizard';
 
 export default function Home() {
+  const [heroBg, setHeroBg] = useState('/assets/heroimage.png');
+
+  useEffect(() => {
+    const handleUpdateHeroBg = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail && typeof customEvent.detail.src === 'string') {
+        setHeroBg(customEvent.detail.src);
+      }
+    };
+    window.addEventListener('update-hero-bg', handleUpdateHeroBg);
+    return () => {
+      window.removeEventListener('update-hero-bg', handleUpdateHeroBg);
+    };
+  }, []);
+
   return (
     <main>
       {/* Hero Section */}
@@ -12,7 +27,7 @@ export default function Home() {
           <img
             id="hero-bg-img"
             className="w-full h-full object-cover brightness-75 scale-105 transition-all duration-700 ease-in-out"
-            src="/assets/heroimage.png"
+            src={heroBg}
             alt="Sleek white EV in Himachal"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80"></div>
@@ -21,7 +36,7 @@ export default function Home() {
         <div className="relative z-10 max-w-screen-2xl mx-auto px-8 grid lg:grid-cols-2 gap-12 items-center w-full">
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-lg border border-white/30 shadow-sm animate-entrance opacity-0" style={{ animationFillMode: 'forwards' }}>
-              <span className="material-symbols-outlined text-on-primary-fixed text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>eco</span>
+              <span className="material-symbols-outlined text-on-primary-fixed text-sm" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">eco</span>
               <span className="text-xs font-bold uppercase tracking-widest text-on-primary-fixed">Sustainable Future</span>
             </div>
             <h1 className="display-lg text-white drop-shadow-2xl animate-entrance opacity-0 delay-100" style={{ animationFillMode: 'forwards' }}>
@@ -34,13 +49,13 @@ export default function Home() {
                     window.dispatchEvent(new Event('open-bookings-drawer'));
                   }
                 }}
-                className="btn-glass-green px-10 py-5 rounded-xl font-headline font-extrabold text-lg flex items-center gap-3 active:scale-95 shadow-lg shadow-emerald-950/20"
+                className="btn-glass-green px-10 py-5 rounded-xl font-headline font-extrabold text-lg flex items-center gap-3 active:scale-95 shadow-lg shadow-emerald-950/20 focus-visible:ring-4 focus-visible:ring-emerald-950/20 focus-visible:outline-none"
               >
-                <span className="material-symbols-outlined">receipt_long</span>
+                <span className="material-symbols-outlined" aria-hidden="true">receipt_long</span>
                 Your Bookings
               </button>
-              <a href="/popular-routes" className="btn-glass-white px-10 py-5 rounded-xl font-headline font-extrabold text-lg hover:shadow-2xl transition-all flex items-center justify-center gap-2 shadow-lg">
-                <span className="material-symbols-outlined text-xl">explore</span>
+              <a href="/popular-routes" className="btn-glass-white px-10 py-5 rounded-xl font-headline font-extrabold text-lg hover:shadow-2xl transition-all flex items-center justify-center gap-2 shadow-lg focus-visible:ring-4 focus-visible:ring-white/40 focus-visible:outline-none">
+                <span className="material-symbols-outlined text-xl" aria-hidden="true">explore</span>
                 View Routes
               </a>
             </div>
@@ -62,7 +77,7 @@ export default function Home() {
           <div className="alpine-card hover-brown p-10 rounded-[32px] flex flex-col group">
             <div className="space-y-6">
               <div className="w-16 h-16 rounded-2xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shadow-inner">
-                <span className="material-symbols-outlined text-3xl">location_on</span>
+                <span className="material-symbols-outlined text-3xl" aria-hidden="true">location_on</span>
               </div>
               <h3 className="text-2xl font-headline font-bold text-on-surface">Localized for India</h3>
               <p className="text-tertiary leading-relaxed text-lg">Specially calibrated drivetrains tailored for local traffic nuances and the unique Himalayan climate challenges.</p>
@@ -72,7 +87,7 @@ export default function Home() {
           <div className="alpine-card hover-blue p-10 rounded-[32px] flex flex-col group">
             <div className="space-y-6">
               <div className="w-16 h-16 rounded-2xl bg-primary-fixed flex items-center justify-center text-on-primary-fixed shadow-inner">
-                <span className="material-symbols-outlined text-3xl">bolt</span>
+                <span className="material-symbols-outlined text-3xl" aria-hidden="true">bolt</span>
               </div>
               <h3 className="text-2xl font-headline font-bold text-on-surface">Advanced Tech</h3>
               <p className="text-tertiary leading-relaxed text-lg">Next-gen long-range batteries featuring fast-charging capabilities that work efficiently even at high altitudes.</p>
@@ -82,7 +97,7 @@ export default function Home() {
           <div className="alpine-card hover-green p-10 rounded-[32px] flex flex-col group">
             <div className="space-y-6">
               <div className="w-16 h-16 rounded-2xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed shadow-inner">
-                <span className="material-symbols-outlined text-3xl">forest</span>
+                <span className="material-symbols-outlined text-3xl" aria-hidden="true">forest</span>
               </div>
               <h3 className="text-2xl font-headline font-bold text-on-surface">Eco-Friendly</h3>
               <p className="text-tertiary leading-relaxed text-lg">Zero tailpipe emissions to preserve the pristine mountain air and delicate ecosystem of the valley.</p>
@@ -108,7 +123,7 @@ export default function Home() {
             <div className="absolute -bottom-10 -right-10 bg-surface p-8 rounded-3xl ambient-shadow max-w-xs transition-transform hover:scale-105 duration-500">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-700">
-                  <span className="material-symbols-outlined">verified_user</span>
+                  <span className="material-symbols-outlined" aria-hidden="true">verified_user</span>
                 </div>
                 <p className="font-headline font-bold">100% Verified Fleet</p>
               </div>
@@ -123,7 +138,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="p-6 rounded-2xl border border-slate-200 bg-white/70 shadow-sm flex gap-4 items-start transition-all hover:border-primary/30 hover:shadow-md">
                 <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-primary flex-shrink-0">
-                  <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>person_pin_circle</span>
+                  <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">person_pin_circle</span>
                 </div>
                 <div>
                   <h4 className="font-headline font-bold text-lg text-emerald-950 mb-1">Trained Drivers</h4>
@@ -132,7 +147,7 @@ export default function Home() {
               </div>
               <div className="p-6 rounded-2xl border border-slate-200 bg-white/70 shadow-sm flex gap-4 items-start transition-all hover:border-primary/30 hover:shadow-md">
                 <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-primary flex-shrink-0">
-                  <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>emergency_share</span>
+                  <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">emergency_share</span>
                 </div>
                 <div>
                   <h4 className="font-headline font-bold text-lg text-emerald-950 mb-1">Emergency Response</h4>
