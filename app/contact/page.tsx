@@ -1,9 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import CountryCodeWheel, { COUNTRIES } from '@/components/CountryCodeWheel';
 
 export default function ContactPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [isWheelOpen, setIsWheelOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +43,7 @@ export default function ContactPage() {
               <p className="text-sm text-tertiary mt-1">We respond within 24 hours</p>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-start gap-4 border border-slate-100">
             <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
               <span className="material-symbols-outlined text-secondary text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>location_on</span>
@@ -50,7 +54,7 @@ export default function ContactPage() {
               <p className="text-sm text-tertiary mt-1">Gaggal Airport, HP 176024</p>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-start gap-4 border border-slate-100">
             <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center">
               <span className="material-symbols-outlined text-amber-600 text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>schedule</span>
@@ -80,11 +84,11 @@ export default function ContactPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-on-surface-variant" htmlFor="fname">First Name</label>
-                    <input className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white" id="fname" placeholder="Arjun" type="text" required />
+                    <input className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white" id="fname" placeholder="first name" type="text" required />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-on-surface-variant" htmlFor="lname">Last Name</label>
-                    <input className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white" id="lname" placeholder="Sharma" type="text" required />
+                    <input className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white" id="lname" placeholder="last name" type="text" required />
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -93,7 +97,43 @@ export default function ContactPage() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-on-surface-variant" htmlFor="phone">Phone (optional)</label>
-                  <input className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white" id="phone" placeholder="+91 98765 43210" type="tel" />
+                  <div className="relative flex items-center bg-[#f2f4f3] border-2 border-transparent rounded-xl focus-within:border-[#0d631b] focus-within:bg-white transition-all">
+                    {/* Country Code Trigger */}
+                    <button
+                      type="button"
+                      onClick={() => setIsWheelOpen(!isWheelOpen)}
+                      className="flex items-center gap-1 px-3 py-3 border-r border-slate-300/60 font-semibold text-sm text-slate-700 hover:bg-slate-200/50 rounded-l-xl transition-colors cursor-pointer select-none"
+                    >
+                      <span className="text-lg leading-none">{selectedCountry.flag}</span>
+                      <span className="text-slate-800">{selectedCountry.dialCode}</span>
+                      <span className="material-symbols-outlined text-[16px] text-slate-400 font-bold">keyboard_arrow_down</span>
+                    </button>
+
+                    {/* Scroll Wheel Popover */}
+                    <CountryCodeWheel
+                      selectedCountry={selectedCountry}
+                      onSelect={setSelectedCountry}
+                      isOpen={isWheelOpen}
+                      onClose={() => setIsWheelOpen(false)}
+                    />
+
+                    {/* Number Input */}
+                    <input
+                      className="flex-1 bg-transparent px-4 py-3 font-semibold text-sm outline-none text-slate-800"
+                      placeholder="xxxxx xxxxx"
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                    />
+                    
+                    {/* Hidden input to submit the full combined value */}
+                    <input
+                      type="hidden"
+                      id="phone"
+                      name="phone"
+                      value={phoneNumber ? `${selectedCountry.dialCode} ${phoneNumber}` : ''}
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-on-surface-variant" htmlFor="subject">Subject</label>

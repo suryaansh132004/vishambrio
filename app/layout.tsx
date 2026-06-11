@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import DevRibbon from "@/components/DevRibbon";
 import BookingsDrawer from "@/components/BookingsDrawer";
 import ProfileDrawer from "@/components/ProfileDrawer";
+import BookingWizardDrawer from "@/components/booking-wizard/BookingWizardDrawer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -22,6 +23,11 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "Vishambrio Cabs | Sustainable Himachal",
   description: "Eco-friendly, affordable, and reliable electric cabs for urban and rural commuters navigating the peaks.",
+  icons: {
+    icon: "/assets/logo.png",
+    shortcut: "/assets/logo.png",
+    apple: "/assets/logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -47,6 +53,7 @@ export default function RootLayout({
             <Footer />
             <BookingsDrawer />
             <ProfileDrawer />
+            <BookingWizardDrawer />
             <DevRibbon />
           </BookingsProvider>
         </AuthProvider>

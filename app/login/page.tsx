@@ -52,6 +52,7 @@ function LoginForm() {
       <div className="relative z-10 w-full flex flex-col items-center px-4 py-8">
         {/* Logo Header */}
         <Link href="/" className="flex flex-col items-center space-y-2 mb-8 animate-entrance opacity-0" style={{ animationFillMode: 'forwards' }}>
+          <img src="/assets/logo.png" alt="Vishambrio Logo" className="h-16 w-auto object-contain mb-2" />
           <span className="text-3xl font-extrabold text-emerald-400 tracking-tighter font-headline">Vishambrio Cabs</span>
           <span className="text-xs uppercase tracking-[0.3em] font-semibold text-emerald-300/80">Sustainable Himachal</span>
         </Link>

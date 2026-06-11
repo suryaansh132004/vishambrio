@@ -11,12 +11,38 @@ import Step6Payment from './Step6Payment';
 import Step7Confirm from './Step7Confirm';
 import { useAuth } from '@/context/AuthContext';
 
-export default function BookingWizard() {
+export default function BookingWizard({ isDrawer = false }: { isDrawer?: boolean }) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<BookingFormData>(INITIAL_FORM_DATA);
   const { user } = useAuth();
   
   const [confirmedBookingId, setConfirmedBookingId] = useState<string | null>(null);
+
+  // Listen for prefill events when the booking wizard drawer opens
+  useEffect(() => {
+    const handlePrefill = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail) {
+        const { pickup, drop } = customEvent.detail;
+        setFormData((prev) => {
+          const nextPickup = pickup || prev.pickup;
+          const nextDrop = drop || prev.drop;
+          const pickupLabel = PICKUP_OPTIONS.find(o => o.value === nextPickup)?.label || '';
+          const dropLabel = DROP_OPTIONS.find(o => o.value === nextDrop)?.label || '';
+          return {
+            ...prev,
+            pickup: nextPickup,
+            pickupLabel,
+            drop: nextDrop,
+            dropLabel,
+          };
+        });
+        setStep(1); // Reset to location step
+      }
+    };
+    window.addEventListener('open-booking-wizard', handlePrefill);
+    return () => window.removeEventListener('open-booking-wizard', handlePrefill);
+  }, []);
 
   // Auto-fill user details if logged in and not already filled
   useEffect(() => {
@@ -74,7 +100,7 @@ export default function BookingWizard() {
   };
 
   return (
-    <div id="booking-card" className="booking-wizard-card rounded-[32px] p-8 md:p-10 shadow-2xl relative w-full max-w-lg mx-auto animate-entrance z-20">
+    <div id="booking-card" className={isDrawer ? "w-full flex flex-col p-6" : "booking-wizard-card rounded-[32px] p-8 md:p-10 shadow-2xl relative w-full max-w-lg mx-auto animate-entrance z-20"}>
       {/* Header / Progress Bar */}
       {step < 7 && (
         <div className="mb-8">

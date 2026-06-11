@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { openBookingWizard } from '@/components/Navbar';
 
 export default function TouristAttractionsPage() {
   const [search, setSearch] = useState('');
@@ -130,9 +131,12 @@ export default function TouristAttractionsPage() {
                         🌱 {attr.tokens} &nbsp;•&nbsp; {attr.co2} ⚡
                       </span>
                     </div>
-                    <Link href={`/?pickup=${attr.pickup}&drop=${attr.drop}&step=1`} className="text-primary font-bold text-sm flex items-center gap-1 group/btn">
+                    <button
+                      onClick={() => openBookingWizard({ pickup: attr.pickup, drop: attr.drop })}
+                      className="text-primary font-bold text-sm flex items-center gap-1 group/btn cursor-pointer bg-transparent border-none focus-visible:outline-none"
+                    >
                       Plan Visit <span className="material-symbols-outlined text-sm group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>

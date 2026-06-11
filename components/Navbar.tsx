@@ -16,6 +16,12 @@ export const openBookingsDrawer = () => {
 export const openProfileDrawer = () => {
   if (typeof window !== 'undefined') window.dispatchEvent(new Event('open-profile-drawer'));
 };
+export const openBookingWizard = (detail?: { pickup?: string; drop?: string }) => {
+  if (typeof window !== 'undefined') {
+    const event = new CustomEvent('open-booking-wizard', { detail });
+    window.dispatchEvent(event);
+  }
+};
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -33,8 +39,9 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 w-full z-50 ambient-shadow">
       <div className="flex justify-between items-center px-6 md:px-12 py-4 max-w-screen-2xl mx-auto">
-        <Link href="/" className="text-xl font-extrabold text-emerald-900 tracking-tighter font-headline">
-          Vishambrio Cabs
+        <Link href="/" className="flex items-center gap-3 text-xl font-extrabold text-emerald-900 tracking-tighter font-headline">
+          <img src="/assets/logo.png" alt="Vishambrio Logo" className="h-8 w-auto object-contain" />
+          <span>Vishambrio Cabs</span>
         </Link>
 
         {/* Desktop Menu */}
@@ -102,11 +109,8 @@ export default function Navbar() {
           )}
 
           <button
-            onClick={() => {
-              const el = document.getElementById('booking-card');
-              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }}
-            className="hidden sm:block btn-primary-gradient text-on-primary px-6 py-2.5 rounded-xl font-headline font-bold active:scale-95 duration-200 shadow-lg shadow-primary/20 focus-visible:ring-2 focus-visible:ring-emerald-700 focus-visible:outline-none"
+            onClick={() => openBookingWizard()}
+            className="hidden sm:block btn-primary-gradient text-on-primary px-6 py-2.5 rounded-xl font-headline font-bold active:scale-95 duration-200 shadow-lg shadow-primary/20 focus-visible:ring-2 focus-visible:ring-emerald-700 focus-visible:outline-none cursor-pointer"
           >
             Book Now
           </button>

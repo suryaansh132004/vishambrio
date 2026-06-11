@@ -6,7 +6,10 @@ export default function Footer() {
     <footer className="w-full rounded-t-[48px] bg-white pt-20 pb-12 ambient-shadow mt-16">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 pb-20 max-w-screen-2xl mx-auto font-body text-sm">
         <div className="col-span-1 md:col-span-1 space-y-6">
-          <div className="text-lg font-bold text-emerald-900 tracking-tighter font-headline">Vishambrio Cabs</div>
+          <div className="flex items-center gap-2 text-lg font-bold text-emerald-900 tracking-tighter font-headline">
+            <img src="/assets/logo.png" alt="Vishambrio Logo" className="h-6 w-auto object-contain" />
+            <span>Vishambrio Cabs</span>
+          </div>
           <p className="text-slate-500 italic">"We are not just cabs; we are a sustainable transportation ecosystem"</p>
           <div className="flex gap-4">
             <a

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import RouteMapModal from '@/components/RouteMapModal';
+import { openBookingWizard } from '@/components/Navbar';
 
 type FilterType = 'all' | 'popular' | 'scenic' | 'spiritual' | 'adventure';
 
@@ -174,9 +175,12 @@ export default function PopularRoutesPage() {
                   <button onClick={() => setSelectedRouteId(route.id)} className="flex-1 text-center border-2 border-primary text-primary rounded-xl py-3 font-headline font-bold hover:bg-emerald-50/50 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none">
                     <span className="material-symbols-outlined text-base" aria-hidden="true">map</span> Map & Stops
                   </button>
-                  <Link href={`/?pickup=${route.pickup}&drop=${route.drop}&step=1`} className="flex-1 text-center bg-primary text-white rounded-xl py-3 font-headline font-bold hover:bg-emerald-700 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm shadow-md hover:shadow-lg focus-visible:ring-2 focus-visible:ring-emerald-700 focus-visible:outline-none">
+                  <button
+                    onClick={() => openBookingWizard({ pickup: route.pickup, drop: route.drop })}
+                    className="flex-1 text-center bg-primary text-white rounded-xl py-3 font-headline font-bold hover:bg-emerald-700 transition-colors flex items-center justify-center gap-1 text-xs sm:text-sm shadow-md hover:shadow-lg focus-visible:ring-2 focus-visible:ring-emerald-700 focus-visible:outline-none cursor-pointer"
+                  >
                     <span className="material-symbols-outlined text-base" aria-hidden="true">bolt</span> Book Ride
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

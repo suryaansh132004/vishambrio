@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import BookingWizard from '@/components/booking-wizard/BookingWizard';
+
 
 export default function Home() {
   const [heroBg, setHeroBg] = useState('/assets/heroimage.png');
@@ -33,7 +33,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80"></div>
         </div>
         
-        <div className="relative z-10 max-w-screen-2xl mx-auto px-8 grid lg:grid-cols-2 gap-12 items-center w-full">
+        <div className="relative z-10 max-w-screen-2xl mx-auto px-8 grid lg:grid-cols-2 gap-12 items-end w-full">
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-lg border border-white/30 shadow-sm animate-entrance opacity-0" style={{ animationFillMode: 'forwards' }}>
               <span className="material-symbols-outlined text-on-primary-fixed text-sm" style={{ fontVariationSettings: "'FILL' 1" }} aria-hidden="true">eco</span>
@@ -42,14 +42,14 @@ export default function Home() {
             <h1 className="display-lg text-white drop-shadow-2xl animate-entrance opacity-0 delay-100" style={{ animationFillMode: 'forwards' }}>
               <span className="text-secondary-fixed-dim">Revolutionizing</span> How <span className="text-primary-fixed">Himachal</span> Moves
             </h1>
-            <div className="flex flex-wrap gap-4 animate-entrance opacity-0 delay-300" style={{ animationFillMode: 'forwards' }}>
+            <div className="flex flex-wrap items-center gap-4 animate-entrance opacity-0 delay-300" style={{ animationFillMode: 'forwards' }}>
               <button 
                 onClick={() => {
                   if (typeof window !== 'undefined') {
                     window.dispatchEvent(new Event('open-bookings-drawer'));
                   }
                 }}
-                className="btn-glass-green px-10 py-5 rounded-xl font-headline font-extrabold text-lg flex items-center gap-3 active:scale-95 shadow-lg shadow-emerald-950/20 focus-visible:ring-4 focus-visible:ring-emerald-950/20 focus-visible:outline-none"
+                className="btn-glass-white px-10 py-5 rounded-xl font-headline font-extrabold text-lg flex items-center gap-3 active:scale-95 shadow-lg focus-visible:ring-4 focus-visible:ring-white/40 focus-visible:outline-none"
               >
                 <span className="material-symbols-outlined" aria-hidden="true">receipt_long</span>
                 Your Bookings
@@ -61,8 +61,19 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Interactive E-Taxi Booking Wizard Column */}
-          <BookingWizard />
+          <div className="flex lg:justify-end animate-entrance opacity-0 delay-300" style={{ animationFillMode: 'forwards' }}>
+            <button
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  window.dispatchEvent(new Event('open-booking-wizard'));
+                }
+              }}
+              className="btn-glass-green px-12 py-6 rounded-2xl font-headline font-extrabold text-xl flex items-center gap-3 active:scale-95 shadow-xl shadow-emerald-950/30 focus-visible:ring-4 focus-visible:ring-emerald-950/30 focus-visible:outline-none cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-2xl" aria-hidden="true">bolt</span>
+              Book Now
+            </button>
+          </div>
         </div>
       </header>
 
