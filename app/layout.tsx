@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Manrope } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { BookingsProvider } from "@/context/BookingsContext";
@@ -9,11 +9,6 @@ import DevRibbon from "@/components/DevRibbon";
 import BookingsDrawer from "@/components/BookingsDrawer";
 import ProfileDrawer from "@/components/ProfileDrawer";
 import BookingWizardDrawer from "@/components/booking-wizard/BookingWizardDrawer";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -44,7 +39,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${manrope.variable} antialiased bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed`}
+        className={`${manrope.variable} antialiased bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed`}
       >
         <AuthProvider>
           <BookingsProvider>

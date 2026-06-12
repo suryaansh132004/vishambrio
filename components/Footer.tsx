@@ -63,7 +63,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="max-w-screen-2xl mx-auto px-12 py-8 ghost-border border-b-0 border-l-0 border-r-0 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-slate-400">© 2024 Vishambrio Cabs. Sustainable Himachal.</p>
+        <p className="text-slate-400">© 2026 Vishambrio Cabs. Sustainable Himachal.</p>
         <div className="flex gap-8 text-xs text-slate-400">
           <Link className="hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none rounded px-1" href="#">Privacy Policy</Link>
           <Link className="hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none rounded px-1" href="#">Terms of Service</Link>
