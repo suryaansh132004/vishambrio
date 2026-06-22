@@ -10,32 +10,32 @@ export interface CountryCode {
 }
 
 export const COUNTRIES: CountryCode[] = [
-  { code: 'IN', name: 'India', flag: '🇮🇳', dialCode: '+91' },
-  { code: 'US', name: 'United States', flag: '🇺🇸', dialCode: '+1' },
-  { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', dialCode: '+44' },
-  { code: 'CA', name: 'Canada', flag: '🇨🇦', dialCode: '+1' },
-  { code: 'AU', name: 'Australia', flag: '🇦🇺', dialCode: '+61' },
-  { code: 'DE', name: 'Germany', flag: '🇩🇪', dialCode: '+49' },
-  { code: 'FR', name: 'France', flag: '🇫🇷', dialCode: '+33' },
-  { code: 'SG', name: 'Singapore', flag: '🇸🇬', dialCode: '+65' },
-  { code: 'AE', name: 'United Arab Emirates', flag: '🇦🇪', dialCode: '+971' },
-  { code: 'NP', name: 'Nepal', flag: '🇳🇵', dialCode: '+977' },
-  { code: 'BT', name: 'Bhutan', flag: '🇧🇹', dialCode: '+975' },
-  { code: 'BD', name: 'Bangladesh', flag: '🇧🇩', dialCode: '+880' },
-  { code: 'LK', name: 'Sri Lanka', flag: '🇱🇰', dialCode: '+94' },
-  { code: 'MY', name: 'Malaysia', flag: '🇲🇾', dialCode: '+60' },
-  { code: 'TH', name: 'Thailand', flag: '🇹🇭', dialCode: '+66' },
-  { code: 'NZ', name: 'New Zealand', flag: '🇳🇿', dialCode: '+64' },
-  { code: 'ZA', name: 'South Africa', flag: '🇿🇦', dialCode: '+27' },
-  { code: 'JP', name: 'Japan', flag: '🇯🇵', dialCode: '+81' },
-  { code: 'CN', name: 'China', flag: '🇨🇳', dialCode: '+86' },
-  { code: 'RU', name: 'Russia', flag: '🇷🇺', dialCode: '+7' },
-  { code: 'IT', name: 'Italy', flag: '🇮🇹', dialCode: '+39' },
-  { code: 'ES', name: 'Spain', flag: '🇪🇸', dialCode: '+34' },
-  { code: 'NL', name: 'Netherlands', flag: '🇳🇱', dialCode: '+31' },
-  { code: 'CH', name: 'Switzerland', flag: '🇨🇭', dialCode: '+41' },
-  { code: 'SA', name: 'Saudi Arabia', flag: '🇸🇦', dialCode: '+966' },
-  { code: 'KR', name: 'South Korea', flag: '🇰🇷', dialCode: '+82' },
+  { code: 'IN', name: 'India', flag: 'IN', dialCode: '+91' },
+  { code: 'US', name: 'United States', flag: 'US', dialCode: '+1' },
+  { code: 'GB', name: 'United Kingdom', flag: 'GB', dialCode: '+44' },
+  { code: 'CA', name: 'Canada', flag: 'CA', dialCode: '+1' },
+  { code: 'AU', name: 'Australia', flag: 'AU', dialCode: '+61' },
+  { code: 'DE', name: 'Germany', flag: 'DE', dialCode: '+49' },
+  { code: 'FR', name: 'France', flag: 'FR', dialCode: '+33' },
+  { code: 'SG', name: 'Singapore', flag: 'SG', dialCode: '+65' },
+  { code: 'AE', name: 'United Arab Emirates', flag: 'AE', dialCode: '+971' },
+  { code: 'NP', name: 'Nepal', flag: 'NP', dialCode: '+977' },
+  { code: 'BT', name: 'Bhutan', flag: 'BT', dialCode: '+975' },
+  { code: 'BD', name: 'Bangladesh', flag: 'BD', dialCode: '+880' },
+  { code: 'LK', name: 'Sri Lanka', flag: 'LK', dialCode: '+94' },
+  { code: 'MY', name: 'Malaysia', flag: 'MY', dialCode: '+60' },
+  { code: 'TH', name: 'Thailand', flag: 'TH', dialCode: '+66' },
+  { code: 'NZ', name: 'New Zealand', flag: 'NZ', dialCode: '+64' },
+  { code: 'ZA', name: 'South Africa', flag: 'ZA', dialCode: '+27' },
+  { code: 'JP', name: 'Japan', flag: 'JP', dialCode: '+81' },
+  { code: 'CN', name: 'China', flag: 'CN', dialCode: '+86' },
+  { code: 'RU', name: 'Russia', flag: 'RU', dialCode: '+7' },
+  { code: 'IT', name: 'Italy', flag: 'IT', dialCode: '+39' },
+  { code: 'ES', name: 'Spain', flag: 'ES', dialCode: '+34' },
+  { code: 'NL', name: 'Netherlands', flag: 'NL', dialCode: '+31' },
+  { code: 'CH', name: 'Switzerland', flag: 'CH', dialCode: '+41' },
+  { code: 'SA', name: 'Saudi Arabia', flag: 'SA', dialCode: '+966' },
+  { code: 'KR', name: 'South Korea', flag: 'KR', dialCode: '+82' },
 ];
 
 interface Props {
@@ -214,7 +214,7 @@ export default function CountryCodeWheel({ selectedCountry, onSelect, isOpen, on
                     }}
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-xl leading-none">{country.flag}</span>
+                      <span className="text-[10px] font-extrabold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200 uppercase tracking-wider select-none w-7 text-center">{country.flag}</span>
                       <span className={`text-xs ${isSelected ? 'font-bold text-slate-800' : 'text-slate-500'}`}>
                         {country.name}
                       </span>

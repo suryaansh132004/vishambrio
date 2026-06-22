@@ -17,8 +17,8 @@ export default function PopularRoutesPage() {
       id: 'route-1',
       title: 'Gaggal → Dharamshala',
       bgClass: 'from-sky-400 to-blue-700',
-      icon: '🏔️',
-      primaryBadge: { type: 'popular', label: '🌟 Popular' },
+      icon: 'filter_hdr',
+      primaryBadge: { type: 'popular', label: 'Popular' },
       tags: ['popular', 'scenic'],
       distance: '~18 km',
       time: '~35 min',
@@ -31,8 +31,8 @@ export default function PopularRoutesPage() {
       id: 'route-2',
       title: 'Gaggal → McLeod Ganj',
       bgClass: 'from-emerald-500 to-green-800',
-      icon: '🌲',
-      primaryBadge: { type: 'popular', label: '🌟 Popular' },
+      icon: 'forest',
+      primaryBadge: { type: 'popular', label: 'Popular' },
       tags: ['popular', 'scenic'],
       distance: '~25 km',
       time: '~55 min',
@@ -45,8 +45,8 @@ export default function PopularRoutesPage() {
       id: 'route-3',
       title: 'Gaggal → Chamunda Devi',
       bgClass: 'from-amber-400 to-orange-700',
-      icon: '🛕',
-      primaryBadge: { type: 'spiritual', label: '🛕 Spiritual' },
+      icon: 'temple_hindu',
+      primaryBadge: { type: 'spiritual', label: 'Spiritual' },
       tags: ['spiritual'],
       distance: '~20 km',
       time: '~45 min',
@@ -59,8 +59,8 @@ export default function PopularRoutesPage() {
       id: 'route-4',
       title: 'Gaggal → Jwalamukhi',
       bgClass: 'from-violet-500 to-purple-800',
-      icon: '🕌',
-      primaryBadge: { type: 'popular', label: '🌟 Popular' },
+      icon: 'temple_hindu',
+      primaryBadge: { type: 'popular', label: 'Popular' },
       tags: ['spiritual', 'popular'],
       distance: '~55 km',
       time: '~1.5 hrs',
@@ -73,8 +73,8 @@ export default function PopularRoutesPage() {
       id: 'route-5',
       title: 'Gaggal → Manali',
       bgClass: 'from-slate-600 to-slate-900',
-      icon: '🗻',
-      primaryBadge: { type: 'adventure', label: '🧗 Adventure' },
+      icon: 'landscape',
+      primaryBadge: { type: 'adventure', label: 'Adventure' },
       tags: ['adventure', 'scenic'],
       distance: '~230 km',
       time: '~6–7 hrs',
@@ -87,8 +87,8 @@ export default function PopularRoutesPage() {
       id: 'route-6',
       title: 'Gaggal → Baijnath Paprola',
       bgClass: 'from-cyan-500 to-teal-800',
-      icon: '🌊',
-      primaryBadge: { type: 'scenic', label: '🏔️ Scenic' },
+      icon: 'water',
+      primaryBadge: { type: 'scenic', label: 'Scenic' },
       tags: ['scenic', 'spiritual'],
       distance: '~60 km',
       time: '~1.5 hrs',
@@ -126,10 +126,10 @@ export default function PopularRoutesPage() {
       <section className="py-10 px-6 max-w-screen-xl mx-auto">
         <div className="flex flex-wrap gap-3 justify-center">
           <button className={`px-5 py-2 rounded-full font-headline font-bold text-sm border-2 transition-all focus-visible:ring-2 focus-visible:ring-emerald-800 focus-visible:outline-none ${filter === 'all' ? 'bg-emerald-800 border-emerald-800 text-white' : 'border-slate-300 bg-white text-slate-600 hover:border-emerald-800 hover:text-emerald-800'}`} onClick={() => setFilter('all')}>All Routes</button>
-          <button className={`px-5 py-2 rounded-full font-headline font-bold text-sm border-2 transition-all focus-visible:ring-2 focus-visible:ring-emerald-800 focus-visible:outline-none ${filter === 'popular' ? 'bg-emerald-800 border-emerald-800 text-white' : 'border-slate-300 bg-white text-slate-600 hover:border-emerald-800 hover:text-emerald-800'}`} onClick={() => setFilter('popular')}>🌟 Popular</button>
-          <button className={`px-5 py-2 rounded-full font-headline font-bold text-sm border-2 transition-all focus-visible:ring-2 focus-visible:ring-emerald-800 focus-visible:outline-none ${filter === 'scenic' ? 'bg-emerald-800 border-emerald-800 text-white' : 'border-slate-300 bg-white text-slate-600 hover:border-emerald-800 hover:text-emerald-800'}`} onClick={() => setFilter('scenic')}>🏔️ Scenic</button>
-          <button className={`px-5 py-2 rounded-full font-headline font-bold text-sm border-2 transition-all focus-visible:ring-2 focus-visible:ring-emerald-800 focus-visible:outline-none ${filter === 'spiritual' ? 'bg-emerald-800 border-emerald-800 text-white' : 'border-slate-300 bg-white text-slate-600 hover:border-emerald-800 hover:text-emerald-800'}`} onClick={() => setFilter('spiritual')}>🛕 Spiritual</button>
-          <button className={`px-5 py-2 rounded-full font-headline font-bold text-sm border-2 transition-all focus-visible:ring-2 focus-visible:ring-emerald-800 focus-visible:outline-none ${filter === 'adventure' ? 'bg-emerald-800 border-emerald-800 text-white' : 'border-slate-300 bg-white text-slate-600 hover:border-emerald-800 hover:text-emerald-800'}`} onClick={() => setFilter('adventure')}>🧗 Adventure</button>
+          <button className={`px-5 py-2 rounded-full font-headline font-bold text-sm border-2 transition-all focus-visible:ring-2 focus-visible:ring-emerald-800 focus-visible:outline-none ${filter === 'popular' ? 'bg-emerald-800 border-emerald-800 text-white' : 'border-slate-300 bg-white text-slate-600 hover:border-emerald-800 hover:text-emerald-800'}`} onClick={() => setFilter('popular')}>Popular</button>
+          <button className={`px-5 py-2 rounded-full font-headline font-bold text-sm border-2 transition-all focus-visible:ring-2 focus-visible:ring-emerald-800 focus-visible:outline-none ${filter === 'scenic' ? 'bg-emerald-800 border-emerald-800 text-white' : 'border-slate-300 bg-white text-slate-600 hover:border-emerald-800 hover:text-emerald-800'}`} onClick={() => setFilter('scenic')}>Scenic</button>
+          <button className={`px-5 py-2 rounded-full font-headline font-bold text-sm border-2 transition-all focus-visible:ring-2 focus-visible:ring-emerald-800 focus-visible:outline-none ${filter === 'spiritual' ? 'bg-emerald-800 border-emerald-800 text-white' : 'border-slate-300 bg-white text-slate-600 hover:border-emerald-800 hover:text-emerald-800'}`} onClick={() => setFilter('spiritual')}>Spiritual</button>
+          <button className={`px-5 py-2 rounded-full font-headline font-bold text-sm border-2 transition-all focus-visible:ring-2 focus-visible:ring-emerald-800 focus-visible:outline-none ${filter === 'adventure' ? 'bg-emerald-800 border-emerald-800 text-white' : 'border-slate-300 bg-white text-slate-600 hover:border-emerald-800 hover:text-emerald-800'}`} onClick={() => setFilter('adventure')}>Adventure</button>
         </div>
       </section>
 
@@ -151,7 +151,7 @@ export default function PopularRoutesPage() {
           {filteredRoutes.map((route) => (
             <div key={route.id} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-slate-100">
               <div className={`h-48 bg-gradient-to-br ${route.bgClass} flex items-end p-6 relative overflow-hidden`}>
-                <div className="absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center" aria-hidden="true">{route.icon}</div>
+                <span className="material-symbols-outlined absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center pointer-events-none select-none" aria-hidden="true">{route.icon}</span>
                 <div className="relative z-10">
                   <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${
                     route.primaryBadge.type === 'popular' ? 'bg-green-100 text-green-800' :

@@ -70,7 +70,7 @@ export default function Step3Contact({ formData, updateFormData, nextStep, prevS
             className="w-4 h-4 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500"
           />
           <label htmlFor="whatsapp-updates" className="text-xs font-semibold text-slate-500 flex items-center gap-1">
-            Send tickets & driver alerts via WhatsApp ✉️
+            Send tickets & driver alerts via WhatsApp
           </label>
         </div>
 

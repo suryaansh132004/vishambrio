@@ -109,7 +109,7 @@ export default function Step6Payment({ formData, updateFormData, nextStep, prevS
               aria-checked={formData.paymentMethod === 'upi'}
               className={`rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors border-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 ${formData.paymentMethod === 'upi' ? 'border-primary bg-emerald-50/40' : 'border-outline-variant hover:bg-slate-50'}`}
             >
-              <span className="text-lg mb-1" aria-hidden="true">📱</span>
+              <span className="material-symbols-outlined text-lg mb-1 text-slate-500" aria-hidden="true">smartphone</span>
               <span className="text-[10px] font-bold text-slate-600">UPI App</span>
             </div>
             <div 
@@ -125,7 +125,7 @@ export default function Step6Payment({ formData, updateFormData, nextStep, prevS
               aria-checked={formData.paymentMethod === 'card'}
               className={`rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors border-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 ${formData.paymentMethod === 'card' ? 'border-primary bg-emerald-50/40' : 'border-outline-variant hover:bg-slate-50'}`}
             >
-              <span className="text-lg mb-1" aria-hidden="true">💳</span>
+              <span className="material-symbols-outlined text-lg mb-1 text-slate-500" aria-hidden="true">credit_card</span>
               <span className="text-[10px] font-bold text-slate-600">Card</span>
             </div>
             <div 
@@ -141,7 +141,7 @@ export default function Step6Payment({ formData, updateFormData, nextStep, prevS
               aria-checked={formData.paymentMethod === 'partial'}
               className={`rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors border-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 ${formData.paymentMethod === 'partial' ? 'border-primary bg-emerald-50/40' : 'border-outline-variant hover:bg-slate-50'}`}
             >
-              <span className="text-lg mb-1" aria-hidden="true">🪙</span>
+              <span className="material-symbols-outlined text-lg mb-1 text-slate-500" aria-hidden="true">payments</span>
               <span className="text-[10px] font-bold text-slate-600">Token</span>
             </div>
           </div>

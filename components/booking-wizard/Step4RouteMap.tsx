@@ -29,47 +29,47 @@ export default function Step4RouteMap({ formData, nextStep, prevStep }: Props) {
     const dropVal = formData.drop;
 
     if (pickupVal === 'gaggal') {
-        cName = "Gaggal Airport EV Power Station ⚡";
+        cName = "Gaggal Airport EV Power Station";
         if (dropVal === 'mcleodganj') {
-            sName = "Bhagsu Pine Canopy Lookout 🌲";
+            sName = "Bhagsu Pine Canopy Lookout";
             co2 = 5.8;
             curve = "M 30,100 C 100,50 160,130 220,70 C 280,30 320,110 370,40";
         } else if (dropVal === 'dharamshala') {
-            sName = "Dharamshala Valley Vistas 🏔️";
+            sName = "Dharamshala Valley Vistas";
             co2 = 4.5;
             curve = "M 30,100 Q 120,50 200,90 T 370,75";
         } else {
-            sName = "Kangra Valley Panoramic View 🏔️";
+            sName = "Kangra Valley Panoramic View";
             co2 = 5.2;
             curve = "M 30,80 C 100,90 160,120 220,95 C 280,75 320,115 370,110";
         }
     } else if (pickupVal === 'pathankot') {
-        cName = "Kandwal Green Charger Hub ⚡";
+        cName = "Kandwal Green Charger Hub";
         if (dropVal === 'mcleodganj') {
-            sName = "Dhauladhar Snow Peaks Lookout 🏔️";
+            sName = "Dhauladhar Snow Peaks Lookout";
             co2 = 21.5;
             curve = "M 30,120 C 110,60 170,140 230,80 C 290,30 330,110 370,40";
         } else if (dropVal === 'dharamshala') {
-            sName = "Kangra Ridge Panoramic Stop 🏔️";
+            sName = "Kangra Ridge Panoramic Stop";
             co2 = 19.8;
             curve = "M 30,120 Q 120,70 210,105 T 370,75";
         } else {
-            sName = "Ancient Fort Vistas Stop 🏔️";
+            sName = "Ancient Fort Vistas Stop";
             co2 = 18.5;
             curve = "M 30,110 C 110,110 170,130 230,105 C 290,80 330,120 370,110";
         }
     } else {
-        cName = "Kandwal Gate EV Charging Hub ⚡";
+        cName = "Kandwal Gate EV Charging Hub";
         if (dropVal === 'mcleodganj') {
-            sName = "Naddi Hill Viewpoint 🏔️";
+            sName = "Naddi Hill Viewpoint";
             co2 = 16.5;
             curve = "M 30,110 C 110,55 170,135 230,75 C 290,30 330,110 370,40";
         } else if (dropVal === 'dharamshala') {
-            sName = "Dhauladhar Base Scenic Stop 🏔️";
+            sName = "Dhauladhar Base Scenic Stop";
             co2 = 14.8;
             curve = "M 30,110 Q 120,60 210,95 T 370,75";
         } else {
-            sName = "Fort Valley Lookout Stop 🏔️";
+            sName = "Fort Valley Lookout Stop";
             co2 = 13.5;
             curve = "M 30,100 C 110,100 170,120 230,100 C 290,80 330,115 370,110";
         }
@@ -180,14 +180,14 @@ export default function Step4RouteMap({ formData, nextStep, prevStep }: Props) {
                 <div className="w-1.5 h-1.5 bg-amber-300 rounded-full animate-ping"></div>
               </div>
               <div className="text-xs">
-                <div className="font-extrabold uppercase text-[9px] tracking-wider flex items-center gap-0.5 text-[#fcd34d]">Green Power Hub ⚡</div>
+                <div className="font-extrabold uppercase text-[9px] tracking-wider flex items-center gap-0.5 text-[#fcd34d]">Green Power Hub</div>
                 <div className="text-[#e2e8f0]">{chargerName}</div>
               </div>
             </div>
             <div className="relative flex items-center gap-3">
               <div className="absolute -left-[21px] w-3 h-3 rounded-full flex items-center justify-center" style={{ backgroundColor: '#38bdf8', boxShadow: '0 0 0 4px #071e27' }}></div>
               <div className="text-xs">
-                <div className="font-extrabold uppercase text-[9px] tracking-wider flex items-center gap-0.5 text-[#7dd3fc]">Scenic Stop 🏔️</div>
+                <div className="font-extrabold uppercase text-[9px] tracking-wider flex items-center gap-0.5 text-[#7dd3fc]">Scenic Stop</div>
                 <div className="text-[#e2e8f0]">{scenicName}</div>
               </div>
             </div>

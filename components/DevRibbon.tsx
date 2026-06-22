@@ -30,7 +30,7 @@ export default function DevRibbon() {
           />
         </svg>
         <span className="text-amber-100 text-sm font-semibold font-headline tracking-wide">
-          🚧 &nbsp;This website is currently under development. Some features may be incomplete or subject to change.
+          This website is currently under development. Some features may be incomplete or subject to change.
         </span>
       </div>
       <button

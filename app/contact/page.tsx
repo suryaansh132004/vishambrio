@@ -102,9 +102,9 @@ export default function ContactPage() {
                     <button
                       type="button"
                       onClick={() => setIsWheelOpen(!isWheelOpen)}
-                      className="flex items-center gap-1 px-3 py-3 border-r border-slate-300/60 font-semibold text-sm text-slate-700 hover:bg-slate-200/50 rounded-l-xl transition-colors cursor-pointer select-none"
+                      className="flex items-center gap-1 px-3 py-3 border-r border-slate-300/60 font-semibold text-sm text-slate-700 hover:bg-slate-200/50 rounded-l-xl transition-colors cursor-pointer select-none animate-entrance"
                     >
-                      <span className="text-lg leading-none">{selectedCountry.flag}</span>
+                      <span className="text-[10px] font-extrabold bg-slate-200/60 text-slate-700 px-1.5 py-0.5 rounded border border-slate-300/40 uppercase tracking-wider leading-none select-none w-7 text-center">{selectedCountry.flag}</span>
                       <span className="text-slate-800">{selectedCountry.dialCode}</span>
                       <span className="material-symbols-outlined text-[16px] text-slate-400 font-bold">keyboard_arrow_down</span>
                     </button>
@@ -152,7 +152,7 @@ export default function ContactPage() {
                   <textarea className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white resize-none" id="message" rows={5} placeholder="Tell us how we can help…" required></textarea>
                 </div>
                 <button className="w-full text-white rounded-xl py-4 font-headline font-bold text-base transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg" style={{ background: 'linear-gradient(135deg, #0d631b 0%, #2e7d32 100%)' }} type="submit">
-                  Send Message &nbsp;✉️
+                  Send Message
                 </button>
               </form>
             )}

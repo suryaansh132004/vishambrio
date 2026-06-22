@@ -128,7 +128,7 @@ export default function TouristAttractionsPage() {
                     <div className="space-y-1">
                       <span className="text-xs font-bold text-primary uppercase tracking-widest block">{attr.category}</span>
                       <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/50">
-                        🌱 {attr.tokens} &nbsp;•&nbsp; {attr.co2} ⚡
+                        <span className="material-symbols-outlined text-xs" aria-hidden="true">eco</span> {attr.tokens} &nbsp;•&nbsp; {attr.co2} <span className="material-symbols-outlined text-xs" aria-hidden="true">bolt</span>
                       </span>
                     </div>
                     <button

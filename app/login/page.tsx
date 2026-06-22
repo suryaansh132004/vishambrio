@@ -153,7 +153,7 @@ function LoginForm() {
               </div>
 
               <button className="w-full btn-primary-gradient text-on-primary py-4 rounded-xl font-headline font-bold text-lg hover:shadow-lg active:scale-98 transition-all shadow-md mt-6 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34d399]">
-                {tab === 'login' ? 'Log In \u00a0🔑' : 'Sign Up \u00a0🌱'}
+                {tab === 'login' ? 'Log In' : 'Sign Up'}
               </button>
             </form>
           </div>

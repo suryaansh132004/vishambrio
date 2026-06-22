@@ -23,7 +23,7 @@ export default function Step7Confirm({ formData, confirmedBookingId, resetWizard
         
         <div className="space-y-2">
           <h3 className="text-2xl font-headline font-extrabold text-emerald-950">Booking Confirmed!</h3>
-          <p className="text-emerald-700 font-bold text-xs uppercase tracking-widest">Your green ride is secured 🌱</p>
+          <p className="text-emerald-700 font-bold text-xs uppercase tracking-widest">Your green ride is secured</p>
         </div>
 
         <div className="bg-slate-50 p-4 rounded-xl inline-block">

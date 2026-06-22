@@ -238,7 +238,7 @@ export default function ProfileDrawer() {
                   </div>
                   <div>
                     <div className="text-3xl font-headline font-extrabold text-emerald-950">{metrics.tokens}</div>
-                    <span className="text-[10px] font-bold text-emerald-700/80 uppercase tracking-widest block mt-0.5">Eco-Points Earned🌱</span>
+                    <span className="text-[10px] font-bold text-emerald-700/80 uppercase tracking-widest block mt-0.5">Eco-Points Earned</span>
                   </div>
                 </div>
                 <div className="bg-white rounded-2xl border border-emerald-100/50 p-4 shadow-sm flex flex-col justify-between h-28 hover:shadow-md transition-shadow">
@@ -248,7 +248,7 @@ export default function ProfileDrawer() {
                   </div>
                   <div>
                     <div className="text-3xl font-headline font-extrabold text-emerald-950">{metrics.carbon} <span className="text-sm">kg</span></div>
-                    <span className="text-[10px] font-bold text-emerald-700/80 uppercase tracking-widest block mt-0.5">vs Diesel Travel 💨</span>
+                    <span className="text-[10px] font-bold text-emerald-700/80 uppercase tracking-widest block mt-0.5">vs Diesel Travel</span>
                   </div>
                 </div>
                 <div className="col-span-2 bg-white rounded-2xl border border-emerald-100/50 p-4 shadow-sm hover:shadow-md transition-shadow">

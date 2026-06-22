@@ -12,7 +12,7 @@ export const ProfileStore = {
     if (!localStorage.getItem(key)) {
       const profile: UserProfile = {
         phone: '+91 98765 43210',
-        memberLevel: 'Eco-Explorer 🌲',
+        memberLevel: 'Eco-Explorer',
         seededTokens: 185,
         seededCarbon: 37,
         seededMoney: 4350,

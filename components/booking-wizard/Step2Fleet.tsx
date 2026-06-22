@@ -43,12 +43,19 @@ export default function Step2Fleet({ formData, updateFormData, nextStep, prevSte
                 <span className="font-headline font-bold text-lg text-emerald-950">Tata Nexon EV</span>
                 <span className="text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">SUV</span>
               </div>
-              <div className="flex flex-wrap gap-2 text-[11px] font-semibold text-slate-500">
-                <span className="flex items-center gap-0.5">👤 4 Seat</span>
-                <span className="flex items-center gap-0.5">🧳 2 Large + 2 Hand</span>
+              <div className="flex flex-wrap gap-3 text-[11px] font-semibold text-slate-500">
+                <span className="flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[14px]" aria-hidden="true">person</span>
+                  4 Seat
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[14px]" aria-hidden="true">luggage</span>
+                  2 Large + 2 Hand
+                </span>
               </div>
               <div className="text-[11px] font-bold text-emerald-700 flex items-center gap-1">
-                <span>🌱 100% Electric - Zero Emissions</span>
+                <span className="material-symbols-outlined text-[14px]" aria-hidden="true">eco</span>
+                <span>100% Electric - Zero Emissions</span>
               </div>
             </div>
             <div className="text-right">
@@ -78,12 +85,19 @@ export default function Step2Fleet({ formData, updateFormData, nextStep, prevSte
                 <span className="font-headline font-bold text-lg text-emerald-950">Tata XPRES-T EV</span>
                 <span className="text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">Sedan</span>
               </div>
-              <div className="flex flex-wrap gap-2 text-[11px] font-semibold text-slate-500">
-                <span className="flex items-center gap-0.5">👤 4 Seat</span>
-                <span className="flex items-center gap-0.5">🧳 1 Large + 2 Hand</span>
+              <div className="flex flex-wrap gap-3 text-[11px] font-semibold text-slate-500">
+                <span className="flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[14px]" aria-hidden="true">person</span>
+                  4 Seat
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[14px]" aria-hidden="true">luggage</span>
+                  1 Large + 2 Hand
+                </span>
               </div>
               <div className="text-[11px] font-bold text-emerald-700 flex items-center gap-1">
-                <span>🌱 100% Electric - Zero Emissions</span>
+                <span className="material-symbols-outlined text-[14px]" aria-hidden="true">eco</span>
+                <span>100% Electric - Zero Emissions</span>
               </div>
             </div>
             <div className="text-right">

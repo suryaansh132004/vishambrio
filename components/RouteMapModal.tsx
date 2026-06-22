@@ -10,10 +10,14 @@ interface RouteMapModalProps {
   routeId: string | null;
 }
 
+// Pixel-space position for the tooltip (computed from SVG rect at click-time)
+interface TooltipPos { x: number; y: number; above: boolean; }
+
 export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModalProps) {
   const [activeNodeIdx, setActiveNodeIdx] = useState(0);
   const [activeScenicIdx, setActiveScenicIdx] = useState(0);
   const [isRendered, setIsRendered] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState<TooltipPos | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -22,22 +26,43 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
       setIsRendered(true);
       setActiveNodeIdx(0);
       setActiveScenicIdx(0);
+      setTooltipPos(null); // will be set after DOM paints via the effect below
     } else {
+      setTooltipPos(null);
       const timer = setTimeout(() => setIsRendered(false), 300);
       return () => clearTimeout(timer);
     }
   }, [isOpen, routeId]);
 
+  // After the map renders, position the tooltip for the initial node (index 0)
+  useEffect(() => {
+    if (!isOpen || !isRendered) return;
+    // Small delay to ensure getBoundingClientRect is accurate after layout
+    const t = setTimeout(() => {
+      if (!mapContainerRef.current) return;
+      const dataLocal = routeDetailsData[routeId!];
+      if (!dataLocal) return;
+      const node = dataLocal.nodes[0];
+      if (!node) return;
+      const rect = mapContainerRef.current.getBoundingClientRect();
+      const scaleX = rect.width  / 400;
+      const scaleY = rect.height / 240;
+      const screenX = rect.left + node.x * scaleX;
+      const screenY = rect.top  + node.y * scaleY;
+      setTooltipPos({ x: screenX, y: screenY, above: screenY > window.innerHeight * 0.55 });
+    }, 80);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, isRendered]);
+
+  // Auto-advance scenic photo gallery
   useEffect(() => {
     if (!isOpen || !routeId) return;
-    
     const data = routeDetailsData[routeId];
     if (!data || !data.photos || data.photos.length === 0) return;
-
     const timer = setInterval(() => {
       setActiveScenicIdx((prev) => (prev + 1) % data.photos.length);
     }, 4500);
-    
     return () => clearInterval(timer);
   }, [isOpen, routeId, activeScenicIdx]);
 
@@ -117,10 +142,66 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
     if (node && node.photoIndex !== undefined) {
       setActiveScenicIdx(node.photoIndex % data.photos.length);
     }
+    // Compute fixed-space tooltip anchor from the SVG container's bounding rect
+    if (mapContainerRef.current && node) {
+      const rect = mapContainerRef.current.getBoundingClientRect();
+      const scaleX = rect.width / 400;
+      const scaleY = rect.height / 240;
+      const screenX = rect.left + node.x * scaleX;
+      const screenY = rect.top  + node.y * scaleY;
+      // Place card above the node when there's enough room, otherwise below
+      const above = screenY > window.innerHeight * 0.55;
+      setTooltipPos({ x: screenX, y: screenY, above });
+    }
   };
 
   return (
     <div className={`fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-6 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+
+      {/* ── Stop detail card (fixed, outside overflow-hidden modal) ─────────── */}
+      {activeNode && tooltipPos && (() => {
+        const TOOLTIP_W = 240;
+        const PADDING   = 12;
+        // Clamp X so card never leaves the viewport
+        const rawLeft = tooltipPos.x - TOOLTIP_W / 2;
+        const left = Math.max(PADDING, Math.min(window.innerWidth - TOOLTIP_W - PADDING, rawLeft));
+        const top  = tooltipPos.above ? tooltipPos.y - PADDING : tooltipPos.y + PADDING;
+
+        return (
+          <div
+            key={activeNodeIdx}
+            className="fixed z-[2000] bg-white rounded-2xl p-4 shadow-2xl border border-emerald-400/30 text-slate-800 animate-entrance pointer-events-auto"
+            style={{
+              width: `${TOOLTIP_W}px`,
+              left:  `${left}px`,
+              top:   `${top}px`,
+              transform: tooltipPos.above ? 'translateY(-100%)' : 'none',
+            }}
+          >
+            <div className="flex items-start gap-2.5">
+              <span className="material-symbols-outlined text-emerald-600 mt-0.5 text-lg flex-shrink-0">
+                {activeNode.type === 'start'  ? 'play_arrow'
+                : activeNode.type === 'stop'  ? 'battery_charging_full'
+                : activeNode.type === 'scenic'? 'photo_camera'
+                : activeNode.type === 'end'   ? 'flag'
+                :                               'location_on'}
+              </span>
+              <div className="space-y-1 min-w-0">
+                <h5 className="font-bold text-sm text-slate-900 leading-tight">{activeNode.name}</h5>
+                <p  className="text-[11px] text-slate-500 leading-relaxed">{activeNode.desc}</p>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeNode.name)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 hover:text-emerald-950 transition-colors pt-1"
+                >
+                  <span className="material-symbols-outlined text-[12px]">directions</span> View on Google Maps
+                </a>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
       <div className="fixed inset-0 bg-emerald-950/60 backdrop-blur-md" onClick={onClose} aria-hidden="true"></div>
       
       <div 
@@ -141,9 +222,10 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
               <span className="material-symbols-outlined text-[14px]">explore</span> Live Route Map
             </span>
             <h4 className="text-xl font-headline font-extrabold mt-2 text-slate-100">{data.title}</h4>
-            <p className="text-xs text-slate-400 mt-1">Click the nodes along the route path to view stop details and scenic checkpoints.</p>
+            <p className="text-xs text-slate-400 mt-1">Click a node on the map or a stop in the timeline to view details.</p>
           </div>
           
+          {/* SVG Map */}
           <div className="relative flex-1 flex items-center justify-center mt-1 mb-6 z-20 select-none" ref={mapContainerRef}>
             <svg viewBox="0 0 400 240" className="w-full h-full max-h-[220px]">
               <defs>
@@ -190,33 +272,9 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
               <circle r="7" fill="#34d399" filter="url(#glow)" style={{ offsetPath: `path("${data.svgPath}")`, animation: 'cabGlide 7s infinite linear' }}></circle>
               <circle r="3.5" fill="#047857" style={{ offsetPath: `path("${data.svgPath}")`, animation: 'cabGlide 7s infinite linear' }}></circle>
             </svg>
-
-            {/* Tooltip Popup */}
-            {activeNode && (
-              <div 
-                className="absolute z-[30] bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-emerald-500/20 max-w-[240px] text-slate-800 animate-entrance transition-all duration-300"
-                style={{
-                  left: `${(activeNode.x / 400) * 100}%`,
-                  top: `${(activeNode.y / 240) * 100}%`,
-                  transform: `translate(${activeNode.x < 120 ? '10px' : activeNode.x > 280 ? '-108%' : '-50%'}, ${activeNode.y < 90 ? '15px' : activeNode.y > 150 ? '-112%' : '-115%'})`
-                }}
-              >
-                <div className="flex items-start gap-2">
-                  <span className="material-symbols-outlined text-emerald-600 mt-0.5 text-lg">
-                    {activeNode.type === 'start' ? 'play_arrow' : activeNode.type === 'stop' ? 'battery_charging_full' : activeNode.type === 'scenic' ? 'photo_camera' : activeNode.type === 'end' ? 'flag' : 'location_on'}
-                  </span>
-                  <div className="space-y-1">
-                    <h5 className="font-bold text-sm text-slate-900 leading-tight">{activeNode.name}</h5>
-                    <p className="text-[11px] text-slate-500 leading-relaxed">{activeNode.desc}</p>
-                    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeNode.name)}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 hover:text-emerald-950 transition-colors pt-1">
-                      <span className="material-symbols-outlined text-[12px]">directions</span> View on Google Maps
-                    </a>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
-          
+
+          {/* Stats bar */}
           <div className="flex justify-between items-center bg-[#071822]/60 backdrop-blur-md rounded-2xl p-3 border border-slate-800 relative z-20">
             <div className="text-center flex-1 border-r border-slate-800">
               <div className="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Distance</div>
@@ -231,6 +289,9 @@ export default function RouteMapModal({ isOpen, onClose, routeId }: RouteMapModa
               <div className="text-sm font-extrabold text-emerald-400">{data.baseFare}</div>
             </div>
           </div>
+
+          {/* Tooltip is now rendered as a fixed-position element outside the
+              overflow-hidden modal — see the sibling render above the modal div */}
         </div>
         
         {/* Right Column: Timeline & Gallery */}
