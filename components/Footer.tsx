@@ -10,7 +10,7 @@ export default function Footer() {
             <img src="/assets/logo.png" alt="Vishambrio Logo" className="h-6 w-auto object-contain" />
             <span>Vishambrio Cabs</span>
           </div>
-          <p className="text-slate-500 italic">"We are not just cabs; we are a sustainable transportation ecosystem"</p>
+          <p className="text-slate-500 italic">&ldquo;We are not just cabs; we are a sustainable transportation ecosystem&rdquo;</p>
           <div className="flex gap-4">
             <a
               className="w-10 h-10 rounded-full bg-surface flex items-center justify-center ambient-shadow hover:text-primary transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"

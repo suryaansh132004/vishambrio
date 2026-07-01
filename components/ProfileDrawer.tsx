@@ -4,20 +4,38 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { ProfileStore } from '@/lib/profile';
 import { UserProfile, Complaint } from '@/lib/types';
+import CountryCodeWheel, { COUNTRIES, CountryCode } from './CountryCodeWheel';
 import CustomDialog from './CustomDialog';
+
+
+function parseStoredPhone(stored: string): { country: CountryCode; number: string } {
+  const defaultCountry = COUNTRIES[0];
+  if (!stored) return { country: defaultCountry, number: '' };
+
+  const matched = COUNTRIES.find((c) => stored.startsWith(c.dialCode));
+  if (matched) {
+    const number = stored.slice(matched.dialCode.length).trim();
+    return { country: matched, number };
+  }
+  return { country: defaultCountry, number: stored };
+}
 
 export default function ProfileDrawer() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'complaints'>('overview');
-  const { user } = useAuth();
-  
+  const { user, logout: supabaseLogout, updateProfile } = useAuth();
+
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [metrics, setMetrics] = useState({ tokens: 0, carbon: 0 });
   const [totalSpent, setTotalSpent] = useState(0);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [phoneInput, setPhoneInput] = useState('');
-
+  const [editName, setEditName] = useState('');
+  const [editEmail, setEditEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState<CountryCode>(COUNTRIES[0]);
+  const [isWheelOpen, setIsWheelOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [complaintCategory, setComplaintCategory] = useState('');
   const [complaintText, setComplaintText] = useState('');
 
@@ -31,100 +49,140 @@ export default function ProfileDrawer() {
   }, []);
 
   useEffect(() => {
-    if (user?.email) {
-      setProfile(ProfileStore.getUserProfile(user.email));
-      setMetrics(ProfileStore.getCarbonMetrics(user.email));
-      setTotalSpent(ProfileStore.getTotalMoneySpent(user.email));
-      setPhoneInput(ProfileStore.getUserProfile(user.email)?.phone || '');
-    }
+    let active = true;
+    const loadProfileData = async () => {
+      if (user?.id && isOpen) {
+        const fetchedProfile = await ProfileStore.getUserProfile(user.id);
+        const fetchedMetrics = await ProfileStore.getCarbonMetrics(user.id);
+        const fetchedSpent = await ProfileStore.getTotalMoneySpent(user.id);
+
+        if (active) {
+          setProfile(fetchedProfile);
+          if (fetchedProfile?.phone) {
+            const parsed = parseStoredPhone(fetchedProfile.phone);
+            setSelectedCountry(parsed.country);
+            setPhoneNumber(parsed.number);
+          } else {
+            setSelectedCountry(COUNTRIES[0]);
+            setPhoneNumber('');
+          }
+          setMetrics(fetchedMetrics);
+          setTotalSpent(fetchedSpent);
+        }
+      }
+    };
+    loadProfileData();
+    return () => { active = false; };
   }, [user, isOpen]);
+
+  const closeDrawer = () => setIsOpen(false);
 
   useEffect(() => {
     if (!isOpen) return;
-
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        closeDrawer();
-      }
+      if (e.key === 'Escape') { closeDrawer(); return; }
       if (e.key === 'Tab') {
         if (!drawerRef.current) return;
         const focusableElements = drawerRef.current.querySelectorAll<HTMLElement>(
           'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]'
         );
         if (focusableElements.length === 0) return;
-        
         const firstElement = focusableElements[0];
         const lastElement = focusableElements[focusableElements.length - 1];
-        
-        if (e.shiftKey) { // Shift + Tab
-          if (document.activeElement === firstElement) {
-            lastElement.focus();
-            e.preventDefault();
-          }
-        } else { // Tab
-          if (document.activeElement === lastElement) {
-            firstElement.focus();
-            e.preventDefault();
-          }
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) { lastElement.focus(); e.preventDefault(); }
+        } else {
+          if (document.activeElement === lastElement) { firstElement.focus(); e.preventDefault(); }
         }
       }
     };
-
     const previousActiveElement = document.activeElement as HTMLElement;
-
     const timer = setTimeout(() => {
-      const focusableElements = drawerRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]'
-      );
-      if (focusableElements && focusableElements.length > 0) {
-        focusableElements[0].focus();
-      }
+      const focusable = drawerRef.current?.querySelectorAll<HTMLElement>('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]');
+      if (focusable && focusable.length > 0) focusable[0].focus();
     }, 50);
-
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       clearTimeout(timer);
-      if (previousActiveElement) {
-        previousActiveElement.focus();
-      }
+      if (previousActiveElement) previousActiveElement.focus();
     };
   }, [isOpen]);
 
-  const closeDrawer = () => setIsOpen(false);
+  const handleStartEditing = () => {
+    setEditName(user?.name || '');
+    setEditEmail(user?.email || '');
+    setIsEditing(true);
+  };
 
-  const handleSavePhone = () => {
-    if (user?.email && phoneInput) {
-      ProfileStore.updateProfilePhone(user.email, phoneInput);
-      setProfile(ProfileStore.getUserProfile(user.email));
+  const handleSaveDetails = async () => {
+    if (!user?.id) return;
+    setIsSaving(true);
+
+    try {
+      const nameChanged = editName.trim() && editName.trim() !== user.name;
+      const emailChanged = editEmail.trim() && editEmail.trim() !== user.email;
+      const fullPhone = phoneNumber.trim() ? `${selectedCountry.dialCode} ${phoneNumber.trim()}` : '';
+
+      await ProfileStore.updateProfilePhone(user.id, fullPhone);
+
+      if (nameChanged || emailChanged) {
+        const updates: { name?: string; email?: string } = {};
+        if (nameChanged) updates.name = editName.trim();
+        if (emailChanged) updates.email = editEmail.trim();
+
+        const { error, emailChangePending } = await updateProfile(updates);
+
+        if (error) {
+          setAlertDialog({ isOpen: true, title: 'Update Failed', message: error.message || 'Could not update your details. Please try again.' });
+          return;
+        }
+
+        if (emailChangePending) {
+          setAlertDialog({
+            isOpen: true,
+            title: 'Verify Your New Email',
+            message: `A verification link has been sent to ${editEmail.trim()}. Your email address will be updated once you confirm it.`,
+          });
+        }
+      }
+
+      const updated = await ProfileStore.getUserProfile(user.id);
+      setProfile(updated);
       setIsEditing(false);
+      setIsWheelOpen(false);
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  const handleSubmitComplaint = (e: React.FormEvent) => {
+  const handleSubmitComplaint = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (user?.email && complaintCategory && complaintText) {
-      ProfileStore.submitComplaint(user.email, complaintCategory, complaintText);
-      setProfile(ProfileStore.getUserProfile(user.email));
-      setComplaintCategory('');
-      setComplaintText('');
-      setAlertDialog({
-        isOpen: true,
-        title: 'Report Submitted',
-        message: 'Your complaint has been filed successfully. A green fleet supervisor will review it.'
-      });
+    if (user?.id && complaintCategory && complaintText) {
+      const success = await ProfileStore.submitComplaint(user.id, complaintCategory, complaintText);
+      if (success) {
+        const updated = await ProfileStore.getUserProfile(user.id);
+        setProfile(updated);
+        setComplaintCategory('');
+        setComplaintText('');
+        setAlertDialog({ isOpen: true, title: 'Report Submitted', message: 'Your complaint has been filed successfully. A green fleet supervisor will review it.' });
+      } else {
+        setAlertDialog({ isOpen: true, title: 'Submission Failed', message: 'There was an issue submitting your complaint. Please try again.' });
+      }
     }
   };
 
-  if (!user || !profile) return null; // Or show login prompt if needed
+  if (!user || !profile) return null;
+
+  const displayPhone = profile.phone
+    ? profile.phone
+    : 'No phone saved yet';
 
   return (
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[99998] transition-opacity duration-300 ${
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[99998] transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={closeDrawer}
         aria-hidden="true"
       ></div>
@@ -132,9 +190,7 @@ export default function ProfileDrawer() {
       {/* Drawer */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 right-0 h-full w-full max-w-md bg-surface shadow-2xl z-[99999] transform transition-transform duration-300 flex flex-col ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed top-0 right-0 h-full w-full max-w-md bg-surface shadow-2xl z-[99999] transform transition-transform duration-300 flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         role="dialog"
         aria-modal="true"
         aria-label="My Green Profile Drawer"
@@ -144,35 +200,17 @@ export default function ProfileDrawer() {
             <span className="material-symbols-outlined text-emerald-400" aria-hidden="true">account_circle</span>
             <h2 className="text-xl font-headline font-bold">My Green Profile</h2>
           </div>
-          <button 
-            onClick={closeDrawer} 
-            className="p-1.5 rounded-full hover:bg-white/10 text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white" 
-            aria-label="Close Profile Drawer"
-          >
+          <button onClick={closeDrawer} className="p-1.5 rounded-full hover:bg-white/10 text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white" aria-label="Close Profile Drawer">
             <span className="material-symbols-outlined" aria-hidden="true">close</span>
           </button>
         </div>
 
         {/* Tab Navigation */}
         <div className="grid grid-cols-2 border-b border-slate-100 bg-white" role="tablist">
-          <button
-            onClick={() => setActiveTab('overview')}
-            role="tab"
-            aria-selected={activeTab === 'overview'}
-            className={`py-4 font-headline font-bold text-sm text-slate-500 border-b-2 transition-colors flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:bg-slate-50 ${
-              activeTab === 'overview' ? 'bg-emerald-50/50 text-emerald-700 border-emerald-700' : 'border-transparent hover:text-emerald-700'
-            }`}
-          >
+          <button onClick={() => setActiveTab('overview')} role="tab" aria-selected={activeTab === 'overview'} className={`py-4 font-headline font-bold text-sm text-slate-500 border-b-2 transition-colors flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:bg-slate-50 ${activeTab === 'overview' ? 'bg-emerald-50/50 text-emerald-700 border-emerald-700' : 'border-transparent hover:text-emerald-700'}`}>
             <span className="material-symbols-outlined text-lg" aria-hidden="true">dashboard</span> Overview
           </button>
-          <button
-            onClick={() => setActiveTab('complaints')}
-            role="tab"
-            aria-selected={activeTab === 'complaints'}
-            className={`py-4 font-headline font-bold text-sm text-slate-500 border-b-2 transition-colors flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:bg-slate-50 ${
-              activeTab === 'complaints' ? 'bg-emerald-50/50 text-emerald-700 border-emerald-700' : 'border-transparent hover:text-emerald-700'
-            }`}
-          >
+          <button onClick={() => setActiveTab('complaints')} role="tab" aria-selected={activeTab === 'complaints'} className={`py-4 font-headline font-bold text-sm text-slate-500 border-b-2 transition-colors flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:bg-slate-50 ${activeTab === 'complaints' ? 'bg-emerald-50/50 text-emerald-700 border-emerald-700' : 'border-transparent hover:text-emerald-700'}`}>
             <span className="material-symbols-outlined text-lg" aria-hidden="true">chat</span> Complaints
           </button>
         </div>
@@ -201,29 +239,97 @@ export default function ProfileDrawer() {
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Account Details</h4>
                 <div className="space-y-1">
                   <label htmlFor="profile-name" className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Full Name</label>
-                  <input id="profile-name" type="text" value={user.name} disabled className="w-full wizard-input py-2 px-3 bg-slate-50 text-sm font-semibold border-2 border-transparent disabled:opacity-85" />
+                  {isEditing ? (
+                    <input
+                      id="profile-name"
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      className="w-full wizard-input py-2 px-3 text-sm font-semibold border-2 border-emerald-400 focus:outline-none"
+                    />
+                  ) : (
+                    <input id="profile-name" type="text" value={user.name} disabled className="w-full wizard-input py-2 px-3 bg-slate-50 text-sm font-semibold border-2 border-transparent disabled:opacity-85" />
+                  )}
                 </div>
                 <div className="space-y-1">
                   <label htmlFor="profile-email" className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email Address</label>
-                  <input id="profile-email" type="email" value={user.email} disabled className="w-full wizard-input py-2 px-3 bg-slate-50 text-sm font-semibold border-2 border-transparent disabled:opacity-85" />
+                  {isEditing ? (
+                    <div className="space-y-1">
+                      <input
+                        id="profile-email"
+                        type="email"
+                        value={editEmail}
+                        onChange={(e) => setEditEmail(e.target.value)}
+                        className="w-full wizard-input py-2 px-3 text-sm font-semibold border-2 border-emerald-400 focus:outline-none"
+                      />
+                      {editEmail.trim() !== user.email && editEmail.trim() !== '' && (
+                        <p className="text-[10px] text-amber-600 font-semibold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[12px]">info</span>
+                          A verification link will be sent to this address to confirm the change.
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <input id="profile-email" type="email" value={user.email} disabled className="w-full wizard-input py-2 px-3 bg-slate-50 text-sm font-semibold border-2 border-transparent disabled:opacity-85" />
+                  )}
                 </div>
+
+                {/* Phone with CountryCodeWheel */}
                 <div className="space-y-1">
                   <label htmlFor="profile-phone" className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mobile Number</label>
-                  <input 
-                    id="profile-phone"
-                    type="text" 
-                    value={phoneInput} 
-                    onChange={(e) => setPhoneInput(e.target.value)}
-                    disabled={!isEditing} 
-                    className={`w-full wizard-input py-2 px-3 text-sm font-semibold border-2 ${isEditing ? 'bg-white border-emerald-400 focus-visible:ring-2 focus-visible:ring-emerald-700' : 'bg-slate-50 border-transparent disabled:opacity-85'}`} 
-                  />
+                  {isEditing ? (
+                    <div className="relative flex items-center wizard-input py-0 px-0 border-2 border-emerald-400 bg-white focus-within:ring-2 focus-within:ring-emerald-700 overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => setIsWheelOpen(!isWheelOpen)}
+                        className="flex items-center gap-1 px-3 py-2 border-r border-slate-200 font-semibold text-sm text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer select-none"
+                      >
+                        <span className="text-[10px] font-extrabold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200 uppercase tracking-wider leading-none select-none w-7 text-center">{selectedCountry.flag}</span>
+                        <span>{selectedCountry.dialCode}</span>
+                        <span className="material-symbols-outlined text-[16px] text-slate-400">keyboard_arrow_down</span>
+                      </button>
+                      <CountryCodeWheel
+                        selectedCountry={selectedCountry}
+                        onSelect={setSelectedCountry}
+                        isOpen={isWheelOpen}
+                        onClose={() => setIsWheelOpen(false)}
+                      />
+                      <input
+                        id="profile-phone"
+                        type="tel"
+                        className="flex-1 bg-transparent px-3 py-2 text-sm font-semibold outline-none text-slate-800"
+                        placeholder="xxxxx xxxxx"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full wizard-input py-2 px-3 bg-slate-50 text-sm font-semibold border-2 border-transparent text-slate-600">
+                      {displayPhone}
+                    </div>
+                  )}
                 </div>
+
                 {isEditing ? (
-                  <button onClick={handleSavePhone} className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-950">
-                    Save Details
-                  </button>
+                  <div className="flex gap-2 mt-2">
+                    <button
+                      onClick={() => { setIsEditing(false); setIsWheelOpen(false); }}
+                      disabled={isSaving}
+                      className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSaveDetails}
+                      disabled={isSaving}
+                      className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-950 disabled:opacity-50 flex items-center justify-center gap-1.5"
+                    >
+                      {isSaving ? <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : null}
+                      {isSaving ? 'Saving...' : 'Save Details'}
+                    </button>
+                  </div>
                 ) : (
-                  <button onClick={() => setIsEditing(true)} className="w-full py-2.5 bg-slate-100 hover:bg-emerald-50 text-emerald-800 font-bold rounded-xl text-xs transition-colors border border-transparent hover:border-emerald-100 mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700">
+                  <button onClick={handleStartEditing} className="w-full py-2.5 bg-slate-100 hover:bg-emerald-50 text-emerald-800 font-bold rounded-xl text-xs transition-colors border border-transparent hover:border-emerald-100 mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700">
                     Edit Details
                   </button>
                 )}
@@ -244,22 +350,20 @@ export default function ProfileDrawer() {
                 <div className="bg-white rounded-2xl border border-emerald-100/50 p-4 shadow-sm flex flex-col justify-between h-28 hover:shadow-md transition-shadow">
                   <div className="flex justify-between items-start">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">CO₂ Saved</span>
-                    <span className="material-symbols-outlined text-emerald-600 text-lg" aria-hidden="true">forest</span>
+                    
                   </div>
                   <div>
                     <div className="text-3xl font-headline font-extrabold text-emerald-950">{metrics.carbon} <span className="text-sm">kg</span></div>
-                    <span className="text-[10px] font-bold text-emerald-700/80 uppercase tracking-widest block mt-0.5">vs Diesel Travel</span>
+                    <span className="text-[10px] font-bold text-emerald-700/80 uppercase tracking-widest block mt-0.5">vs Fuel Travel</span>
                   </div>
                 </div>
                 <div className="col-span-2 bg-white rounded-2xl border border-emerald-100/50 p-4 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex justify-between items-center">
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1">Total Travel Spend</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1">Total Travel expenditure</span>
                       <div className="text-2xl font-headline font-extrabold text-emerald-950">₹{totalSpent.toLocaleString('en-IN')}</div>
                     </div>
-                    <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600">
-                      <span className="material-symbols-outlined" aria-hidden="true">payments</span>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
@@ -269,22 +373,15 @@ export default function ProfileDrawer() {
           {activeTab === 'complaints' && (
             <div className="space-y-6">
               <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl text-xs font-semibold text-amber-900 leading-relaxed flex items-start gap-2">
-                <span className="material-symbols-outlined text-sm mt-0.5 flex-shrink-0" aria-hidden="true">info</span>
+                <span className="material-symbols-outlined text-sm mt-0.5 shrink-0" aria-hidden="true">info</span>
                 <span>Your feedback helps us maintain the highest standards of safety and sustainability across our Himalayan fleet.</span>
               </div>
-
               <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm space-y-4">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">File a New Report</h4>
                 <form onSubmit={handleSubmitComplaint} className="space-y-3">
                   <div className="space-y-1">
                     <label htmlFor="complaint-cat" className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Category</label>
-                    <select
-                      id="complaint-cat"
-                      value={complaintCategory}
-                      onChange={(e) => setComplaintCategory(e.target.value)}
-                      required
-                      className="w-full wizard-input py-2 px-3 text-sm font-semibold focus-visible:ring-2 focus-visible:ring-emerald-700 focus-visible:outline-none"
-                    >
+                    <select id="complaint-cat" value={complaintCategory} onChange={(e) => setComplaintCategory(e.target.value)} required className="w-full wizard-input py-2 px-3 text-sm font-semibold focus-visible:ring-2 focus-visible:ring-emerald-700 focus-visible:outline-none">
                       <option value="" disabled>Select a category...</option>
                       <option value="Driver Behavior">Driver Behavior</option>
                       <option value="Vehicle Condition">Vehicle Condition</option>
@@ -295,33 +392,32 @@ export default function ProfileDrawer() {
                   </div>
                   <div className="space-y-1">
                     <label htmlFor="complaint-desc" className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Details</label>
-                    <textarea
-                      id="complaint-desc"
-                      value={complaintText}
-                      onChange={(e) => setComplaintText(e.target.value)}
-                      required
-                      placeholder="Please describe the issue..."
-                      className="w-full wizard-input py-2 px-3 text-sm font-semibold resize-none h-24 focus-visible:ring-2 focus-visible:ring-emerald-700 focus-visible:outline-none"
-                    ></textarea>
+                    <textarea id="complaint-desc" value={complaintText} onChange={(e) => setComplaintText(e.target.value)} required placeholder="Please describe the issue..." className="w-full wizard-input py-2 px-3 text-sm font-semibold resize-none h-24 focus-visible:ring-2 focus-visible:ring-emerald-700 focus-visible:outline-none"></textarea>
                   </div>
-                  <button type="submit" className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors mt-2 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-950">
-                    Submit Report
-                  </button>
+                  <button type="submit" className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors mt-2 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-950">Submit Report</button>
                 </form>
               </div>
-
               <div className="space-y-4">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">History</h4>
                 {profile.complaints.length === 0 ? (
                   <p className="text-xs text-slate-400 text-center py-4">No reports filed yet.</p>
                 ) : (
-                  profile.complaints.map((c) => (
-                    <ComplaintCard key={c.id} complaint={c} />
-                  ))
+                  profile.complaints.map((c) => <ComplaintCard key={c.id} complaint={c} />)
                 )}
               </div>
             </div>
           )}
+        </div>
+
+        {/* Footer — Logout */}
+        <div className="p-4 border-t border-slate-100 bg-white flex-shrink-0">
+          <button
+            onClick={async () => { closeDrawer(); await supabaseLogout(); }}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-red-600 hover:bg-red-50 hover:text-red-800 font-headline font-bold text-sm transition-colors border-2 border-red-100 hover:border-red-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600"
+          >
+            <span className="material-symbols-outlined text-lg" aria-hidden="true">logout</span>
+            Log Out
+          </button>
         </div>
       </div>
 
@@ -344,7 +440,6 @@ function ComplaintCard({ complaint }: { complaint: Complaint }) {
       default: return 'bg-sky-100 text-sky-800';
     }
   };
-
   return (
     <div className="bg-white border border-slate-100 p-4 rounded-xl shadow-sm space-y-3">
       <div className="flex justify-between items-start">
@@ -352,19 +447,13 @@ function ComplaintCard({ complaint }: { complaint: Complaint }) {
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Ticket ID: {complaint.id}</span>
           <h5 className="font-bold text-slate-800 text-sm">{complaint.category}</h5>
         </div>
-        <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-widest ${getBadgeStyle(complaint.status)}`}>
-          {complaint.status}
-        </span>
+        <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-widest ${getBadgeStyle(complaint.status)}`}>{complaint.status}</span>
       </div>
-      <p className="text-xs text-slate-600 font-medium leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-        "{complaint.text}"
-      </p>
+      <p className="text-xs text-slate-600 font-medium leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100">&ldquo;{complaint.text}&rdquo;</p>
       {complaint.reply && (
         <div className="mt-2 pl-3 border-l-2 border-emerald-300">
           <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 block mb-1">Vishambrio Support</span>
-          <p className="text-xs text-emerald-900 font-semibold leading-relaxed">
-            {complaint.reply}
-          </p>
+          <p className="text-xs text-emerald-900 font-semibold leading-relaxed">{complaint.reply}</p>
         </div>
       )}
     </div>

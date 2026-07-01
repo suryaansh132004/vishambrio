@@ -29,6 +29,8 @@ export default function BookingWizardDrawer() {
     return () => window.removeEventListener('open-booking-wizard', handleOpen);
   }, []);
 
+  const closeDrawer = () => setIsOpen(false);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -80,8 +82,6 @@ export default function BookingWizardDrawer() {
       }
     };
   }, [isOpen]);
-
-  const closeDrawer = () => setIsOpen(false);
 
   return (
     <>

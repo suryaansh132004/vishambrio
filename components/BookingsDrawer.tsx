@@ -20,6 +20,8 @@ export default function BookingsDrawer() {
     return () => window.removeEventListener('open-bookings-drawer', handleOpen);
   }, []);
 
+  const closeDrawer = () => setIsOpen(false);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -71,8 +73,6 @@ export default function BookingsDrawer() {
       }
     };
   }, [isOpen]);
-
-  const closeDrawer = () => setIsOpen(false);
 
   const handleCancel = (id: string) => {
     setCancelConfirmId(id);
@@ -160,7 +160,7 @@ export default function BookingsDrawer() {
               </div>
               <h3 className="font-headline font-bold text-lg text-slate-800">No Bookings Yet</h3>
               <p className="text-slate-500 text-sm max-w-[240px]">
-                Hi {user.name.split(' ')[0]}, you haven't booked any green trips yet. Plan your ride in the booking wizard to start!
+                Hi {user.name.split(' ')[0]}, you haven&apos;t booked any green trips yet. Plan your ride in the booking wizard to start!
               </p>
             </div>
           ) : (

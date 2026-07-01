@@ -117,7 +117,7 @@ export default function PopularRoutesPage() {
           </div>
           <h1 className="display-lg text-white">Popular <span style={{ color: '#96ccff' }}>Routes</span></h1>
           <p className="text-xl text-white/80 max-w-xl mx-auto leading-relaxed">
-            From dhauladhar peaks to ancient temples — discover our most-travelled electric cab routes.
+            From dhauladhar peaks to ancient temples &mdash; discover our most-travelled electric cab routes.
           </p>
         </div>
       </section>
@@ -199,7 +199,7 @@ export default function PopularRoutesPage() {
       <section className="py-20 px-6">
         <div className="max-w-screen-xl mx-auto bg-gradient-to-r from-emerald-900 via-emerald-800 to-emerald-700 rounded-[40px] p-12 text-center text-white">
           <h2 className="text-4xl font-headline font-extrabold mb-4">Need a Custom Route?</h2>
-          <p className="text-xl text-white/80 mb-8 max-w-xl mx-auto">Don't see your destination? Contact us and we'll plan your perfect Himachal road trip.</p>
+          <p className="text-xl text-white/80 mb-8 max-w-xl mx-auto">Don&apos;t see your destination? Contact us and we&apos;ll plan your perfect Himachal road trip.</p>
           <Link href="/contact" className="inline-flex items-center gap-3 bg-white text-emerald-900 px-10 py-4 rounded-2xl font-headline font-extrabold text-lg hover:bg-green-50 transition-all hover:-translate-y-1 shadow-xl duration-300 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none">
             <span className="material-symbols-outlined" aria-hidden="true">mail</span>
             Contact Us

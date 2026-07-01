@@ -1,13 +1,52 @@
 'use client';
 
-import React, { useState } from 'react';
-import CountryCodeWheel, { COUNTRIES } from '@/components/CountryCodeWheel';
+import React, { useState, useEffect } from 'react';
+import CountryCodeWheel, { COUNTRIES, CountryCode } from '@/components/CountryCodeWheel';
+import { useAuth } from '@/context/AuthContext';
+import { ProfileStore } from '@/lib/profile';
+
+function parseStoredPhone(stored: string): { country: CountryCode; number: string } {
+  const defaultCountry = COUNTRIES[0];
+  if (!stored) return { country: defaultCountry, number: '' };
+  const matched = COUNTRIES.find((c) => stored.startsWith(c.dialCode));
+  if (matched) {
+    return { country: matched, number: stored.slice(matched.dialCode.length).trim() };
+  }
+  return { country: defaultCountry, number: stored };
+}
 
 export default function ContactPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
+  const [selectedCountry, setSelectedCountry] = useState<CountryCode>(COUNTRIES[0]);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isWheelOpen, setIsWheelOpen] = useState(false);
+
+  // Prefilled fields
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+
+  const { user } = useAuth();
+
+  // Prefill known user details when logged in
+  useEffect(() => {
+    if (!user) return;
+    const nameParts = user.name.trim().split(' ');
+    // Batch state updates outside of render cycle using setTimeout
+    setTimeout(() => {
+      setFirstName(nameParts[0] || '');
+      setLastName(nameParts.slice(1).join(' ') || '');
+      setEmail(user.email || '');
+    }, 0);
+
+    ProfileStore.getUserProfile(user.id).then((profile) => {
+      if (profile?.phone) {
+        const parsed = parseStoredPhone(profile.phone);
+        setSelectedCountry(parsed.country);
+        setPhoneNumber(parsed.number);
+      }
+    });
+  }, [user]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +64,7 @@ export default function ContactPage() {
           </div>
           <h1 className="display-lg text-white">Contact <span style={{ color: '#a3f69c' }}>Vishambrio</span></h1>
           <p className="text-xl text-white/80 max-w-xl mx-auto leading-relaxed">
-            Whether you're planning a trip across the mountains or have a question, we're here to help.
+            Whether you&apos;re planning a trip across the mountains or have a question, we&apos;re here to help.
           </p>
         </div>
       </section>
@@ -43,7 +82,6 @@ export default function ContactPage() {
               <p className="text-sm text-tertiary mt-1">We respond within 24 hours</p>
             </div>
           </div>
-
           <div className="bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-start gap-4 border border-slate-100">
             <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
               <span className="material-symbols-outlined text-secondary text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>location_on</span>
@@ -54,7 +92,6 @@ export default function ContactPage() {
               <p className="text-sm text-tertiary mt-1">Gaggal Airport, HP 176024</p>
             </div>
           </div>
-
           <div className="bg-white rounded-3xl p-8 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-start gap-4 border border-slate-100">
             <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center">
               <span className="material-symbols-outlined text-amber-600 text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>schedule</span>
@@ -69,70 +106,49 @@ export default function ContactPage() {
 
         {/* Contact Form + Map */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Form */}
           <div className="bg-white rounded-[32px] p-10 shadow-xl shadow-emerald-900/5">
             <h2 className="text-3xl font-headline font-extrabold text-on-surface mb-2">Send us a Message</h2>
             <p className="text-tertiary mb-8">Fill in the form below and our team will get back to you shortly.</p>
 
+            {user && (
+              <div className="mb-6 flex items-center gap-2 px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-semibold text-emerald-800">
+                <span className="material-symbols-outlined text-sm text-emerald-600" style={{ fontVariationSettings: "'FILL' 1" }}>person_check</span>
+                Some fields have been pre-filled from your account. You can edit them freely.
+              </div>
+            )}
+
             {isSubmitted ? (
               <div className="bg-green-50 border-2 border-green-200 rounded-2xl p-6 mb-6 text-center animate-entrance">
                 <span className="material-symbols-outlined text-primary text-4xl mb-2 block" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                <p className="font-headline font-bold text-emerald-800">Message sent! We'll be in touch soon.</p>
+                <p className="font-headline font-bold text-emerald-800">Message sent! We&apos;ll be in touch soon.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-on-surface-variant" htmlFor="fname">First Name</label>
-                    <input className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white" id="fname" placeholder="first name" type="text" required />
+                    <input className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white" id="fname" placeholder="first name" type="text" required value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-on-surface-variant" htmlFor="lname">Last Name</label>
-                    <input className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white" id="lname" placeholder="last name" type="text" required />
+                    <input className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white" id="lname" placeholder="last name" type="text" required value={lastName} onChange={(e) => setLastName(e.target.value)} />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-on-surface-variant" htmlFor="email">Email Address</label>
-                  <input className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white" id="email" placeholder="you@example.com" type="email" required />
+                  <input className="w-full bg-[#f2f4f3] border-2 border-transparent rounded-xl px-4 py-3 font-semibold text-sm outline-none transition-all focus:border-[#0d631b] focus:bg-white" id="email" placeholder="you@example.com" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-on-surface-variant" htmlFor="phone">Phone (optional)</label>
                   <div className="relative flex items-center bg-[#f2f4f3] border-2 border-transparent rounded-xl focus-within:border-[#0d631b] focus-within:bg-white transition-all">
-                    {/* Country Code Trigger */}
-                    <button
-                      type="button"
-                      onClick={() => setIsWheelOpen(!isWheelOpen)}
-                      className="flex items-center gap-1 px-3 py-3 border-r border-slate-300/60 font-semibold text-sm text-slate-700 hover:bg-slate-200/50 rounded-l-xl transition-colors cursor-pointer select-none animate-entrance"
-                    >
+                    <button type="button" onClick={() => setIsWheelOpen(!isWheelOpen)} className="flex items-center gap-1 px-3 py-3 border-r border-slate-300/60 font-semibold text-sm text-slate-700 hover:bg-slate-200/50 rounded-l-xl transition-colors cursor-pointer select-none animate-entrance">
                       <span className="text-[10px] font-extrabold bg-slate-200/60 text-slate-700 px-1.5 py-0.5 rounded border border-slate-300/40 uppercase tracking-wider leading-none select-none w-7 text-center">{selectedCountry.flag}</span>
                       <span className="text-slate-800">{selectedCountry.dialCode}</span>
                       <span className="material-symbols-outlined text-[16px] text-slate-400 font-bold">keyboard_arrow_down</span>
                     </button>
-
-                    {/* Scroll Wheel Popover */}
-                    <CountryCodeWheel
-                      selectedCountry={selectedCountry}
-                      onSelect={setSelectedCountry}
-                      isOpen={isWheelOpen}
-                      onClose={() => setIsWheelOpen(false)}
-                    />
-
-                    {/* Number Input */}
-                    <input
-                      className="flex-1 bg-transparent px-4 py-3 font-semibold text-sm outline-none text-slate-800"
-                      placeholder="xxxxx xxxxx"
-                      type="tel"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                    />
-                    
-                    {/* Hidden input to submit the full combined value */}
-                    <input
-                      type="hidden"
-                      id="phone"
-                      name="phone"
-                      value={phoneNumber ? `${selectedCountry.dialCode} ${phoneNumber}` : ''}
-                    />
+                    <CountryCodeWheel selectedCountry={selectedCountry} onSelect={setSelectedCountry} isOpen={isWheelOpen} onClose={() => setIsWheelOpen(false)} />
+                    <input className="flex-1 bg-transparent px-4 py-3 font-semibold text-sm outline-none text-slate-800" placeholder="xxxxx xxxxx" type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                    <input type="hidden" id="phone" name="phone" value={phoneNumber ? `${selectedCountry.dialCode} ${phoneNumber}` : ''} />
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -173,8 +189,6 @@ export default function ContactPage() {
                 </a>
               </div>
             </div>
-
-            {/* Quick contact prompt */}
             <div className="bg-gradient-to-br from-emerald-900 to-emerald-700 rounded-[24px] p-8 text-white">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-white/15 rounded-2xl flex items-center justify-center flex-shrink-0">
@@ -182,7 +196,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="font-headline font-bold text-lg mb-1">Prefer email?</p>
-                  <p className="text-white/70 text-sm mb-4">Drop us a direct mail and we'll respond within one business day.</p>
+                  <p className="text-white/70 text-sm mb-4">Drop us a direct mail and we&apos;ll respond within one business day.</p>
                   <a href="mailto:gen@vishambrio.com" className="inline-flex items-center gap-2 bg-white text-emerald-800 font-headline font-bold px-5 py-2.5 rounded-xl hover:bg-green-50 transition-colors text-sm">
                     <span className="material-symbols-outlined text-base">mail</span>
                     gen@vishambrio.com

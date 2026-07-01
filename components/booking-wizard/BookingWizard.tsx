@@ -15,8 +15,14 @@ export default function BookingWizard({ isDrawer = false }: { isDrawer?: boolean
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<BookingFormData>(INITIAL_FORM_DATA);
   const { user } = useAuth();
-  
   const [confirmedBookingId, setConfirmedBookingId] = useState<string | null>(null);
+
+  // Reset wizard when user logs out or a different user logs in
+  useEffect(() => {
+    setFormData({ ...INITIAL_FORM_DATA });
+    setConfirmedBookingId(null);
+    setStep(1);
+  }, [user?.id]);
 
   // Listen for prefill events when the booking wizard drawer opens
   useEffect(() => {
@@ -43,13 +49,6 @@ export default function BookingWizard({ isDrawer = false }: { isDrawer?: boolean
     window.addEventListener('open-booking-wizard', handlePrefill);
     return () => window.removeEventListener('open-booking-wizard', handlePrefill);
   }, []);
-
-  // Auto-fill user details if logged in and not already filled
-  useEffect(() => {
-    if (user && !formData.riderEmail && !formData.riderName) {
-      updateFormData({ riderEmail: user.email, riderName: user.name });
-    }
-  }, [user]);
 
   // Recalculate fares whenever location or fleet changes
   useEffect(() => {
@@ -94,7 +93,7 @@ export default function BookingWizard({ isDrawer = false }: { isDrawer?: boolean
 
 
   const resetWizard = () => {
-    setFormData({ ...INITIAL_FORM_DATA, riderName: user?.name || '', riderEmail: user?.email || '' });
+    setFormData({ ...INITIAL_FORM_DATA });
     setConfirmedBookingId(null);
     setStep(1);
   };

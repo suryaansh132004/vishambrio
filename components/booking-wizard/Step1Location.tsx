@@ -13,16 +13,6 @@ interface Props {
 export default function Step1Location({ formData, updateFormData, nextStep }: Props) {
   const [alertDialog, setAlertDialog] = useState<{ isOpen: boolean; title: string; message: string } | null>(null);
 
-  const isFormValid =
-    formData.pickup &&
-    formData.drop &&
-    formData.date &&
-    formData.time &&
-    (formData.journeyType === 'oneway' ||
-      (formData.returnTime &&
-        formData.returnPickup &&
-        (formData.returnType === 'sameday' || formData.returnDate)));
-
   return (
     <div className="booking-step active animate-entrance">
       <h3 className="text-2xl font-headline font-extrabold text-emerald-950 mb-6">Plan Your Green Ride</h3>

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { openBookingWizard } from '@/components/Navbar';
 
 export default function TouristAttractionsPage() {
@@ -20,7 +19,7 @@ export default function TouristAttractionsPage() {
     },
     {
       title: 'Masroor Rock Cut Temple',
-      desc: "Known as the 'Ellora of Himachal', these 8th-century monolithic rock-cut temples are a marvel of ancient architecture.",
+      desc: "Known as the \u2018Ellora of Himachal\u2019, these 8th-century monolithic rock-cut temples are a marvel of ancient architecture.",
       img: '/assets/masroor_temple.png',
       category: 'Architecture',
       tokens: '+140 Tokens',
@@ -112,7 +111,7 @@ export default function TouristAttractionsPage() {
           <div className="text-center py-20 bg-white rounded-[32px] border border-slate-100 max-w-md mx-auto space-y-4 shadow-sm animate-entrance">
             <span className="material-symbols-outlined text-slate-300 text-5xl">search_off</span>
             <h4 className="font-headline font-bold text-slate-700 text-lg">No Attractions Found</h4>
-            <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-xs mx-auto">Try searching for other popular spots like "Bir", "Fort", or "Temple".</p>
+            <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-xs mx-auto">Try searching for other popular spots like &ldquo;Bir&rdquo;, &ldquo;Fort&rdquo;, or &ldquo;Temple&rdquo;.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">

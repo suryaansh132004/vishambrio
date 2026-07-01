@@ -6,6 +6,7 @@
 // interfaces will become the contract between client & server.
 
 export interface User {
+  id: string;
   name: string;
   email: string;
 }

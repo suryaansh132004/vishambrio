@@ -36,7 +36,7 @@ export default function Step6Payment({ formData, updateFormData, nextStep, prevS
 
   const amountPayable = formData.paymentMethod === 'partial' ? 500 : formData.totalFare;
 
-  const triggerPayment = () => {
+  const triggerPayment = async () => {
     // H4 Security Patch: Re-verify login state right before payment
     if (!user) {
       setAlertDialog({
@@ -49,8 +49,9 @@ export default function Step6Payment({ formData, updateFormData, nextStep, prevS
 
     setIsProcessing(true);
 
-    setTimeout(() => {
-      setIsProcessing(false);
+    try {
+      // Simulate gateway transaction verification delay
+      await new Promise((resolve) => setTimeout(resolve, 2500));
 
       // H5 Security Patch: Timestamp-based booking ID to avoid collision
       const ts = Date.now().toString(36).toUpperCase();
@@ -73,16 +74,34 @@ export default function Step6Payment({ formData, updateFormData, nextStep, prevS
         otp: Math.floor(1000 + Math.random() * 9000),
       };
 
-      addBooking(bookingData);
-      setConfirmedBookingId(randomId);
-      
-      // Clean up any temp booking
-      if (typeof window !== 'undefined') {
-         localStorage.removeItem('vishambrio_temp_booking');
-      }
+      const success = await addBooking(bookingData);
+      setIsProcessing(false);
 
-      nextStep();
-    }, 2500);
+      if (success) {
+        setConfirmedBookingId(randomId);
+        
+        // Clean up any temp booking
+        if (typeof window !== 'undefined') {
+           sessionStorage.removeItem('vishambrio_temp_booking');
+        }
+
+        nextStep();
+      } else {
+        setAlertDialog({
+          isOpen: true,
+          title: 'Booking Failed',
+          message: 'We encountered an error saving your booking to the Supabase database. Please try again.'
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      setIsProcessing(false);
+      setAlertDialog({
+        isOpen: true,
+        title: 'Network Error',
+        message: 'Could not contact the servers. Please check your internet connection and try again.'
+      });
+    }
   };
 
   return (
@@ -185,11 +204,12 @@ export default function Step6Payment({ formData, updateFormData, nextStep, prevS
         type="alert"
         onConfirm={() => {
           setAlertDialog(null);
-          // Redirect on confirm
-          if (typeof window !== 'undefined') {
-             localStorage.setItem('vishambrio_temp_booking', JSON.stringify(formData));
+          if (alertDialog?.title === 'Authentication Required') {
+            if (typeof window !== 'undefined') {
+              sessionStorage.setItem('vishambrio_temp_booking', JSON.stringify(formData));
+            }
+            router.push('/login?redirect=/&step=6');
           }
-          router.push('/login?redirect=/&step=6');
         }}
       />
     </div>

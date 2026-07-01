@@ -128,8 +128,7 @@ export default function Home() {
         <div className="max-w-screen-2xl mx-auto px-8 grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative">
             <div className="aspect-[4/3] rounded-3xl overflow-hidden">
-              {/* TODO: Replace with real vehicle photo */}
-              <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxnm2lkwHRKgOKolfxACC_FOolaIwd9RgQMUGoPbBQZxuN2nncyubAbqtbFheO3JqgrucqUjyJRswXaKmpU3FENRn7rG-VSYloHCQ_QZ8KeSJPxhwmgf95jp2gsRhbNfyq8g7Y7CNh9vN2MZrrdeo_EhYNWxnelOygAht_HIQxTIiAVb_EvwOwyCVikv0fHgJ09Qmbu66RTomFQK7_nIdwPcvlPEGpIVjvUprjT_4VUA-mqI2x7WYbEXIv_aljLE2aYZWBzevjid8" alt="EV dashboard navigation" />
+              <img className="w-full h-full object-cover" src="/assets/landingpage.webp" alt="EV dashboard navigation" />
             </div>
           </div>
           <div className="space-y-8">
@@ -168,7 +167,7 @@ export default function Home() {
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-headline font-extrabold tracking-tight mb-4">Where we&apos;re headed</h2>
           <p className="text-lg text-tertiary max-w-2xl mx-auto">
-            We&apos;re starting small and growing district by district. Here&apos;s the plan.
+            We&apos;re starting small and growing district by district.
           </p>
         </div>
 
@@ -216,34 +215,13 @@ export default function Home() {
                 </div>
                 <h4 className="text-xl font-bold mb-2 text-secondary">Expand Across Himachal</h4>
                 <p className="text-tertiary mb-3">
-                  Once Kangra is running smoothly, we expand to Kullu, Manali, Shimla, and other high-traffic districts. More vehicles, more charging stations, more coverage.
+                  Coming soon. Have some patience these things take time.
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">Kullu</span>
-                  <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">Manali</span>
-                  <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">Shimla</span>
-                </div>
+
               </div>
             </div>
 
-            {/* Phase 3 */}
-            <div className="relative flex items-start justify-between group">
-              <div className="w-[45%] text-right pr-10 hidden md:block">
-                <span className="inline-block px-3 py-1 rounded-full bg-teal-100 text-teal-800 text-xs font-bold uppercase tracking-wide mb-2">2033+</span>
-                <h3 className="text-2xl font-headline font-extrabold text-on-surface">Phase 3</h3>
-              </div>
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-5 h-5 rounded-full bg-tertiary-container border-4 border-surface shadow-md group-hover:scale-125 transition-transform duration-300 z-10"></div>
-              <div className="md:w-[45%] pl-10">
-                <div className="md:hidden mb-2">
-                  <span className="inline-block px-3 py-1 rounded-full bg-teal-100 text-teal-800 text-xs font-bold uppercase tracking-wide mb-1">2033+</span>
-                  <h3 className="text-xl font-headline font-extrabold text-on-surface">Phase 3</h3>
-                </div>
-                <h4 className="text-xl font-bold mb-2 text-tertiary-container">Full State Network</h4>
-                <p className="text-tertiary">
-                  The long-term goal: a connected electric cab network across all of Himachal Pradesh. Inter-district travel, tourist circuits, daily commutes — all electric.
-                </p>
-              </div>
-            </div>
+          
           </div>
         </div>
       </section>
