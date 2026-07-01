@@ -148,7 +148,6 @@ export default function PopularRoutesPage() {
           {filteredRoutes.map((route) => (
             <div key={route.id} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-slate-100">
               <div className={`h-48 bg-gradient-to-br ${route.bgClass} flex items-end p-6 relative overflow-hidden`}>
-                <span className="material-symbols-outlined absolute inset-0 opacity-20 text-[8rem] flex items-center justify-center pointer-events-none select-none" aria-hidden="true">{route.icon}</span>
                 <div className="relative z-10">
                   <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${
                     route.primaryBadge.type === 'popular' ? 'bg-green-100 text-green-800' :
